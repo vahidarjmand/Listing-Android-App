@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/space_white"
+    tools:context="tmediaa.ir.ahamdian.InsertOrderActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
+
+    <com.stepstone.stepper.StepperLayout
+        android:id="@+id/stepperLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ms_stepperType="dots"
+        app:ms_showErrorState="true"
+        app:ms_activeStepColor="@color/colorPrimaryDark"
+        app:ms_inactiveStepColor="#cccccc"
+        app:ms_backButtonColor="#FFFFFF"
+        app:ms_nextButtonColor="#FFFFFF"
+        app:ms_completeButtonColor="#FFFFFF"
+        app:ms_tabStepDividerWidth="58dp"
+        app:ms_bottomNavigationBackground="@color/colorPrimary"
+        app:ms_showBackButtonOnFirstStep="true"
+        app:ms_stepperFeedback_contentOverlayBackground="@color/transparent_gray"
+        app:ms_stepperFeedbackType="tabs|content_overlay|disabled_content_interaction|content_fade|disabled_bottom_navigation"
+        app:ms_stepperLayoutTheme="@style/StepperLayoutThemeWithCenteredCompleteButton" />
+
+</LinearLayout>

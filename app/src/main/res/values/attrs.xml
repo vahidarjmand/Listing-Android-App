@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AVLoadingIndicatorView">
+        <attr name="indicator">
+            <flag name="BallPulse" value="0"/>
+            <flag name="BallGridPulse" value="1"/>
+            <flag name="BallClipRotate" value="2"/>
+            <flag name="BallClipRotatePulse" value="3"/>
+            <flag name="SquareSpin" value="4"/>
+            <flag name="BallClipRotateMultiple" value="5"/>
+            <flag name="BallPulseRise" value="6"/>
+            <flag name="BallRotate" value="7"/>
+            <flag name="CubeTransition" value="8"/>
+            <flag name="BallZigZag" value="9"/>
+            <flag name="BallZigZagDeflect" value="10"/>
+            <flag name="BallTrianglePath" value="11"/>
+            <flag name="BallScale" value="12"/>
+            <flag name="LineScale" value="13"/>
+            <flag name="LineScaleParty" value="14"/>
+            <flag name="BallScaleMultiple" value="15"/>
+            <flag name="BallPulseSync" value="16"/>
+            <flag name="BallBeat" value="17"/>
+            <flag name="LineScalePulseOut" value="18"/>
+            <flag name="LineScalePulseOutRapid" value="19"/>
+            <flag name="BallScaleRipple" value="20"/>
+            <flag name="BallScaleRippleMultiple" value="21"/>
+            <flag name="BallSpinFadeLoader" value="22"/>
+            <flag name="LineSpinFadeLoader" value="23"/>
+            <flag name="TriangleSkewSpin" value="24"/>
+            <flag name="Pacman" value="25"/>
+            <flag name="BallGridBeat" value="26"/>
+            <flag name="SemiCircleSpin" value="27"/>
+        </attr>
+        <attr name="indicator_color" format="color"/>
+    </declare-styleable>
+
+    <attr name="MaterialTapTargetPromptTheme" format="reference"/>
+    <attr name="mttp_target" format="reference"/>
+    <attr name="mttp_primaryText" format="string"/>
+    <attr name="mttp_secondaryText" format="string"/>
+    <attr name="mttp_primaryTextColour" format="color"/>
+    <attr name="mttp_secondaryTextColour" format="color"/>
+    <attr name="mttp_backgroundColour" format="color"/>
+    <attr name="mttp_focalColour" format="color"/>
+    <attr name="mttp_focalRadius" format="dimension"/>
+    <attr name="mttp_primaryTextSize" format="dimension"/>
+    <attr name="mttp_secondaryTextSize" format="dimension"/>
+    <attr name="mttp_maxTextWidth" format="dimension"/>
+    <attr name="mttp_textPadding" format="dimension"/>
+    <attr name="mttp_focalToTextPadding" format="dimension"/>
+    <attr name="mttp_textSeparation" format="dimension"/>
+    <attr name="mttp_autoDismiss" format="boolean"/>
+    <attr name="mttp_autoFinish" format="boolean"/>
+    <attr name="mttp_captureTouchEventOutsidePrompt" format="boolean"/>
+    <attr name="mttp_captureTouchEventOnFocal" format="boolean"/>
+    <attr name="mttp_primaryTextFontFamily" format="string"/>
+    <attr name="mttp_secondaryTextFontFamily" format="string"/>
+    <attr name="mttp_primaryTextStyle" format="enum">
+        <enum name="normal" value="0"/>
+        <enum name="bold" value="1"/>
+        <enum name="italic" value="2"/>
+    </attr>
+    <attr name="mttp_secondaryTextStyle" format="enum">
+        <enum name="normal" value="0"/>
+        <enum name="bold" value="1"/>
+        <enum name="italic" value="2"/>
+    </attr>
+    <attr name="mttp_primaryTextTypeface" format="enum">
+        <enum name="normal" value="0" />
+        <enum name="sans" value="1" />
+        <enum name="serif" value="2" />
+        <enum name="monospace" value="3" />
+    </attr>
+    <attr name="mttp_secondaryTextTypeface" format="enum">
+        <enum name="normal" value="0" />
+        <enum name="sans" value="1" />
+        <enum name="serif" value="2" />
+        <enum name="monospace" value="3" />
+    </attr>
+    <attr name="mttp_iconTint" format="reference"/>
+    <attr name="mttp_iconTintMode" format="enum">
+        <enum name="SRC_OVER" value="3" />
+        <enum name="SRC_IN" value="5" />
+        <enum name="SRC_ATOP" value="9" />
+        <enum name="MULTIPLY" value="14" />
+        <enum name="SCREEN" value="15" />
+        <enum name="ADD" value="16" />
+    </attr>
+    <attr name="mttp_iconColourFilter" format="color"/>
+    <declare-styleable name="PromptView">
+        <attr name="mttp_target"/>
+        <attr name="mttp_primaryText"/>
+        <attr name="mttp_secondaryText"/>
+        <attr name="mttp_primaryTextColour"/>
+        <attr name="mttp_secondaryTextColour"/>
+        <attr name="mttp_backgroundColour"/>
+        <attr name="mttp_focalColour"/>
+        <attr name="mttp_focalRadius"/>
+        <attr name="mttp_primaryTextSize"/>
+        <attr name="mttp_secondaryTextSize"/>
+        <attr name="mttp_maxTextWidth"/>
+        <attr name="mttp_textPadding"/>
+        <attr name="mttp_focalToTextPadding"/>
+        <attr name="mttp_textSeparation"/>
+        <attr name="mttp_autoDismiss"/>
+        <attr name="mttp_autoFinish"/>
+        <attr name="mttp_captureTouchEventOutsidePrompt"/>
+        <attr name="mttp_captureTouchEventOnFocal"/>
+        <attr name="mttp_primaryTextFontFamily"/>
+        <attr name="mttp_secondaryTextFontFamily"/>
+        <attr name="mttp_primaryTextStyle"/>
+        <attr name="mttp_secondaryTextStyle"/>
+        <attr name="mttp_primaryTextTypeface"/>
+        <attr name="mttp_secondaryTextTypeface"/>
+        <attr name="mttp_iconTint"/>
+        <attr name="mttp_iconTintMode"/>
+        <attr name="mttp_iconColourFilter"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="SpaceNavigationView">
+        <attr name="space_item_icon_size" format="dimension" />
+        <attr name="space_item_icon_only_size" format="dimension" />
+        <attr name="space_item_text_size" format="dimension" />
+        <attr name="space_background_color" format="color" />
+        <attr name="centre_button_color" format="color" />
+        <attr name="active_item_color" format="color" />
+        <attr name="inactive_item_color" format="color" />
+        <attr name="centre_button_icon" format="reference" />
+        <attr name="active_centre_button_icon_color" format="color" />
+        <attr name="inactive_centre_button_icon_color" format="color" />
+        <attr name="active_centre_button_background_color" format="color"/>
+        <attr name="centre_part_linear" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="RelativeTimeTextView">
+        <attr name="relative_time_prefix" format="string" />
+        <attr name="relative_time_suffix" format="string" />
+        <attr name="reference_time" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="TabsContainer">
+        <attr name="ms_activeTabColor" format="color|reference" />
+        <attr name="ms_inactiveTabColor" format="color|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="DottedProgressBar">
+        <attr name="ms_activeDotColor" format="color|reference" />
+        <attr name="ms_inactiveDotColor" format="color|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ColorableProgressBar">
+        <attr name="ms_progressPrimaryColor" format="color|reference" />
+        <attr name="ms_progressBackgroundColor" format="color|reference" />
+    </declare-styleable>
+    
+	<declare-styleable name="StepperLayout">
+        <!-- BACK button's text color -->
+        <attr name="ms_backButtonColor" format="color|reference" />
+        <!-- NEXT button's text color -->
+        <attr name="ms_nextButtonColor" format="color|reference" />
+        <!-- COMPLETE button's text color -->
+        <attr name="ms_completeButtonColor" format="color|reference" />
+        <!-- Active step's color -->
+        <attr name="ms_activeStepColor" format="color|reference" />
+        <!-- Inactive step's color -->
+        <attr name="ms_inactiveStepColor" format="color|reference" />
+        <!-- Background of the bottom navigation -->
+        <attr name="ms_bottomNavigationBackground" format="reference" />
+        <!-- Error's color -->
+        <attr name="ms_errorColor" format="color|reference" />
+
+        <!-- BACK button's background -->
+        <attr name="ms_backButtonBackground" format="reference" />
+        <!-- NEXT button's background -->
+        <attr name="ms_nextButtonBackground" format="reference" />
+        <!-- COMPLETE button's background -->
+        <attr name="ms_completeButtonBackground" format="reference" />
+
+        <!-- BACK button's text -->
+        <attr name="ms_backButtonText" format="string|reference" />
+        <!-- NEXT button's text -->
+        <attr name="ms_nextButtonText" format="string|reference" />
+        <!-- COMPLETE button's text -->
+        <attr name="ms_completeButtonText" format="string|reference" />
+
+        <!-- The width of the horizontal tab divider used in tabs stepper type -->
+        <attr name="ms_tabStepDividerWidth" format="dimension|reference" />
+
+        <!-- Flag indicating if the Back (Previous step) button should be shown on the first step. False by default. -->
+        <attr name="ms_showBackButtonOnFirstStep" format="boolean" />
+
+        <!-- Flag indicating if the Bottom Navigation should be shown on the layout. True by default. -->
+        <attr name="ms_showBottomNavigation" format="boolean" />
+
+        <!-- DEPRECATED: Use ms_showErrorStateEnabled instead -->
+        <attr name="ms_showErrorState" format="boolean" />
+
+        <!-- Flag indicating whether to show the error state. Only applicable for 'tabs' type. False by default. -->
+        <attr name="ms_showErrorStateEnabled" format="boolean" />
+
+        <!-- DEPRECATED: Use ms_showErrorStateOnBackEnabled instead -->
+        <attr name="ms_showErrorStateOnBack" format="boolean" />
+
+        <!-- Flag indicating whether to keep showing the error state when user moves back. Only applicable for 'tabs' type. False by default. -->
+        <attr name="ms_showErrorStateOnBackEnabled" format="boolean" />
+
+        <!-- Flag indicating whether to show the error message below the tab title if specified. Only applicable for 'tabs' type. False by default. -->
+        <attr name="ms_showErrorMessageEnabled" format="boolean" />
+
+        <!-- Flag indicating whether step navigation is possible by clicking on the tabs directly. Only applicable for 'tabs' type. True by default. -->
+        <attr name="ms_tabNavigationEnabled" format="boolean" />
+
+        <!-- Type(s) of stepper feedback -->
+        <attr name="ms_stepperFeedbackType">
+            <flag name="none" value="1" />
+            <flag name="tabs" value="2" />
+            <flag name="content_progress" value="4" />
+            <flag name="disabled_bottom_navigation" value="8" />
+            <flag name="disabled_content_interaction" value="16" />
+            <flag name="content_fade" value="32" />
+            <flag name="content_overlay" value="64" />
+        </attr>
+
+        <!-- An alpha value from 0 to 1.0f to be used for the faded out view if 'content_fade' stepper feedback type is set. 0.5f by default. -->
+        <attr name="ms_stepperFeedback_contentFadeAlpha" format="float" />
+
+        <!-- Background to be used for the overlay on top of the content if 'content_overlay' stepper feedback type is set. -->
+        <attr name="ms_stepperFeedback_contentOverlayBackground" format="reference" />
+
+        <!-- Theme to use for even more custom styling of the stepper layout.
+             It is recommended that it should extend @style/MSDefaultStepperLayoutTheme, which is the default theme used.
+             See StepperLayoutTheme below for a list of possible inner view styles to overwrite.
+        -->
+        <attr name="ms_stepperLayoutTheme" format="reference" />
+
+        <!-- REQUIRED: Type of the stepper-->
+        <attr name="ms_stepperType">
+            <enum name="dots" value="0x01" />
+            <enum name="progress_bar" value="0x02" />
+            <enum name="tabs" value="0x03" />
+            <enum name="none" value="0x04" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="RightNavigationButton">
+        <attr name="state_verification_failed" format="boolean" />
+    </declare-styleable>
+
+    <attr name="ms_stepperStyle" format="reference" />
+
+    <declare-styleable name="StepperLayoutTheme">
+
+        <!-- Used by ms_bottomNavigation in layout/ms_stepper_layout -->
+        <attr name="ms_bottomNavigationStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsContainer in layout/ms_stepper_layout -->
+        <attr name="ms_tabsContainerStyle" format="reference" />
+
+        <!-- Used by ms_stepPrevButton in layout/ms_stepper_layout -->
+        <attr name="ms_backNavigationButtonStyle" format="reference" />
+
+        <!-- Used by ms_stepNextButton in layout/ms_stepper_layout -->
+        <attr name="ms_nextNavigationButtonStyle" format="reference" />
+
+        <!-- Used by ms_stepCompleteButton in layout/ms_stepper_layout -->
+        <attr name="ms_completeNavigationButtonStyle" format="reference" />
+
+        <!-- Used by ms_stepProgressBar in layout/ms_stepper_layout -->
+        <attr name="ms_colorableProgressBarStyle" format="reference" />
+
+        <!-- Used by ms_stepPagerProgressBar in layout/ms_stepper_layout -->
+        <attr name="ms_stepPagerProgressBarStyle" format="reference" />
+
+        <!-- Used by ms_stepPagerOverlay in layout/ms_stepper_layout -->
+        <attr name="ms_stepPagerOverlayStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsScrollView in layout/ms_tabs_container -->
+        <attr name="ms_stepTabsScrollViewStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsInnerContainer in layout/ms_tabs_container -->
+        <attr name="ms_stepTabsInnerContainerStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsProgressMessage in layout/ms_tabs_container -->
+        <attr name="ms_stepTabsProgressMessageStyle" format="reference" />
+
+        <!-- Used in layout/ms_step_tab_container -->
+        <attr name="ms_stepTabContainerStyle" format="reference" />
+
+        <!-- Used by ms_stepNumber in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabNumberStyle" format="reference" />
+
+        <!-- Used by ms_stepDoneIndicator in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabDoneIndicatorStyle" format="reference" />
+
+        <!-- Used by ms_stepIconBackground in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabIconBackgroundStyle" format="reference" />
+
+        <!-- Used by ms_stepTitle in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabTitleStyle" format="reference" />
+
+        <!-- Used by ms_stepSubtitle in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabSubtitleStyle" format="reference" />
+
+        <!-- Used by ms_stepDivider in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabDividerStyle" format="reference" />
+
+
+    </declare-styleable>
+
+
+    <attr name="precision" format="integer" />
+    <attr name="scale" format="integer" />
+    <declare-styleable name="EditTextDecimal">
+        <attr name="precision" />
+        <attr name="scale" />
+    </declare-styleable>
+    <declare-styleable name="EditTextDecimalComma">
+        <attr name="precision" />
+        <attr name="scale" />
+    </declare-styleable>
+    <declare-styleable name="EditTextIntegerComma">
+        <attr name="numberLength" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="EditTextCard">
+        <attr name="cardType" format="enum">
+            <enum name="other" value="0"/>
+            <enum name="idCard" value="1"/>
+
+            <!-- TODO add cardType (enum) here -->
+
+        </attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="SimpleViewPager">
+        <attr name="forceSquare" format="boolean" />
+        <attr name="vertical" format="boolean" />
+        <attr name="circlesPaddingTop" format="dimension" />
+        <attr name="circlesPaddingBottom" format="dimension" />
+        <attr name="scaleType" format="enum">
+            <enum name="CENTER" value="0"/>
+            <enum name="CENTER_CROP" value="1"/>
+            <enum name="CENTER_INSIDE" value="2"/>
+            <enum name="FIT_CENTER" value="3"/>
+            <enum name="FIT_END" value="4"/>
+            <enum name="FIT_START" value="5"/>
+            <enum name="FIT_XY" value="6"/>
+            <enum name="MATRIX" value="7"/>
+        </attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="LoadingView">
+        <attr name="loading_renderer">
+            <!--circle rotate-->
+            <enum name="MaterialLoadingRenderer" value="0"/>
+            <enum name="LevelLoadingRenderer" value="1"/>
+            <enum name="WhorlLoadingRenderer" value="2"/>
+            <enum name="GearLoadingRenderer" value="3"/>
+            <!--circle jump-->
+            <enum name="SwapLoadingRenderer" value="4"/>
+            <enum name="GuardLoadingRenderer" value="5"/>
+            <enum name="DanceLoadingRenderer" value="6"/>
+            <enum name="CollisionLoadingRenderer" value="7"/>
+            <!--Scenery-->
+            <enum name="DayNightLoadingRenderer" value="8"/>
+            <enum name="ElectricFanLoadingRenderer" value="9"/>
+            <!--Animal-->
+            <enum name="FishLoadingRenderer" value="10"/>
+            <enum name="GhostsEyeLoadingRenderer" value="11"/>
+            <!--Goods-->
+            <enum name="BalloonLoadingRenderer" value="12"/>
+            <enum name="WaterBottleLoadingRenderer" value="13"/>
+            <!--ShapeChange-->
+            <enum name="CircleBroodLoadingRenderer" value="14"/>
+            <enum name="CoolWaitLoadingRenderer" value="15"/>
+        </attr>
+    </declare-styleable>
+
+</resources>

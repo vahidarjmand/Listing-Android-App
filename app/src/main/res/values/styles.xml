@@ -1,0 +1,251 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppThemNoBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="AnimLeft">
+        <item name="android:windowEnterAnimation">@anim/from_left</item>
+        <item name="android:windowExitAnimation">@anim/to_left</item>
+    </style>
+
+    <style name="AnimRight">
+        <item name="android:windowEnterAnimation">@anim/from_right</item>
+        <item name="android:windowExitAnimation">@anim/to_right</item>
+    </style>
+
+    <style name="AnimUp">
+        <item name="android:windowEnterAnimation">@anim/from_up</item>
+        <item name="android:windowExitAnimation">@anim/to_up</item>
+    </style>
+
+    <style name="AnimDown">
+        <item name="android:windowEnterAnimation">@anim/from_down</item>
+        <item name="android:windowExitAnimation">@anim/to_down</item>
+    </style>
+
+    <style name="AnimLeftRight">
+        <item name="android:windowEnterAnimation">@anim/from_left</item>
+        <item name="android:windowExitAnimation">@anim/to_right</item>
+    </style>
+
+    <style name="AnimUpDown">
+        <item name="android:windowEnterAnimation">@anim/from_up</item>
+        <item name="android:windowExitAnimation">@anim/to_down</item>
+    </style>
+
+    <style name="AnimFadeInOut">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="AnimZoomInOut">
+        <item name="android:windowEnterAnimation">@anim/zoom_in</item>
+        <item name="android:windowExitAnimation">@anim/zoom_out</item>
+    </style>
+
+    <style name="Theme.Transparent"
+    parent="android:Theme">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:backgroundDimEnabled">false</item>
+</style>
+
+
+<style name="MSNavBarButton" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:textSize">@dimen/ms_navigation_button_text_size</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/ms_default_button_background</item>
+    </style>
+
+    <style name="MSNavBarButton.Back" tools:targetApi="jelly_bean_mr1">
+        <item name="android:gravity">left|start|center_vertical</item>
+    </style>
+
+    <style name="MSNavBarButton.Next" tools:targetApi="jelly_bean_mr1">
+        <item name="android:gravity">right|end|center_vertical</item>
+    </style>
+
+    <style name="MSNavBarButton.Complete" tools:targetApi="jelly_bean_mr1">
+        <item name="android:gravity">right|end|center_vertical</item>v
+    </style>
+
+    <style name="Base.MSStepTabsContainer" parent="">
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MSStepTabsContainer" parent="Base.MSStepTabsContainer">
+        <item name="android:background">@drawable/ms_tab_container_pre_lollipop_background</item>
+    </style>
+
+    <style name="MSBottomNavigation">
+        <item name="android:layout_height">@dimen/ms_bottom_navigation_bar_height</item>
+        <item name="android:background">@color/ms_bottomNavigationBackgroundColor</item>
+    </style>
+
+    <style name="MSColorableProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">@dimen/ms_progress_bar_width</item>
+        <item name="android:layout_height">@dimen/ms_progress_bar_height</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
+    <style name="MSStepTabsScrollView">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="MSStepTabsInnerContainer" tools:ignore="NewApi">
+        <item name="android:paddingLeft">@dimen/ms_tabs_container_lateral_padding</item>
+        <item name="android:paddingStart">@dimen/ms_tabs_container_lateral_padding</item>
+        <item name="android:paddingRight">@dimen/ms_tabs_container_lateral_padding</item>
+        <item name="android:paddingEnd">@dimen/ms_tabs_container_lateral_padding</item>
+    </style>
+
+    <style name="MSStepTabContainer">
+        <item name="android:layout_height">@dimen/ms_step_tab_height</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="MSStepTabNumber">
+        <item name="android:layout_width">@dimen/ms_step_tab_counter_size</item>
+        <item name="android:layout_height">@dimen/ms_step_tab_counter_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/ms_white</item>
+        <item name="android:textSize">@dimen/ms_step_tab_circle_font_size</item>
+    </style>
+
+    <style name="MSStepTabDoneIndicator">
+        <item name="android:layout_width">@dimen/ms_step_tab_counter_size</item>
+        <item name="android:layout_height">@dimen/ms_step_tab_counter_size</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="srcCompat">@drawable/ms_ic_check</item>
+    </style>
+
+    <style name="MSStepTabIconBackground">
+        <item name="android:layout_width">@dimen/ms_step_tab_counter_size</item>
+        <item name="android:layout_height">@dimen/ms_step_tab_counter_size</item>
+    </style>
+
+    <style name="MSStepTabTitle" tools:ignore="NewApi">
+        <item name="android:layout_marginLeft">@dimen/ms_step_tab_text_lateral_padding</item>
+        <item name="android:layout_marginStart">@dimen/ms_step_tab_text_lateral_padding</item>
+        <item name="android:textColor">@color/ms_black</item><!-- Text alpha is changed in StepTab. 87% for active and 38% for inactive-->
+        <item name="android:textSize">@dimen/ms_step_tab_title_font_size</item>
+    </style>
+
+    <style name="MSStepTabSubtitle" tools:ignore="NewApi">
+        <item name="android:layout_marginLeft">@dimen/ms_step_tab_text_lateral_padding</item>
+        <item name="android:layout_marginStart">@dimen/ms_step_tab_text_lateral_padding</item>
+        <item name="android:textColor">@color/ms_selectedColor</item>
+        <item name="android:textSize">@dimen/ms_step_tab_title_font_size</item>
+    </style>
+
+    <style name="MSStepTabDivider">
+        <item name="android:layout_width">@dimen/ms_step_tab_divider_length</item>
+        <item name="android:layout_height">@dimen/ms_step_tab_divider_thickness</item>
+        <item name="android:background">@drawable/ms_vertical_tab_divider</item>
+    </style>
+
+    <style name="MSStepTabsProgressMessage" tools:targetApi="jelly_bean_mr1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingEnd">@dimen/ms_progress_message_lateral_padding</item>
+        <item name="android:paddingLeft">@dimen/ms_progress_message_lateral_padding</item>
+        <item name="android:paddingRight">@dimen/ms_progress_message_lateral_padding</item>
+        <item name="android:paddingStart">@dimen/ms_progress_message_lateral_padding</item>
+        <item name="android:textColor">@color/ms_black_87_opacity</item>
+        <item name="android:textSize">@dimen/ms_progress_message_font_size</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="MSStepPagerProgressBarStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="MSStepPagerOverlayStyle">
+        <item name="android:background">@color/ms_defaultContentOverlayColor</item>
+    </style>
+
+    <!-- Custom  Theme -->
+    <style name="StepperLayoutThemeWithCenteredCompleteButton" parent="MSDefaultStepperLayoutTheme">
+        <item name="ms_completeNavigationButtonStyle">@style/CenteredCompleteButtonStyle</item>
+    </style>
+
+    <style name="CenteredCompleteButtonStyle" parent="MSNavBarButton.Complete">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="MSDefaultStepperLayoutTheme">
+        <item name="ms_tabsContainerStyle">@style/MSStepTabsContainer</item>
+        <item name="ms_bottomNavigationStyle">@style/MSBottomNavigation</item>
+        <item name="ms_backNavigationButtonStyle">@style/MSNavBarButton.Back</item>
+        <item name="ms_nextNavigationButtonStyle">@style/MSNavBarButton.Next</item>
+        <item name="ms_completeNavigationButtonStyle">@style/MSNavBarButton.Complete</item>
+        <item name="ms_colorableProgressBarStyle">@style/MSColorableProgressBar</item>
+        <item name="ms_stepPagerProgressBarStyle">@style/MSStepPagerProgressBarStyle</item>
+        <item name="ms_stepPagerOverlayStyle">@style/MSStepPagerOverlayStyle</item>
+
+        <item name="ms_stepTabsScrollViewStyle">@style/MSStepTabsScrollView</item>
+        <item name="ms_stepTabsInnerContainerStyle">@style/MSStepTabsInnerContainer</item>
+
+        <item name="ms_stepTabContainerStyle">@style/MSStepTabContainer</item>
+
+        <item name="ms_stepTabNumberStyle">@style/MSStepTabNumber</item>
+        <item name="ms_stepTabDoneIndicatorStyle">@style/MSStepTabDoneIndicator</item>
+        <item name="ms_stepTabIconBackgroundStyle">@style/MSStepTabIconBackground</item>
+        <item name="ms_stepTabTitleStyle">@style/MSStepTabTitle</item>
+        <item name="ms_stepTabSubtitleStyle">@style/MSStepTabSubtitle</item>
+        <item name="ms_stepTabDividerStyle">@style/MSStepTabDivider</item>
+        <item name="ms_stepTabsProgressMessageStyle">@style/MSStepTabsProgressMessage</item>
+    </style>
+
+
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">#33000000</item> <!-- Or any transparency or color you need -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+</resources>
+
+

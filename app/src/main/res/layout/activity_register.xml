@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_overly"
+    android:orientation="vertical"
+    tools:context=".RegisterActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top">
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoView">
+
+            <ImageView
+                android:id="@+id/logoView"
+                android:layout_height="95dp"
+                android:layout_marginTop="50dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/app_logo"
+                app:layout_widthPercent="60%" />
+
+            <LinearLayout
+                android:id="@+id/form_container"
+                app:layout_widthPercent="60%"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/logoView"
+                >
+
+                <EditText
+                    android:id="@+id/register_mobile_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="موبایل"
+                    android:inputType="number"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#ffffff"/>
+
+
+                <RelativeLayout
+                    android:id="@+id/gavanin_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/register_mobile_txt"
+                    android:clickable="true"
+                    android:layoutDirection="rtl"
+                    android:padding="6dp">
+
+
+                    <CheckBox
+                        android:id="@+id/gavanin_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@id/gavanin_checkbox"
+                        android:gravity="right|center_vertical"
+
+                        android:text="قوانین و مقرارت تبلیغ اپ را میپذیرم"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/gavanin_box"
+                    android:layout_marginTop="8dp"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background"
+                        android:text="ثبت نام"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnRegister"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_widthPercent="60%">
+
+                        <Button
+                            android:id="@+id/btnLogin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/button_dark_background"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="قبلا عضو شده ام"
+                            android:textColor="#fff"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/active_code_box"
+                app:layout_widthPercent="60%"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/form_container">
+                <EditText
+                    android:id="@+id/active_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/edit_text_background"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="کد فعال سازی"
+                    android:inputType="number"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#ffffff"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/active_code"
+                    android:layout_marginTop="8dp"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/active_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background"
+                        android:text="ورود به نرم افزار"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </android.support.percent.PercentRelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

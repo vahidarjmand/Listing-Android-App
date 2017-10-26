@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/order_item_row_bg"
+    android:padding="12dp"
+    android:clickable="false"
+    android:id="@+id/item_row">
+
+    <ImageView
+        android:id="@+id/arrowView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:clickable="false"
+        android:src="@drawable/category_arrow"
+        android:layout_gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:clickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>

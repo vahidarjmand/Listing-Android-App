@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">پلاک</string>
+	
+    <string name="toast_message">Toast message</string>
+    <string name="space_scrolling_view_behavior">com.luseen.spacenavigation.SpaceNavigationViewBehavior</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="just_now">همین الان</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="text_home">item 1</string>
+    <string name="text_category">item 2</string>
+    <string name="text_search">item 3</string>
+
+    <string name="listview_header_hint_normal">pull to refresh</string>
+    <string name="listview_header_hint_release">release to start refresh</string>
+    <string name="listview_loading">loading...</string>
+    <string name="nomore_loading">no more to be loaded</string>
+    <string name="refreshing">refreshing...</string>
+    <string name="refresh_done">refresh done</string>
+    <string name="loading_done">loading done</string>
+    <string name="listview_header_last_time">last update：</string>
+
+    <string name="permission_rationale_title">جهت عملکرد صحیح نرم افزار دسترسی به این مجورها باید توسط شما تایید شود.</string>
+    <string name="permission_rationale_message">جهت عملکرد صحیح نرم افزار دسترسی به این مجورها باید توسط شما تایید شود.</string>
+    <string name="permission_rationale_settings_button_text">تنظیمات</string>
+
+
+    <string name="title_activity_temp">TempActivity</string>
+    <string name="yesterday">دیروز</string>
+    <string name="tomorrow">فردا</string>
+    <string name="today">امروز</string>
+    <string name="ago">قبل</string>
+    <string name="hour">ساعت</string>
+    <string name="few_seconds_ago">چند ثانیه پیش</string>
+    <string name="seconds"> ثانیه </string>
+    <string name="minutes"> دقیقه </string>
+    <string name="days"> روز </string>
+    <string name="weeks"> هفته </string>
+    <string name="now"> همین حالا </string>
+    <string name="all_permissions_denied_feedback">جهت عملکرد صحیح نرم افزار دسترسی به این مجورها باید توسط شما تایید شود.</string>
+
+    <string name="ms_back">قبلی</string>
+    <string name="ms_next">بعدی</string>
+    <string name="ms_complete">اتمام</string>
+    <string name="insert_order_title">افزودن آگهی</string>
+    <string name="insert_order_select_category">انتخاب دسته بندی</string>
+    <string name="general_price_hint">قیمت (300,000 هزار تومان)</string>
+    <string name="general_type_hint">نوع</string>
+    <string name="general_email_hint">ایمیل (الزامی نیست)</string>
+    <string name="general_select_image_text">انتخاب</string>
+    <string name="general_tel_hint">مثال 09121111111</string>
+    <string name="general_title_hint">عنوان آگهی</string>
+    <string name="general_desc_hint">توضیحات آگهی</string>
+    <string name="amlak_metraj_hint">متراژ</string>
+    <string name="amlak_price_hint">قیمت کل</string>
+    <string name="amlak_type_hint">نوع آگهی دهنده</string>
+    <string name="amlak_otagh_hint">تعداد اتاق</string>
+    <string name="amlak_homeshahr_hint">حومه شهر</string>
+    <string name="amlak_vadieh_hint">ودیعه</string>
+    <string name="amlak_ejareh_hint">اجاره ماهیانه</string>
+    <string name="amlak_sanad_hint">سند اداری</string>
+    <string name="amlak_type_shakhsi_hint">شخصی</string>
+    <string name="amlak_type_moshaver_hint">مشاور املاک</string>
+    <string name="amlak_type_label">نوع آگهی دهنده</string>
+    <string name="amlak_sanad_yes_hint">دارد</string>
+    <string name="amlak_sanad_no_hint">ندارد</string>
+    <string name="naghliye_brand_hint">برند و مدل خودرو</string>
+    <string name="naghliye_kardkard_hint">کارکرد</string>
+    <string name="catehory_selector_progress_label">در حال بارگذاری</string>
+
+	
+	<string name="pick_image_from_gallery">انتخاب تصویر از گالری</string>
+    <string name="text_images">%1$d تصاویر</string>
+    <string name="text_button_done">اتمام</string>
+    <string name="text_title_activity_album">انتخاب تصاویر</string>
+    <string name="text_title_dialog_sort_by_album">مرتب سازی بر اساس</string>
+    <string name="text_title_dialog_sort_by_photo">Sort photo by</string>
+    <string name="action_sort">Sort</string>
+    <string name="brand_prompt">انتخاب برند</string>
+
+    <string name="amlak_homeshahr_yes_label">هست</string>
+    <string name="amlak_homeshahr_no_label">نیست</string>
+
+    <string-array name="naghliye_sal">
+            <item>1360</item>
+            <item>1361</item>
+            <item>1362</item>
+            <item>1363</item>
+            <item>1364</item>
+            <item>1365</item>
+            <item>1366</item>
+            <item>1367</item>
+            <item>1368</item>
+            <item>1369</item>
+            <item>1370</item>
+            <item>1371</item>
+            <item>1372</item>
+            <item>1373</item>
+            <item>1374</item>
+            <item>1375</item>
+            <item>1376</item>
+            <item>1377</item>
+            <item>1378</item>
+            <item>1379</item>
+            <item>1380</item>
+            <item>1381</item>
+            <item>1382</item>
+            <item>1383</item>
+            <item>1384</item>
+            <item>1385</item>
+            <item>1386</item>
+            <item>1387</item>
+            <item>1388</item>
+            <item>1389</item>
+            <item>1390</item>
+            <item>1391</item>
+            <item>1392</item>
+            <item>1393</item>
+            <item>1394</item>
+            <item>1395</item>
+            <item>1396</item>
+    </string-array>
+</resources>
