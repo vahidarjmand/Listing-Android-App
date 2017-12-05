@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    app:theme="@style/AppTheme.NoActionBar"
+    tools:context="tmediaa.ir.ahamdian.seach.SearchFilterActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/apply_seach_btn"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/filter_button_background"
+            android:text="اعمال فیلتر"
+            android:textColor="@color/White" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttons"
+        android:layout_below="@+id/appbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <com.sevenheaven.segmentcontrol.SegmentControl
+                android:id="@+id/segment_control"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:textSize="13sp"
+                app:cornerRadius="5dip"
+                app:horizonGap="14dip"
+                app:normalColor="#FFFFFF"
+                app:selectedColor="@color/colorPrimary"
+                app:texts="جدیدترین|گرانترین|ارزانترین"
+                app:verticalGap="14dip" />
+
+            <RelativeLayout
+                android:id="@+id/thumb_selector_container"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:gravity="left"
+                    android:text="نمایش آگهی های عکس دار" />
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true">
+
+                    <Switch
+                        android:id="@+id/feature_image_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="5dp"
+                        android:checked="false"
+                        android:textOff="خیر"
+                        android:textOn="بله"
+                        app:theme="@style/swtich_style"
+                        tools:ignore="MissingPrefix" />
+
+                    <TextView
+                        android:id="@+id/switchBtn_txtView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/feature_image_switch"
+                        android:gravity="center_horizontal"
+                        android:text="خیر" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/category_selector_container"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:gravity="left"
+                    android:text="انتخاب دسته بندی" />
+
+                <Button
+                    android:id="@+id/category_selector_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/category_button_bg"
+                    android:text="انتخاب"
+                    android:textColor="@color/White"></Button>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/general_filter_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/general_type_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="نوع آگهی" />
+
+                    <RadioGroup
+                        android:id="@+id/general_type_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <RadioButton
+                            android:id="@+id/general_type_sale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="فروشی" />
+
+                        <RadioButton
+                            android:id="@+id/general_type_request"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="درخواستی" />
+                    </RadioGroup>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/general_price_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/price_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="قیمت" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@id/price_label"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:id="@+id/general_price_from_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="از" />
+
+                            <th.in.lordgift.widget.EditTextIntegerComma
+                                android:id="@+id/general_price_from_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/general_price_hint"
+                                android:maxLines="1"
+                                android:textSize="12sp"
+                                app:numberLength="10" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/general_price_to_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/general_price_from_con"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="تا" />
+
+                            <th.in.lordgift.widget.EditTextIntegerComma
+                                android:id="@+id/general_price_to_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/general_price_to_hint"
+                                android:maxLines="1"
+                                android:textSize="12sp"
+                                app:numberLength="10" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/amlak_filter_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/amlak_metraj_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/amlak_metraj_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="right"
+                            android:text="متراژ:" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/amlak_metraj_label_1_from"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="از" />
+
+                            <EditText
+                                android:id="@+id/amlak_metraj_from_txt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:maxLength="4" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="متر" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="تا" />
+
+                            <EditText
+                                android:id="@+id/amlak_metraj_to_txt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:maxLength="4" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@id/amlak_metraj_from_txt"
+                                android:text="متر" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/amlak_type_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:text="نوع آگهی دهنده" />
+
+                    <RadioGroup
+                        android:id="@+id/amlak_type_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <RadioButton
+                            android:id="@+id/amlak_type_shakhsi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="شخصی" />
+
+                        <RadioButton
+                            android:id="@+id/amlak_type_bongah"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="بنگاه املاک" />
+                    </RadioGroup>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/amlak_room_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:text="تعداد اتاق" />
+
+                    <RadioGroup
+                        android:id="@+id/amlak_room_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <RadioButton
+                            android:id="@+id/room_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="1" />
+
+                        <RadioButton
+                            android:id="@+id/room_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="2" />
+
+                        <RadioButton
+                            android:id="@+id/room_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="3" />
+
+                        <RadioButton
+                            android:id="@+id/room_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="4" />
+
+                        <RadioButton
+                            android:id="@+id/room_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="5 به بالا" />
+                    </RadioGroup>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/amlak_vadieh_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/amlak_vadie_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="محدوده ودیعه" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@id/amlak_vadie_label"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:id="@+id/amlak_vadie_from_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="از" />
+
+                            <th.in.lordgift.widget.EditTextIntegerComma
+                                android:id="@+id/amlak_vadie_from_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/general_price_hint"
+                                android:maxLines="1"
+                                android:textSize="12sp"
+                                app:numberLength="10" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/amlak_vadie_to_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/amlak_vadie_from_con"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="تا" />
+
+                            <th.in.lordgift.widget.EditTextIntegerComma
+                                android:id="@+id/amlak_vadie_to_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/general_price_to_hint"
+                                android:maxLines="1"
+                                android:textSize="12sp"
+                                app:numberLength="10" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/amlak_ejareh_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/amlak_ejareh_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="محدوده اجاره" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@id/amlak_ejareh_label"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:id="@+id/amlak_ejareh_from_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="از" />
+
+                            <th.in.lordgift.widget.EditTextIntegerComma
+                                android:id="@+id/amlak_ejareh_from_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/general_price_hint"
+                                android:maxLines="1"
+                                android:textSize="12sp"
+                                app:numberLength="10" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/amlak_ejareh_to_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/amlak_ejareh_from_con"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="تا" />
+
+                            <th.in.lordgift.widget.EditTextIntegerComma
+                                android:id="@+id/amlak_ejareh_to_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/general_price_to_hint"
+                                android:maxLines="1"
+                                android:textSize="12sp"
+                                app:numberLength="10" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/naghlie_filter_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/naghlie_brand_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/brand_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="انتخاب برند" />
+
+                    <tmediaa.ir.ahamdian.tools.NoDefaultSpinner
+                        android:id="@+id/naghliye_brand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:prompt="@string/brand_prompt"
+                        android:spinnerMode="dialog" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/naghlie_sal_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/naghlie_sal_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="محدود سال" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@id/naghlie_sal_label"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:id="@+id/naghlie_sal_from_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="از" />
+
+                            <EditText
+                                android:id="@+id/naghliye_sal_from_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="سال 1385"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:maxLines="1"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/naghlie_sal_to_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/naghlie_sal_from_con"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="تا" />
+
+                            <EditText
+                                android:id="@+id/naghliye_sal_to_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="سال 1395"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:maxLines="1"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/naghlie_karkard_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/naghlie_karkard_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:gravity="left"
+                        android:text="محدود کارکرد" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@id/naghlie_karkard_label"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:id="@+id/naghlie_karkard_from_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="از" />
+
+                            <EditText
+                                android:id="@+id/naghliye_karkard_from_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="10 هزار کیلومتر"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:maxLines="1"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/naghlie_karkard_to_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/naghlie_karkard_from_con"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="تا" />
+
+                            <EditText
+                                android:id="@+id/naghliye_karkard_to_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="80 هزار کیلومتر"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:maxLines="1"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

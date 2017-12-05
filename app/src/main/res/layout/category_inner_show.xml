@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/viewpager_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_200"
+        android:padding="5dp">
+
+        <tmediaa.ir.ahamdian.tools.NonSwipeableViewPager
+            android:id="@+id/category_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <com.santalu.emptyview.EmptyView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:emptyDrawable="@drawable/ic_sentiment_dissatisfied"
+        app:emptyDrawableTint="@color/colorPrimary"
+        app:emptyGravity="center"
+        app:emptyText="@string/empty"
+        app:errorBackgroundColor="@color/red_btn_bg_color"
+        app:errorButtonBackgroundColor="@color/white"
+        app:errorButtonText="@string/try_again"
+        app:errorButtonTextColor="@color/black"
+        app:errorDrawable="@drawable/ic_sentiment_very_dissatisfied"
+        app:errorDrawableTint="@color/white"
+        app:errorText="@string/error_unknown"
+        app:errorTextColor="@color/white"
+        app:loadingDrawable="@drawable/ic_sentiment_satisfied"
+        app:loadingStyle="circular"
+        app:loadingText="@string/loading"
+        app:loadingTint="@color/colorPrimary">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/category_recyclerview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </com.santalu.emptyview.EmptyView>
+
+</LinearLayout>
+
+

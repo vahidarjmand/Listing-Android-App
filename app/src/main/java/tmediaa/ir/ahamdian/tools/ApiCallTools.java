@@ -2,7 +2,6 @@ package tmediaa.ir.ahamdian.tools;
 
 import android.content.Context;
 import android.provider.Settings;
-import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -62,17 +61,17 @@ public class ApiCallTools {
                 });
     }
 
-    public void getOrders(Context context, String url, final int page, final onOrderLoad orderLoad) {
+    public void getOrders(Context context, String url, final int city,final int page, final onOrderLoad orderLoad) {
         this.orderLoad = orderLoad;
         Ion.with(context)
-                .load(CONST.GET_ORDERS)
-                .addQuery("page", String.valueOf(page))
+                .load(url)
+                .setBodyParameter("city_id", String.valueOf(city))
+                .setBodyParameter("page", String.valueOf(page))
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (e != null) {
-                            Log.d(CONST.APP_LOG, "Error : " + e.getMessage());
                         } else {
                             listData.clear();
                             JsonArray items = result.get("items").getAsJsonObject().get("data").getAsJsonArray();
@@ -88,8 +87,10 @@ public class ApiCallTools {
                                 JsonObject item = items.get(i).getAsJsonObject();
                                 OrderItem orderItem = new OrderItem();
                                 orderItem.setId(item.get("id").getAsInt());
+                                orderItem.setCat_name(item.get("catname").getAsString());
                                 orderItem.setTitle(item.get("title").getAsString());
                                 orderItem.setDesc(item.get("desc").getAsString());
+                                orderItem.setAttachments(item.get("attachments").getAsJsonArray());
                                 orderItem.setDate(item.get("updated_at").getAsString());
                                 listData.add(orderItem);
                             }
@@ -103,6 +104,54 @@ public class ApiCallTools {
                 });
     }
 
+
+
+    public void getOrdersWithID(Context context, String url, final int city,final int page,int id, final onOrderLoad orderLoad) {
+
+
+        this.orderLoad = orderLoad;
+        Ion.with(context)
+                .load(url)
+                .setBodyParameter("city_id", String.valueOf(city))
+                .setBodyParameter("page", String.valueOf(page))
+                .setBodyParameter("cat_id", String.valueOf(id))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (e != null) {
+
+                        } else {
+                            listData.clear();
+                            JsonArray items = result.get("items").getAsJsonObject().get("data").getAsJsonArray();
+                            total_page = result.get("items").getAsJsonObject().get("last_page").getAsInt();
+
+                            if(page > total_page){
+                                status = true;
+                            }else{
+                                status = false;
+                            }
+
+                            for (int i = 0; i < items.size(); i++) {
+                                JsonObject item = items.get(i).getAsJsonObject();
+                                OrderItem orderItem = new OrderItem();
+                                orderItem.setId(item.get("id").getAsInt());
+                                orderItem.setCat_name(item.get("catname").getAsString());
+                                orderItem.setTitle(item.get("title").getAsString());
+                                orderItem.setDesc(item.get("desc").getAsString());
+                                orderItem.setAttachments(item.get("attachments").getAsJsonArray());
+                                orderItem.setDate(item.get("updated_at").getAsString());
+                                listData.add(orderItem);
+                            }
+
+                            if (orderLoad != null) {
+                                orderLoad.onOrdersLoad(listData, status);
+                            }
+
+                        }
+                    }
+                });
+    }
 
     public interface onOrderLoad {
         void onOrdersLoad(ArrayList<OrderItem> items,boolean is_end);

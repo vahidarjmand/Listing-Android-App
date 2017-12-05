@@ -37,7 +37,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -61,7 +60,6 @@ import com.stepstone.stepper.internal.widget.TabsContainer;
 import com.stepstone.stepper.viewmodel.StepViewModel;
 
 import tmediaa.ir.ahamdian.R;
-import tmediaa.ir.ahamdian.tools.CONST;
 
 
 /**
@@ -576,7 +574,6 @@ public class StepperLayout extends LinearLayout implements TabsContainer.TabItem
      * @param tabNavigationEnabled true if step navigation is possible by clicking on the tabs directly, false otherwise
      */
     public void setTabNavigationEnabled(boolean tabNavigationEnabled) {
-        Log.d(CONST.APP_LOG,"status: "+ tabNavigationEnabled);
         mTabNavigationEnabled = tabNavigationEnabled;
     }
 

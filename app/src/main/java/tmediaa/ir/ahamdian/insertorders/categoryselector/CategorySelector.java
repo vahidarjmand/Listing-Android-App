@@ -30,10 +30,12 @@ import tmediaa.ir.ahamdian.adapters.CategoryMenuPagerAdapter;
 import tmediaa.ir.ahamdian.interfaces.CategoryCallback;
 import tmediaa.ir.ahamdian.model.Brand;
 import tmediaa.ir.ahamdian.model.CategoryItem;
+import tmediaa.ir.ahamdian.otto.AppEvents;
+import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.CONST;
 
 
-public class CategorySelector extends DialogFragment implements DialogInterface.OnKeyListener{
+public class CategorySelector extends DialogFragment implements DialogInterface.OnKeyListener {
     private Context context;
     private LinearLayout progress_container;
     private LinearLayout pager_container;
@@ -45,14 +47,12 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
 
     private int selected_id = 0;
     private String selected_name = "";
-    public static CategorySelector newInstanse(CategoryCallback callback)
-    {
+
+    public static CategorySelector newInstanse(CategoryCallback callback) {
         CategorySelector f = new CategorySelector();
         f.mCallback = callback;
-        return  f;
+        return f;
     }
-
-
 
 
     @Override
@@ -113,20 +113,20 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
 
                             category_pager = (ViewPager) rootView.findViewById(R.id.category_pager);
 
-                             adapter = new CategoryMenuPagerAdapter(context, lists, new CategoryMenuPagerAdapter.PagerCallback() {
+                            adapter = new CategoryMenuPagerAdapter(context, lists, new CategoryMenuPagerAdapter.PagerCallback() {
                                 @Override
                                 public void onChangePager(int page) {
                                     category_pager.setCurrentItem(page + 1);
 
                                 }
 
-                                 @Override
-                                 public void closeMenu(int id, String name) {
-                                     dismiss();
-                                     selected_id = id;
-                                     selected_name = name;
-                                 }
-                             });
+                                @Override
+                                public void closeMenu(int id, String name) {
+                                    dismiss();
+                                    selected_id = id;
+                                    selected_name = name;
+                                }
+                            });
 
 
                             category_pager.setAdapter(adapter);
@@ -181,14 +181,14 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
         if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
             //This is the filter
             if (event.getAction() != KeyEvent.ACTION_DOWN) {
-                if (category_pager.getCurrentItem()>0){
+                if (category_pager.getCurrentItem() > 0) {
                     category_pager.setCurrentItem(category_pager.getCurrentItem() - 1);
 
-                }else{
+                } else {
                     dismiss();
                 }
 
-                if(category_pager.getCurrentItem() == 0){
+                if (category_pager.getCurrentItem() == 0) {
                     adapter.loadRoot();
                 }
                 return true;
@@ -203,9 +203,12 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(mCallback !=null){
+        if (mCallback != null) {
 
-            mCallback.onCategoryChoose(selected_id,selected_name);
+            mCallback.onCategoryChoose(selected_id, selected_name);
+        }else{
+            AppEvents.DialogCategoryChose id_event = new AppEvents.DialogCategoryChose(selected_name,selected_id);
+            GlobalBus.getBus().post(id_event);
         }
     }
 }

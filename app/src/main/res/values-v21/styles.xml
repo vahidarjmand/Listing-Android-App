@@ -21,4 +21,11 @@ limitations under the License.
         <item name="android:elevation">2dp</item>
     </style>
 
+    <style name="swtich_style">
+        <item name="android:colorControlActivated">@color/colorPrimary</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorPrimaryLight</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
 </resources>

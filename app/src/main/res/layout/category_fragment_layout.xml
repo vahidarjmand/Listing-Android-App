@@ -4,11 +4,26 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/textView"
+    <FrameLayout
+        android:id="@+id/frame_box"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="category_fragment_layout" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </FrameLayout>
+    <tmediaa.ir.ahamdian.all_category.CustomGridView
+        android:id="@+id/grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:columnWidth="120dp"
+        android:stretchMode="columnWidth"
+        android:drawSelectorOnTop="true"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:gravity="center" />
+
 </LinearLayout>

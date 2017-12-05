@@ -24,17 +24,24 @@ public class CONST {
     public static boolean IS_HELP = false;
     public static String APP_LOG = "APP_LOG";
     public static String GET_ORDERS = BASE_URL + "/api/vr1/getOrders";
+    public static String GET_ORDERS_WITH_ID = BASE_URL + "/api/vr1/getOrdersByCat";
     public static final String APP_TOKEN = BASE_URL + "/api/vr1/accessapi";
     public static final String USER_REGISTER = BASE_URL + "/api/vr1/registerUser";
     public static final String USER_LOGIN = BASE_URL + "/api/vr1/loginUser";
     public static final String ACTIVE_USER = BASE_URL + "/api/vr1/active_user";
     public static final String CATEGORIES_URL = BASE_URL + "/api/vr1/getCategories";
     public static final String GET_ORDER = BASE_URL + "/api/vr1/getOrder";
+    public static final String GET_CITIES = BASE_URL + "/api/vr1/getLocation";
     public static final String ADD_ORDER = BASE_URL + "/api/vr1/add_order";
+    public static final String EDIT_ORDER = BASE_URL + "/api/vr1/edit_order";
+    public static final String REMOVE_ORDER = BASE_URL + "/api/vr1/del_order";
+    public static final String GET_LOCATION_ID = BASE_URL + "/api/vr1/getLocationID";
+    public static final String FINALIZE_ORDER = BASE_URL + "/api/vr1/finalize_order";
+    public static final String SEARCH_API = BASE_URL + "/api/vr1/search";
     public static ArrayList<Brand> NAGHLIYE_BRANDS_LIST = new ArrayList<>();
 
 
-    public void writeFile(String data) {
+    public static void writeFile(String data) {
         final File path =
                 Environment.getExternalStoragePublicDirectory
                         (
@@ -78,6 +85,15 @@ public class CONST {
 
         NumberFormat nf = NumberFormat.getInstance(new Locale("fa", "IR"));
         String str = nf.format(Long.valueOf(number));
+
+        return str;
+    }
+    public static  String formatPriceDouble(double number) {
+
+        //String price_str = th.in.lordgift.widget.Utils.insertNumberComma(String.valueOf(number));
+
+        NumberFormat nf = NumberFormat.getInstance(new Locale("fa", "IR"));
+        String str = nf.format(Double.valueOf(number));
 
         return str;
     }

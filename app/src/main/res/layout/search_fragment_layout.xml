@@ -1,14 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl">
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="search_fragment_layout" />
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/search_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="right"
+                android:hint="جستجو برای ..."
+                android:layout_weight="1"/>
+            <ImageButton
+                android:id="@+id/search_start_btn"
+                android:layout_width="40dp"
+                android:src="@drawable/search_icon"
+                android:layout_height="40dp"
+                android:cropToPadding="true"
+                android:scaleType="fitCenter"
+                android:tint="@color/grey_500"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/showFilterDialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="فیلتر کردن بر اساس دسته بندی و جزییات"
+                android:gravity="right|center_vertical"
+                android:drawableRight="@drawable/filter_icon"
+                android:drawablePadding="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.santalu.emptyview.EmptyView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:emptyDrawable="@drawable/ic_sentiment_dissatisfied"
+        app:emptyDrawableTint="@color/colorPrimary"
+        app:emptyGravity="center"
+        app:emptyText="@string/empty"
+        app:errorBackgroundColor="@color/red_btn_bg_color"
+        app:errorButtonBackgroundColor="@color/white"
+        app:errorButtonText="@string/try_again"
+        app:errorButtonTextColor="@color/black"
+        app:errorDrawable="@drawable/ic_sentiment_very_dissatisfied"
+        app:errorDrawableTint="@color/white"
+        app:errorText="@string/error_unknown"
+        app:errorTextColor="@color/white"
+        app:loadingDrawable="@drawable/ic_sentiment_satisfied"
+        app:loadingStyle="circular"
+        app:loadingText="@string/loading"
+        app:loadingTint="@color/colorPrimary">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/search_recyclerview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </com.santalu.emptyview.EmptyView>
+
 </LinearLayout>

@@ -3,6 +3,7 @@ package tmediaa.ir.ahamdian.insertorders;
 import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.builder.Builders;
 import com.nileshp.multiphotopicker.photopicker.activity.PickImageActivity;
+import com.squareup.otto.Subscribe;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
@@ -61,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
@@ -108,6 +111,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     private ArrayList<String> pathList = new ArrayList<>();
     private ArrayList<String> final_path = new ArrayList<>();
     private View viewItemSelected;
+    private ImageView btnDelete;
     private HorizontalScrollView horizontalScrollView;
     private LinearLayout root;
     private LinearLayout layoutListItemSelect;
@@ -127,7 +131,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     private Integer amlak_type_send;
     private Integer amlak_otagh_send;
     private Integer amlak_homeshahr_send;
-    private Integer amlak_vadieh_send;
+    private Double amlak_vadieh_send;
     private Integer amlak_ejareh_send;
     private Integer amlak_sanad_send;
     private Integer naghliye_brand_send;
@@ -135,6 +139,11 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     private Integer naghliye_sal_send;
     private List<NameValuePair> send_paramas = new ArrayList<NameValuePair>();
     private boolean allow_next = false;
+    private boolean is_edit = false;
+    private int edit_order_id = 0;
+
+
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -210,6 +219,14 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         naghliye_kardkard_con = (LinearLayout) rootView.findViewById(R.id.naghliye_kardkard_con);
         naghliye_sal_con = (LinearLayout) rootView.findViewById(R.id.naghliye_sal_con);
         layoutListItemSelect = (LinearLayout) rootView.findViewById(R.id.layoutListItemSelect);
+
+        progressDialog = new ProgressDialog(getContext());
+
+    }
+
+    private void showProgress(String msg) {
+        progressDialog.setMessage(msg);
+        progressDialog.show();
     }
 
     @Override
@@ -225,7 +242,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
     @Override
     public void onSelected() {
-        //update UI when selected
+
     }
 
     @Override
@@ -245,7 +262,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     }
 
     private void showTargetForm(int id) {
-
         switch (id) {
             case 15:
             case 16:
@@ -295,7 +311,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         }
     }
 
-    private void checkForm() {
+    private void checkForm(StepperLayout.OnNextClickedCallback callback) {
         if (!category_selector_btn.getText().equals("انتخاب")) {
             switch (selected_cat_value) {
                 case 15:
@@ -314,7 +330,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                     if (checkAmlak(selected_cat_value)) {
                         addGeneralField();
                         addAmlakField();
-                        sendMainform();
+                        sendMainform(callback);
                     }
                 case 30:
                 case 31:
@@ -327,7 +343,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                     if (checkNaghliye(selected_cat_value)) {
                         addGeneralField();
                         addNaghliyeField();
-                        sendMainform();
+                        sendMainform(callback);
                     }
                     break;
                 case 104:
@@ -341,13 +357,13 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                     //pezeshki
                     if (checkGenralNoPrice()) {
                         sendPezeshkForm();
-                        sendMainform();
+                        sendMainform(callback);
                     }
                     break;
                 default:
                     if (checkGeneralField()) {
                         addGeneralField();
-                        sendMainform();
+                        sendMainform(callback);
 
                     }
                     break;
@@ -407,7 +423,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
             Toasty.error(getContext(), "لطفا اجاره مورد نظر را وارد کنید.", Toast.LENGTH_LONG, true).show();
             return false;
         } else {
-            amlak_vadieh_send = Integer.parseInt(amlak_vadie.getValue());
+            amlak_vadieh_send = Double.parseDouble(amlak_vadie.getValue());
             return true;
         }
     }
@@ -439,7 +455,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         } else {
             RadioButton selected_radio = (RadioButton) rootView.findViewById(radioButtonID);
 
-            if (selected_radio.getText().toString().equals("شخصی")) {
+            if (selected_radio.getText().toString().equals("هست")) {
                 amlak_homeshahr_send = 1;
             } else {
                 amlak_homeshahr_send = 2;
@@ -879,7 +895,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     @Override
     @UiThread
     public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
-        Toast.makeText(this.getContext(), "Your custom back action. Here you should cancel currently running operations", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), "برگشت", Toast.LENGTH_LONG).show();
         callback.goToPrevStep();
     }
 
@@ -1082,7 +1098,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         }
     }
 
-
     private void showPezeshkForm(int id) {
         initilizeFields();
         form_container.setVisibility(View.VISIBLE);
@@ -1171,7 +1186,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                 amlak_ejareh_con.setVisibility(View.VISIBLE);
                 general_type_con.setVisibility(View.VISIBLE);
                 amlak_metraj_con.setVisibility(View.VISIBLE);
-                amlak_homeshahr_con.setVisibility(View.GONE);
+                amlak_homeshahr_con.setVisibility(View.VISIBLE);
                 break;
             case 21:
                 amlak_sanad_con.setVisibility(View.GONE);
@@ -1194,7 +1209,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                 amlak_otagh_con.setVisibility(View.VISIBLE);
                 general_type_con.setVisibility(View.VISIBLE);
                 amlak_metraj_con.setVisibility(View.VISIBLE);
-                amlak_homeshahr_con.setVisibility(View.GONE);
+                amlak_homeshahr_con.setVisibility(View.VISIBLE);
                 break;
             case 23:
                 amlak_sanad_con.setVisibility(View.GONE);
@@ -1296,45 +1311,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (resultCode == -1 && requestCode == PickImageActivity.PICKER_REQUEST_CODE) {
-            this.pathList = intent.getExtras().getStringArrayList(PickImageActivity.KEY_DATA_RESULT);
-            if (this.pathList != null && !this.pathList.isEmpty()) {
-                horizontalScrollView.setVisibility(View.VISIBLE);
-                StringBuilder sb = new StringBuilder("");
-                for (int i = 0; i < pathList.size(); i++) {
-                    //final_path.add(decodeFile(pathList.get(i), 800, 800));
-                    new DecodeFileAsync().execute(pathList.get(i));
-                    viewItemSelected = getActivity().getLayoutInflater().inflate(R.layout.piclist_item_selected, layoutListItemSelect, false);
-                    viewItemSelected.setTag(pathList.get(i));
-                    ImageView btnDelete = (ImageView) viewItemSelected.findViewById(R.id.btnDelete);
-                    btnDelete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final_path.remove(((View) v.getParent().getParent()).getTag());
-                            layoutListItemSelect.removeView((View) v.getParent().getParent());
-                            if (final_path.size() == 0) {
-                                horizontalScrollView.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                    Bitmap bmImg = BitmapFactory.decodeFile(pathList.get(i), options);
-                    viewItemSelected.setId(i);
-                    ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
-                    imageItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageItem.setLayoutParams(imageView_lp);
-                    imageItem.setImageBitmap(bmImg);
-                    layoutListItemSelect.addView(viewItemSelected);
-
-
-                }
-            }
-        }
-    }
 
     private boolean isPermissionGranted(String permission) {
         //Getting the permission status
@@ -1383,8 +1359,9 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String DateToStr = format.format(curDate);
 
+
         send_paramas.add(new BasicNameValuePair("cat_id", String.valueOf(selected_cat_value)));
-        send_paramas.add(new BasicNameValuePair("city_id", "1"));
+        send_paramas.add(new BasicNameValuePair("city_id", AppSharedPref.read("CITY_ID", "")));
         send_paramas.add(new BasicNameValuePair("title", general_title_send));
         send_paramas.add(new BasicNameValuePair("desc", general_desc_send));
         send_paramas.add(new BasicNameValuePair("email", general_email_send));
@@ -1444,31 +1421,63 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         addGeneralField();
     }
 
-    private void sendMainform() {
 
-        /*Log.d(CONST.APP_LOG,"cat_id: " + selected_cat_value);
-        Log.d(CONST.APP_LOG,"title: " + general_title_send);
-        Log.d(CONST.APP_LOG,"desc: " + general_desc_send);
-        Log.d(CONST.APP_LOG,"email: " + general_email_send);
-        Log.d(CONST.APP_LOG,"tel: " + general_tel_send);
-        Log.d(CONST.APP_LOG,"price_type: " + price_type_send);
-        Log.d(CONST.APP_LOG,"price: " + price_send);
-        Log.d(CONST.APP_LOG,"general_type: " + general_type_send);
-        Log.d(CONST.APP_LOG,"amlak_metrajh: " + amlak_metraj_send);
-        Log.d(CONST.APP_LOG,"amlak_type: " + amlak_type_send);
-        Log.d(CONST.APP_LOG,"amlak_room_count: " + amlak_otagh_send);
-        Log.d(CONST.APP_LOG,"amlak_homeshahr: " + amlak_homeshahr_send);
-        Log.d(CONST.APP_LOG,"amlak_ejare: " + amlak_ejareh_send);
-        Log.d(CONST.APP_LOG,"amlak_vadieh: " + amlak_vadieh_send);
-        Log.d(CONST.APP_LOG,"amlak_sanad_edari: " + amlak_sanad_send);
-        Log.d(CONST.APP_LOG,"naghliey_brand: " + naghliye_brand_send);
-        Log.d(CONST.APP_LOG,"naghliey_sal: " + naghliye_sal_send);
-        Log.d(CONST.APP_LOG,"naghliey_karkard: " + naghliye_karkard_send);*/
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (resultCode == -1 && requestCode == PickImageActivity.PICKER_REQUEST_CODE) {
+            this.pathList = intent.getExtras().getStringArrayList(PickImageActivity.KEY_DATA_RESULT);
+            if (this.pathList != null && !this.pathList.isEmpty()) {
+                horizontalScrollView.setVisibility(View.VISIBLE);
+                for (int i = 0; i < pathList.size(); i++) {
+                    viewItemSelected = getActivity().getLayoutInflater().inflate(R.layout.piclist_item_selected, layoutListItemSelect, false);
+                    viewItemSelected.setTag(pathList.get(i));
+                    btnDelete = (ImageView) viewItemSelected.findViewById(R.id.btnDelete);
+                    calcbtnDelete();
+                    Bitmap bmImg = BitmapFactory.decodeFile(pathList.get(i), options);
+                    viewItemSelected.setId(i);
+                    ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
+                    imageItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageItem.setLayoutParams(imageView_lp);
+                    imageItem.setImageBitmap(bmImg);
+                    layoutListItemSelect.addView(viewItemSelected);
+                }
+            }
+        }
+    }
 
+    private void calcbtnDelete() {
+        if (btnDelete != null) {
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String selected_item = (String) ((View) v.getParent().getParent()).getTag();
+                    layoutListItemSelect.removeView((View) v.getParent().getParent());
+                    pathList.remove(selected_item);
+
+                    if (pathList.size() == 0) {
+                        horizontalScrollView.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+    }
+
+    private void sendMainform(final StepperLayout.OnNextClickedCallback callback) {
+
+        callback.getStepperLayout().showProgress("در حال ارسال اطلاعات");
         String app_token = AppSharedPref.read("TOKEN", "");
         byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+
+
+
         try {
             String user_pass = new String(data, "UTF-8");
+
+            Log.d(CONST.APP_LOG,"user_pass: " + user_pass);
+
             Ion.with(getContext())
                     .load(CONST.APP_TOKEN)
                     .setBodyParameter("username", user_pass)
@@ -1481,51 +1490,123 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                                 JsonParser parser = new JsonParser();
                                 JsonObject json_obj = parser.parse(result).getAsJsonObject();
 
+
                                 if (json_obj.has("token")) {
                                     String token = json_obj.get("token").getAsString();
-                                    Builders.Any.B ionBuilder = Ion.with(getContext()).load("POST", CONST.ADD_ORDER);
-                                    for (int i = 0; i < send_paramas.size(); i++) {
-                                        ionBuilder.setMultipartParameter(send_paramas.get(i).getName(), send_paramas.get(i).getValue());
+                                    Builders.Any.B ionBuilder;
+
+
+
+                                    for (int i = 0; i < pathList.size(); i++) {
+                                        try {
+                                            String path = new DecodeFileAsync().execute(pathList.get(i)).get();
+                                            final_path.add(path);
+                                        } catch (InterruptedException err) {
+                                            err.printStackTrace();
+                                        } catch (ExecutionException err) {
+                                            err.printStackTrace();
+                                        }
                                     }
-                                    ionBuilder.setHeader("Authorization", "Bearer " + token);
 
-                                    Log.d(CONST.APP_LOG, "call: " + final_path.size());
-                                    for (int j = 0; j < final_path.size(); j++) {
-                                        File file = new File(final_path.get(j));
-                                        String name = "img_" + j;
-                                        ionBuilder.setMultipartFile(name, "image/*", file);
-                                    }
+                                    if (is_edit) {
 
-                                    ionBuilder.asString().withResponse().setCallback(new FutureCallback<Response<String>>() {
-                                        @Override
-                                        public void onCompleted(Exception e, Response<String> result) {
+                                        Log.d(CONST.APP_LOG,"edit order");
 
-                                            if (e == null) {
-                                                JsonParser parser = new JsonParser();
-                                                JsonObject json_obj = parser.parse(result.getResult()).getAsJsonObject();
+                                        ionBuilder = Ion.with(getContext()).load("POST", CONST.EDIT_ORDER);
+                                        ionBuilder.setMultipartParameter("order_id", String.valueOf(edit_order_id));
 
-                                                if (json_obj.has("status")) {
-                                                    if (json_obj.get("status").getAsString().equals("ok")) {
-                                                        JsonObject order = json_obj.get("order").getAsJsonObject();
-                                                        allow_next = false;
+                                        for (int i = 0; i < send_paramas.size(); i++) {
+                                            ionBuilder.setMultipartParameter(send_paramas.get(i).getName(), send_paramas.get(i).getValue());
+                                        }
 
-                                                        AppEvents.sendOrderID id_event =new AppEvents.sendOrderID(order.get("id").getAsInt());
-                                                        GlobalBus.getBus().post(id_event);
+                                        ionBuilder.setHeader("Authorization", "Bearer " + token);
 
-                                                        clearForm();
-                                                        final_path.clear();
+                                        for (int j = 0; j < final_path.size(); j++) {
+                                            File file = new File(final_path.get(j));
+                                            String name = "img_" + j;
+                                            ionBuilder.setMultipartFile(name, "image/*", file);
+                                        }
 
+                                        ionBuilder.asString().withResponse().setCallback(new FutureCallback<Response<String>>() {
+                                            @Override
+                                            public void onCompleted(Exception e, Response<String> result) {
+                                                callback.getStepperLayout().hideProgress();
+                                                callback.goToNextStep();
+
+                                                if (e == null) {
+
+                                                    JsonParser parser = new JsonParser();
+                                                    JsonObject json_obj = parser.parse(result.getResult()).getAsJsonObject();
+
+                                                    if (json_obj.has("status")) {
+                                                        if (json_obj.get("status").getAsString().equals("ok")) {
+                                                            JsonObject order = json_obj.get("order").getAsJsonObject();
+                                                            allow_next = false;
+
+                                                            AppEvents.sendOrderID id_event = new AppEvents.sendOrderID(order.get("id").getAsInt());
+                                                            GlobalBus.getBus().post(id_event);
+
+                                                        } else {
+                                                            Toasty.error(getContext(), "خطا در ارسال آگهی لطفا، دوباره تلاش کنید", Toast.LENGTH_LONG).show();
+                                                        }
                                                     } else {
                                                         Toasty.error(getContext(), "خطا در ارسال آگهی لطفا، دوباره تلاش کنید", Toast.LENGTH_LONG).show();
                                                     }
                                                 } else {
-                                                    Toasty.error(getContext(), "خطا در ارسال آگهی لطفا، دوباره تلاش کنید", Toast.LENGTH_LONG).show();
+                                                    Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
                                                 }
-                                            } else {
-                                                Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
                                             }
+                                        });
+
+                                    } else {
+
+                                        Log.d(CONST.APP_LOG,"add order");
+                                        ionBuilder = Ion.with(getContext()).load("POST", CONST.ADD_ORDER);
+                                        for (int i = 0; i < send_paramas.size(); i++) {
+                                            ionBuilder.setMultipartParameter(send_paramas.get(i).getName(), send_paramas.get(i).getValue());
                                         }
-                                    });
+
+                                        ionBuilder.setHeader("Authorization", "Bearer " + token);
+                                        for (int j = 0; j < final_path.size(); j++) {
+                                            File file = new File(final_path.get(j));
+                                            String name = "img_" + j;
+                                            ionBuilder.setMultipartFile(name, "image/*", file);
+                                        }
+
+                                        ionBuilder.asString().withResponse().setCallback(new FutureCallback<Response<String>>() {
+                                            @Override
+                                            public void onCompleted(Exception e, Response<String> result) {
+
+                                                callback.getStepperLayout().hideProgress();
+                                                callback.goToNextStep();
+
+                                                if (e == null) {
+
+                                                    JsonParser parser = new JsonParser();
+                                                    JsonObject json_obj = parser.parse(result.getResult()).getAsJsonObject();
+
+                                                    if (json_obj.has("status")) {
+                                                        if (json_obj.get("status").getAsString().equals("ok")) {
+                                                            JsonObject order = json_obj.get("order").getAsJsonObject();
+                                                            allow_next = false;
+
+                                                            AppEvents.sendOrderID id_event = new AppEvents.sendOrderID(order.get("id").getAsInt());
+                                                            GlobalBus.getBus().post(id_event);
+
+                                                        } else {
+                                                            Toasty.error(getContext(), "خطا در ارسال آگهی لطفا، دوباره تلاش کنید", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    } else {
+                                                        Toasty.error(getContext(), "خطا در ارسال آگهی لطفا، دوباره تلاش کنید", Toast.LENGTH_LONG).show();
+                                                    }
+                                                } else {
+                                                    Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        });
+                                    }
+
+
                                 }
                             } else {
                                 Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
@@ -1569,6 +1650,12 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         private String import_url;
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress("در حال ارسال تصاویر");
+        }
+
+        @Override
         protected String doInBackground(String... params) {
             import_url = params[0];
             String strMyImagePath = null;
@@ -1578,13 +1665,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                 // Part 1: Decode image
                 Bitmap unscaledBitmap = ScalingUtilities.decodeFile(import_url, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
 
-                if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
-                    // Part 2: Scale image
-                    scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-                } else {
-                    unscaledBitmap.recycle();
-                    return import_url;
-                }
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
 
                 // Store to tmp file
 
@@ -1625,7 +1706,9 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
         @Override
         protected void onPostExecute(String s) {
+
             super.onPostExecute(s);
+            progressDialog.dismiss();
             final_path.add(s);
         }
 
@@ -1653,22 +1736,29 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     @Override
     @UiThread
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-        if (selected_cat_value != null) {
-            checkForm();
-            if (allow_next) {
-                callback.getStepperLayout().showProgress("در حال ارسال اطلاعات");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.goToNextStep();
-                        callback.getStepperLayout().hideProgress();
 
-                    }
-                }, 2000L);
-            }
+        if (selected_cat_value != null) {
+            checkForm(callback);
         } else {
             showErrorCon(category_selector);
             Toasty.error(getContext(), "لطفا دسته بندی مورد نظر را انتخاب کنید", Toast.LENGTH_LONG, true).show();
         }
+    }
+
+
+    @Subscribe
+    public void getOrderID(AppEvents.BackStep events) {
+        edit_order_id = events.getOrderID();
+        is_edit = true;
+        final_path.clear();
+        editUI();
+
+
+        calcbtnDelete();
+    }
+
+    private void editUI() {
+        category_selector.setEnabled(false);
+        category_selector_btn.setEnabled(false);
     }
 }

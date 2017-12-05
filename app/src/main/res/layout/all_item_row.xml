@@ -11,7 +11,7 @@
         android:layout_height="110dp"
         android:layout_margin="5dp"
         />
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,22 +20,27 @@
             android:id="@+id/order_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:textSize="16sp"
             />
         <TextView
             android:id="@+id/order_desc"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
             android:textColor="@android:color/darker_gray"
             />
 
-        <com.github.curioustechizen.ago.RelativeTimeTextView
+
+        <!--<com.github.curioustechizen.ago.RelativeTimeTextView
             android:id="@+id/order_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:relative_time_prefix=""
-            app:relative_time_suffix="" />
+            app:relative_time_suffix="" />-->
 
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

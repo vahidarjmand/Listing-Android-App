@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <declare-styleable name="Rotate3dAnimation">
+        <attr name="rollType" format="enum">
+            <enum name="x" value="0"/>
+            <enum name="y" value="1"/>
+            <enum name="z" value="2"/>
+        </attr>
+        <attr name="fromDeg" format="float" />
+        <attr name="toDeg" format="float" />
+        <attr name="pivotX" format="fraction"/>
+        <attr name="pivotY" format="fraction" />
+    </declare-styleable>
+
+
     <declare-styleable name="AVLoadingIndicatorView">
         <attr name="indicator">
             <flag name="BallPulse" value="0"/>
@@ -381,4 +395,196 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="ProgressWheel">
+        <attr name="matProg_progressIndeterminate" format="boolean" />
+        <attr name="matProg_barColor" format="color" />
+        <attr name="matProg_rimColor" format="color" />
+        <attr name="matProg_rimWidth" format="dimension" />
+        <attr name="matProg_spinSpeed" format="float" />
+        <attr name="matProg_barSpinCycleTime" format="integer" />
+        <attr name="matProg_circleRadius" format="dimension" />
+        <attr name="matProg_fillRadius" format="boolean" />
+        <attr name="matProg_barWidth" format="dimension" />
+        <attr name="matProg_linearProgress" format="boolean" />
+    </declare-styleable>
+
+
+
+    <declare-styleable name="FlexboxLayout">
+        <attr name="flexDirection">
+            <enum name="row" value="0" />
+            <enum name="row_reverse" value="1" />
+            <enum name="column" value="2" />
+            <enum name="column_reverse" value="3" />
+        </attr>
+
+        <attr name="flexWrap">
+            <enum name="nowrap" value="0" />
+            <enum name="wrap" value="1" />
+            <enum name="wrap_reverse" value="2" />
+        </attr>
+
+        <!--
+            Omitting flex-flow property since it's reflected in the parent flex container.
+            Set the flexDirection and/or flexWrap to the parent flex container explicitly if you
+            want to use the flex-flow similar way to the web.
+         -->
+
+        <attr name="justifyContent">
+            <enum name="flex_start" value="0" />
+            <enum name="flex_end" value="1" />
+            <enum name="center" value="2" />
+            <enum name="space_between" value="3" />
+            <enum name="space_around" value="4" />
+        </attr>
+
+        <attr name="alignItems">
+            <enum name="flex_start" value="0" />
+            <enum name="flex_end" value="1" />
+            <enum name="center" value="2" />
+            <enum name="baseline" value="3" />
+            <enum name="stretch" value="4" />
+        </attr>
+
+        <attr name="alignContent">
+            <enum name="flex_start" value="0" />
+            <enum name="flex_end" value="1" />
+            <enum name="center" value="2" />
+            <enum name="space_between" value="3" />
+            <enum name="space_around" value="4" />
+            <enum name="stretch" value="5" />
+        </attr>
+
+        <attr name="dividerDrawable" format="reference" />
+        <attr name="dividerDrawableHorizontal" format="reference" />
+        <attr name="dividerDrawableVertical" format="reference" />
+
+        <attr name="showDivider">
+            <flag name="none" value="0" />
+            <flag name="beginning" value="1" />
+            <flag name="middle" value="2" />
+            <flag name="end" value="4" />
+        </attr>
+        <attr name="showDividerHorizontal">
+            <flag name="none" value="0" />
+            <flag name="beginning" value="1" />
+            <flag name="middle" value="2" />
+            <flag name="end" value="4" />
+        </attr>
+        <attr name="showDividerVertical">
+            <flag name="none" value="0" />
+            <flag name="beginning" value="1" />
+            <flag name="middle" value="2" />
+            <flag name="end" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="FlexboxLayout_Layout">
+        <attr name="layout_order" format="integer" />
+
+        <!-- Negative numbers are invalid. -->
+        <attr name="layout_flexGrow" format="float" />
+
+        <!-- Negative numbers are invalid. -->
+        <attr name="layout_flexShrink" format="float" />
+
+        <!--
+            The initial length in a percentage format relative to its parent. This is similar to the
+            flex-basis property in the original CSS specification.
+            (https://www.w3.org/TR/css-flexbox-1/#flex-basis-property)
+            But unlike the flex-basis property, this attribute only accepts a value in fraction
+            (percentage), whereas flex-basis property accepts width values such as 1em, 10px and
+            the 'content' string.
+            But specifying initial fixed width values can be done by specifying width values in
+            layout_width (or layout_height, varies depending on the flexDirection). Also the same
+            effect can be done by specifying "wrap_content" in layout_width (or layout_height) if
+            developers want to achieve the same effect as 'content'.
+            Thus, this attribute only accepts fraction values, which can't be done through
+            layout_width (or layout_height) for simplicity.
+        -->
+        <attr name="layout_flexBasisPercent" format="fraction" />
+
+        <!--
+            Omitting flex property since it's a shorthand for layout_flexGrow and layout_flexShrink
+            and layout_percentInParent (flex-basis in the original CSS spec).
+        -->
+
+        <attr name="layout_alignSelf">
+            <enum name="auto" value="-1" />
+            <!-- The values below need to match the values of alignItems -->
+            <enum name="flex_start" value="0" />
+            <enum name="flex_end" value="1" />
+            <enum name="center" value="2" />
+            <enum name="baseline" value="3" />
+            <enum name="stretch" value="4" />
+        </attr>
+
+        <attr name="layout_minWidth" format="dimension" />
+        <attr name="layout_minHeight" format="dimension" />
+        <attr name="layout_maxWidth" format="dimension" />
+        <attr name="layout_maxHeight" format="dimension" />
+
+        <!--
+            This attribute forces a flex line wrapping. i.e. if this is set to true for a
+            flex item, the item will become the first item of a flex line. (A wrapping happens
+            regardless of the flex items being processed in the the previous flex line)
+            This attribute is ignored if the flex_wrap attribute is set to nowrap.
+            The equivalent attribute isn't defined in the original CSS Flexible Box Module
+            specification, but having this attribute is useful for Android developers to flatten
+            the layouts when building a grid like layout or for a situation where developers want
+            to put a new flex line to make a semantic difference from the previous one, etc.
+        -->
+        <attr name="layout_wrapBefore" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="EmptyView">
+        <attr format="enum" name="emptyGravity">
+            <enum name="center" value="0"/>
+            <enum name="top" value="1"/>
+            <enum name="bottom" value="2"/>
+        </attr>
+        <attr name="loadingStyle">
+            <enum name="circular" value="0"/>
+            <enum name="text" value="2"/>
+        </attr>
+        <attr format="string" name="loadingText"/>
+        <attr format="color" name="loadingTextColor"/>
+        <attr format="reference" name="loadingDrawable"/>
+        <attr format="color" name="loadingTint"/>
+        <attr format="color" name="loadingBackgroundColor"/>
+        <attr format="string" name="emptyText"/>
+        <attr format="color" name="emptyTextColor"/>
+        <attr format="reference" name="emptyDrawable"/>
+        <attr format="color" name="emptyDrawableTint"/>
+        <attr format="color" name="emptyBackgroundColor"/>
+        <attr format="string" name="errorText"/>
+        <attr format="color" name="errorTextColor"/>
+        <attr format="reference" name="errorDrawable"/>
+        <attr format="color" name="errorDrawableTint"/>
+        <attr format="color" name="errorBackgroundColor"/>
+        <attr format="string" name="errorButtonText"/>
+        <attr format="color" name="errorButtonTextColor"/>
+        <attr format="color" name="errorButtonBackgroundColor"/>
+    </declare-styleable>
+
+
+    <!-- segmented button -->
+    <declare-styleable name="SegmentControl">
+        <attr name="cornerRadius" format="dimension|reference"/>
+        <attr name="normalColor" format="color|reference" />
+        <attr name="selectedColor" format="color|reference" />
+        <attr name="backgroundColors" format="color|reference"/>
+        <attr name="textColors" format="color|reference"/>
+        <attr name="texts" format="string|reference"/>
+        <attr name="android:textSize"/>
+        <attr name="android:orientation" />
+        <!-- width -->
+        <attr name="boundWidth" format="dimension|reference"/>
+        <!-- width -->
+        <attr name="separatorWidth" format="dimension|reference"/>
+        <attr name="gaps" format="dimension|reference"/>
+        <attr name="horizonGap" format="dimension|reference"/>
+        <attr name="verticalGap" format="dimension|reference"/>
+    </declare-styleable>
 </resources>

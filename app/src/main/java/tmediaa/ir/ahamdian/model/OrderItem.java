@@ -1,6 +1,6 @@
 package tmediaa.ir.ahamdian.model;
 
-import android.support.annotation.Nullable;
+import com.google.gson.JsonArray;
 
 /**
  * Created by tmediaa on 9/20/2017.
@@ -12,6 +12,8 @@ public class OrderItem {
     private String desc;
     private String url;
     private String date;
+    private String cat_name;
+    private JsonArray attachments;
 
     public OrderItem() {
         this.id = id;
@@ -60,5 +62,21 @@ public class OrderItem {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public JsonArray getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(JsonArray attachments) {
+        this.attachments = attachments;
+    }
+
+    public String getCat_name() {
+        return cat_name;
+    }
+
+    public void setCat_name(String cat_name) {
+        this.cat_name = cat_name;
     }
 }

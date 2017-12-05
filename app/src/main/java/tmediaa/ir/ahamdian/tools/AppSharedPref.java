@@ -3,7 +3,6 @@ package tmediaa.ir.ahamdian.tools;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 /**
  * Created by tmediaa on 7/17/2017.
@@ -26,7 +25,6 @@ public class AppSharedPref {
 
     public static boolean check(String key) {
         boolean is_found = mSharedPref.contains(key);
-        Log.d(CONST.APP_LOG, "found: " + is_found);
         return is_found;
     }
 

@@ -33,20 +33,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:textColor="@color/white"
+            android:background="@drawable/main_button_background"
             android:text="ثبت نهایی" />
 
         <Button
             android:id="@+id/order_edit_btn"
             android:layout_width="0dp"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/main_light_button_background"
             android:layout_weight="1"
             android:text="ویرایش" />
 
         <Button
             android:id="@+id/order_delete_btn"
             android:layout_width="0dp"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/main_del_button_background"
             android:layout_weight="1"
+            android:textColor="@color/white"
             android:text="حذف" />
 
 
@@ -55,6 +63,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:textColor="@color/white"
+            android:background="@drawable/main_button_background"
             android:text="پرداخت و ثبت نهایی" />
     </LinearLayout>
 
@@ -172,6 +183,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/general_price_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -203,6 +215,12 @@
                             android:textColor="@color/item_view_value_color"
                             android:textSize="@dimen/default_item_text_size" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/general_type_view_sep"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBottomNavigationSelectedBackground" />
 
                 </LinearLayout>
 
@@ -241,6 +259,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_metraj_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -274,6 +293,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_type_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -307,6 +327,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_room_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -340,6 +361,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_homeshahr_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -373,6 +395,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_vadie_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -406,6 +429,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_ejareh_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -439,6 +463,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/amlak_sanad_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -479,6 +504,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/naghliye_brand_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -512,6 +538,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/naghliye_sal_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />
@@ -545,6 +572,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/naghliye_kardkard_view_sep"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorBottomNavigationSelectedBackground" />

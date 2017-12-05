@@ -261,7 +261,6 @@ public class RegisterActivity extends PermissionCheckActivity {
                                     active_code_box.setVisibility(View.VISIBLE);
                                     form_container.setVisibility(View.GONE);
 
-                                    Log.d(CONST.APP_LOG, "info: " + json_obj);
                                     if (json_obj.has("user")) {
                                         int user_id = json_obj.get("user").getAsJsonObject().get("id").getAsInt();
                                         String username = json_obj.get("user").getAsJsonObject().get("username").getAsString();

@@ -6,6 +6,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
+
+    </style>
+
+
+    <style name="WindowAnimationStyle">
+        <item name="android:windowEnterAnimation">@anim/from_right</item>
+        <item name="android:windowExitAnimation">@anim/modal_in</item>
     </style>
 
     <!-- Base application theme. -->
@@ -61,18 +69,17 @@
         <item name="android:windowExitAnimation">@anim/zoom_out</item>
     </style>
 
-    <style name="Theme.Transparent"
-    parent="android:Theme">
-    <item name="android:windowIsTranslucent">true</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowIsFloating">true</item>
-    <item name="android:backgroundDimEnabled">false</item>
-</style>
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 
 
-<style name="MSNavBarButton" parent="Base.Widget.AppCompat.Button.Borderless">
+    <style name="MSNavBarButton" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:textSize">@dimen/ms_navigation_button_text_size</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -150,7 +157,8 @@
     <style name="MSStepTabTitle" tools:ignore="NewApi">
         <item name="android:layout_marginLeft">@dimen/ms_step_tab_text_lateral_padding</item>
         <item name="android:layout_marginStart">@dimen/ms_step_tab_text_lateral_padding</item>
-        <item name="android:textColor">@color/ms_black</item><!-- Text alpha is changed in StepTab. 87% for active and 38% for inactive-->
+        <item name="android:textColor">@color/ms_black
+        </item><!-- Text alpha is changed in StepTab. 87% for active and 38% for inactive-->
         <item name="android:textSize">@dimen/ms_step_tab_title_font_size</item>
     </style>
 
@@ -226,14 +234,14 @@
 
 
     <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:background">#33000000</item> <!-- Or any transparency or color you need -->
+        <item name="android:background">#33000000
+        </item> <!-- Or any transparency or color you need -->
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
-
 
 
     <style name="AppTheme.NoActionBar">
@@ -245,6 +253,32 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="alert_dialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@color/float_transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+    </style>
+
+    <style name="dialog_blue_button" parent="android:Widget.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">31dp</item>
+        <item name="android:background">@drawable/blue_button_background</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">21dp</item>
+        <item name="android:paddingRight">21dp</item>
+        <item name="android:textColor">@color/button_text_color</item>
+    </style>
+
+    <style name="swtich_style" parent="@style/Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColorPrimaryDisableOnly">@color/colorPrimaryLight</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
 
 </resources>
 

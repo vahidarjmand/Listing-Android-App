@@ -28,10 +28,10 @@ public class InserOrderAdapter extends AbstractFragmentStepAdapter {
         Fragment step = null;
         switch (position) {
             case 0:
-                step = new InsertOrderStep2();
+                step = new InsertOrderStep1();
                 break;
             case 1:
-                step = new InsertOrderStep1();
+                step = new InsertOrderStep2();
                 break;
             case 2:
                 break;
@@ -55,6 +55,7 @@ public class InserOrderAdapter extends AbstractFragmentStepAdapter {
             case 0:
                 builder
                         .setBackButtonLabel("انصراف")
+                        .setBackButtonVisible(false)
                         .setEndButtonLabel("ثبت آگهی")
                         .setTitle("مشخصات آگهی");
                 break;

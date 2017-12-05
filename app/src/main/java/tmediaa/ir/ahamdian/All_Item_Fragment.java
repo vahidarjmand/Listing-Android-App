@@ -1,5 +1,6 @@
 package tmediaa.ir.ahamdian;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -15,12 +16,16 @@ import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
 import tmediaa.ir.ahamdian.adapters.AllItemAdapter;
 import tmediaa.ir.ahamdian.model.OrderItem;
+import tmediaa.ir.ahamdian.otto.AppEvents;
+import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.ApiCallTools;
+import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
 
 /**
@@ -32,7 +37,6 @@ public class All_Item_Fragment extends Fragment {
     private Context context;
     private View rootView;
     private int current_page = 1;
-    private int total_page = 0;
 
     private XRecyclerView mRecyclerView;
     private AllItemAdapter mAdapter;
@@ -40,6 +44,10 @@ public class All_Item_Fragment extends Fragment {
     private ApiCallTools apiCall = new ApiCallTools();
     private boolean hasNetWork = true;
     private Drawable dividerDrawable;
+    private ProgressDialog progressDialog;
+
+    private int target_city_id = 0;
+
     public static All_Item_Fragment newInstance() {
         All_Item_Fragment fragment = new All_Item_Fragment();
         return fragment;
@@ -63,6 +71,48 @@ public class All_Item_Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rootView = view;
 
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("در حال بارگذاری");
+        progressDialog.show();
+
+        target_city_id = Integer.valueOf(AppSharedPref.read("CITY_ID", "0"));
+
+        if (target_city_id != 0) {
+            loadItem(Integer.valueOf(target_city_id));
+        } else {
+            loadItem(1);
+        }
+
+
+        ((MainActivity) getActivity()).setOnBackClickListener(new MainActivity.OnBackClickListener() {
+            @Override
+            public boolean onBackClick() {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        GlobalBus.getBus().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        GlobalBus.getBus().unregister(this);
+        super.onDetach();
+    }
+
+    @Subscribe
+    public void getCityID(final AppEvents.UpdateLocation events) {
+        listData.clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void loadItem(final int id) {
+
+        progressDialog.dismiss();
         listData = new ArrayList<OrderItem>();
 
         mRecyclerView = (XRecyclerView) rootView.findViewById(R.id.recyclerview);
@@ -73,7 +123,7 @@ public class All_Item_Fragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dividerDrawable = ResourcesCompat.getDrawable(getResources(),R.drawable.item_row_drawable,null);
+            dividerDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.item_row_drawable, null);
         } else {
             dividerDrawable = getResources().getDrawable(R.drawable.item_row_drawable);
         }
@@ -90,17 +140,18 @@ public class All_Item_Fragment extends Fragment {
         mAdapter.setOnItemClickListener(new AllItemAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, OrderItem data) {
-                Log.d(CONST.APP_LOG,"view: "+ data.getId());
+                Log.d(CONST.APP_LOG, "view: " + data.getId());
             }
         });
 
 
-        apiCall.getOrders(context, CONST.GET_ORDERS, current_page, new ApiCallTools.onOrderLoad() {
+        apiCall.getOrders(context, CONST.GET_ORDERS, id, current_page, new ApiCallTools.onOrderLoad() {
             @Override
             public void onOrdersLoad(ArrayList<OrderItem> items, boolean status) {
                 listData.addAll(items);
                 mAdapter.notifyDataSetChanged();
-                mRecyclerView.refreshComplete();
+
+                // mRecyclerView.refreshComplete();
             }
         });
 
@@ -108,8 +159,7 @@ public class All_Item_Fragment extends Fragment {
             @Override
             public void onRefresh() {
                 current_page = 1;
-
-                apiCall.getOrders(context, CONST.GET_ORDERS, current_page, new ApiCallTools.onOrderLoad() {
+                apiCall.getOrders(context, CONST.GET_ORDERS, id, current_page, new ApiCallTools.onOrderLoad() {
                     @Override
                     public void onOrdersLoad(ArrayList<OrderItem> items, boolean status) {
                         listData.clear();
@@ -123,13 +173,13 @@ public class All_Item_Fragment extends Fragment {
             @Override
             public void onLoadMore() {
                 current_page++;
-                apiCall.getOrders(context, CONST.GET_ORDERS, current_page, new ApiCallTools.onOrderLoad() {
+                apiCall.getOrders(context, CONST.GET_ORDERS, id, current_page, new ApiCallTools.onOrderLoad() {
                     @Override
                     public void onOrdersLoad(ArrayList<OrderItem> items, boolean status) {
-                        if(status){
+                        if (status) {
                             mRecyclerView.setNoMore(true);
                             mAdapter.notifyDataSetChanged();
-                        }else{
+                        } else {
                             listData.addAll(items);
                             mAdapter.notifyDataSetChanged();
                             mRecyclerView.refreshComplete();
@@ -138,9 +188,6 @@ public class All_Item_Fragment extends Fragment {
                 });
             }
         });
-
-
     }
-
 
 }

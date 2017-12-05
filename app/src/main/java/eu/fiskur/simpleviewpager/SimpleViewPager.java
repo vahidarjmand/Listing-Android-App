@@ -90,6 +90,12 @@ public class SimpleViewPager extends RelativeLayout {
         setupIndicator(indicatorColor, selectedIndicatorColor);
     }
 
+    public void clearIndicator() {
+        if(circleLayout != null){
+            circleLayout.removeAllViews();
+        }
+    }
+
     private ImageView.ScaleType convertScaleTypeAttribute() {
         switch (scaleType) {
             case 0:

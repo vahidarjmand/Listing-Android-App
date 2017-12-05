@@ -16,27 +16,25 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         AppSharedPref.init(this);
-        if (AppSharedPref.check("allow_splash") && AppSharedPref.read("allow_splash", "").equals("true")) {
-
+        if(AppSharedPref.read("online", 0) == 1){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
                     Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(mainIntent);
                     finish();
                 }
             }, CONST.SPLASH_TIME);
-        } else {
+        }else{
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
                     Intent mainIntent = new Intent(SplashScreen.this, RegisterActivity.class);
                     startActivity(mainIntent);
                     finish();
                 }
             }, CONST.SPLASH_TIME);
         }
+
     }
 }

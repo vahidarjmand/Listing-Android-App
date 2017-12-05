@@ -155,7 +155,7 @@ public class RelativeTimeTextView extends TextView {
         if (this.mReferenceTime == -1L)
             return;
 
-        Log.d(CONST.APP_LOG,"time: "+ getRelativeTimeDisplayString());
+
         setText(mPrefix + getRelativeTimeDisplayString() + mSuffix);
     }
 

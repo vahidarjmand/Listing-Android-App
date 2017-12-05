@@ -5,3 +5,15 @@
 جستجو
 پروفایل کاربری
 نمایش تکی
+
+
+
+onNextClicked -> checkForm(callback) ->
+				id(15^27) checkAmlak(id) boolean -> addGeneralField,addAmlakField, sendMainform(callback)
+				id(30^36) checkNaghliye(id) boolean -> addGeneralField,addNaghliyeField, sendMainform(callback)
+				id(104^111) checkGenralNoPrice(id) boolean -> sendPezeshkForm, sendMainform(callback)
+				other  checkGeneralField(id) boolean -> addGeneralField, sendMainform(callback)
+
+int segment_price_send = 0;
+int general_type_send = 0;
+int naghliye_brand_send ;

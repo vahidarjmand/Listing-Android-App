@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layoutDirection="rtl"
+    android:id="@+id/rootView"
     tools:context="tmediaa.ir.ahamdian.MainActivity">
 
     <FrameLayout
@@ -13,23 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-
     </FrameLayout>
-
-
 
     <com.luseen.spacenavigation.SpaceNavigationView
         android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        app:active_centre_button_icon_color="#ffffff"
-        app:active_item_color="@color/colorPrimary"
-        app:centre_button_color="@color/colorPrimary"
+        app:space_background_color="@color/colorPrimary"
+        app:inactive_item_color="@color/white"
+        app:active_item_color="#001bca"
         app:centre_button_icon="@drawable/add_new_item_icon"
-        app:inactive_item_color="#aeaeae"
-        app:space_background_color="#ffffff"
-        app:space_item_icon_only_size="@dimen/space_item_icon_only_size"
-        app:space_item_icon_size="@dimen/space_item_icon_default_size"
-        app:space_item_text_size="@dimen/space_item_text_default_size" />
-</LinearLayout>
+        app:active_centre_button_icon_color="@color/colorPrimary"
+        app:centre_button_color="@color/colorAccent"
+        app:inactive_centre_button_icon_color="@color/colorPrimary"/>
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

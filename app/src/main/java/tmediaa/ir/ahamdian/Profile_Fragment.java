@@ -1,14 +1,17 @@
 package tmediaa.ir.ahamdian;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import tmediaa.ir.ahamdian.tools.CONST;
+import com.squareup.otto.Subscribe;
+
+import tmediaa.ir.ahamdian.otto.AppEvents;
+import tmediaa.ir.ahamdian.otto.GlobalBus;
 
 /**
  * Created by tmediaa on 9/14/2017.
@@ -35,6 +38,30 @@ public class Profile_Fragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d(CONST.APP_LOG,"Profile Fragment Instansate");
+
+        ((MainActivity) getActivity()).setOnBackClickListener(new MainActivity.OnBackClickListener() {
+            @Override
+            public boolean onBackClick() {
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        GlobalBus.getBus().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        GlobalBus.getBus().unregister(this);
+        super.onDetach();
+    }
+
+    @Subscribe
+    public void getCityID(final AppEvents.UpdateLocation events) {
+
     }
 }

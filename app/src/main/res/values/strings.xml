@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">پلاک</string>
-	
+
     <string name="toast_message">Toast message</string>
+    <string name="connection_error">خطا در برقراری ارتباط با سرور</string>
     <string name="space_scrolling_view_behavior">com.luseen.spacenavigation.SpaceNavigationViewBehavior</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="just_now">همین الان</string>
@@ -44,7 +45,8 @@
     <string name="ms_complete">اتمام</string>
     <string name="insert_order_title">افزودن آگهی</string>
     <string name="insert_order_select_category">انتخاب دسته بندی</string>
-    <string name="general_price_hint">قیمت (300,000 هزار تومان)</string>
+    <string name="general_price_hint">قیمت (300,000 تومان)</string>
+    <string name="general_price_to_hint">قیمت (2,000,000 تومان)</string>
     <string name="general_type_hint">نوع</string>
     <string name="general_email_hint">ایمیل (الزامی نیست)</string>
     <string name="general_select_image_text">انتخاب</string>
@@ -68,8 +70,8 @@
     <string name="naghliye_kardkard_hint">کارکرد</string>
     <string name="catehory_selector_progress_label">در حال بارگذاری</string>
 
-	
-	<string name="pick_image_from_gallery">انتخاب تصویر از گالری</string>
+
+    <string name="pick_image_from_gallery">انتخاب تصویر از گالری</string>
     <string name="text_images">%1$d تصاویر</string>
     <string name="text_button_done">اتمام</string>
     <string name="text_title_activity_album">انتخاب تصاویر</string>
@@ -82,42 +84,65 @@
     <string name="amlak_homeshahr_no_label">نیست</string>
 
     <string-array name="naghliye_sal">
-            <item>1360</item>
-            <item>1361</item>
-            <item>1362</item>
-            <item>1363</item>
-            <item>1364</item>
-            <item>1365</item>
-            <item>1366</item>
-            <item>1367</item>
-            <item>1368</item>
-            <item>1369</item>
-            <item>1370</item>
-            <item>1371</item>
-            <item>1372</item>
-            <item>1373</item>
-            <item>1374</item>
-            <item>1375</item>
-            <item>1376</item>
-            <item>1377</item>
-            <item>1378</item>
-            <item>1379</item>
-            <item>1380</item>
-            <item>1381</item>
-            <item>1382</item>
-            <item>1383</item>
-            <item>1384</item>
-            <item>1385</item>
-            <item>1386</item>
-            <item>1387</item>
-            <item>1388</item>
-            <item>1389</item>
-            <item>1390</item>
-            <item>1391</item>
-            <item>1392</item>
-            <item>1393</item>
-            <item>1394</item>
-            <item>1395</item>
-            <item>1396</item>
+        <item>1360</item>
+        <item>1361</item>
+        <item>1362</item>
+        <item>1363</item>
+        <item>1364</item>
+        <item>1365</item>
+        <item>1366</item>
+        <item>1367</item>
+        <item>1368</item>
+        <item>1369</item>
+        <item>1370</item>
+        <item>1371</item>
+        <item>1372</item>
+        <item>1373</item>
+        <item>1374</item>
+        <item>1375</item>
+        <item>1376</item>
+        <item>1377</item>
+        <item>1378</item>
+        <item>1379</item>
+        <item>1380</item>
+        <item>1381</item>
+        <item>1382</item>
+        <item>1383</item>
+        <item>1384</item>
+        <item>1385</item>
+        <item>1386</item>
+        <item>1387</item>
+        <item>1388</item>
+        <item>1389</item>
+        <item>1390</item>
+        <item>1391</item>
+        <item>1392</item>
+        <item>1393</item>
+        <item>1394</item>
+        <item>1395</item>
+        <item>1396</item>
     </string-array>
+
+    <item name="category_list" type="id" />
+    <item name="_id" type="id" />
+
+    <string name="dialog_default_title">Here\'s a message!</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="LOADING">Loading...</string>
+
+
+    <string name="default_progressbar">Default Progressbar:</string>
+
+
+    <!-- empty view -->
+    <string name="emptyview_loading">در حال بارگزاری …</string>
+    <string name="emptyview_error_unknown">خطا در پردازش درخواست شما</string>
+    <string name="emptyview_error_connection_not_found">ارتباط اینترنتی خود را چک کنید.</string>
+    <string name="emptyview_error_connection_timeout">خطا در ارتباط با سرور</string>
+    <string name="emptyview_error_endpoint">خطا در ارتباط با سرور</string>
+    <string name="empty">آگهی در این بخش وجود ندارد.</string>
+    <string name="try_again">تلاش مجدد</string>
+    <string name="error_unknown">خطای ناشناخته بوجود آمد.</string>
+    <string name="loading">در حال بارگذاری</string>
 </resources>
