@@ -113,27 +113,31 @@ public class LoginActivity extends AppCompatActivity {
                         if(e == null){
                             JsonParser parser = new JsonParser();
                             JsonObject json_obj = parser.parse(result).getAsJsonObject();
-                            boolean is_item = json_obj.get("info").isJsonObject();
-                            if(is_item){
-                                JsonObject item = json_obj.get("info").getAsJsonObject();
-                                int user_id = item.get("id").getAsInt();
-                                String username = item.get("username").getAsString();
-                                String user_status = item.get("status").getAsString();
-                                String active_code = item.get("active_code").getAsString();
-                                active_code_box.setVisibility(View.VISIBLE);
-                                form_container.setVisibility(View.GONE);
+                            if(json_obj.has("info")){
+                                boolean is_item = json_obj.get("info").isJsonObject();
+                                if(is_item){
+                                    JsonObject item = json_obj.get("info").getAsJsonObject();
+                                    int user_id = item.get("id").getAsInt();
+                                    String username = item.get("username").getAsString();
+                                    String user_status = item.get("status").getAsString();
+                                    String active_code = item.get("active_code").getAsString();
+                                    active_code_box.setVisibility(View.VISIBLE);
+                                    form_container.setVisibility(View.GONE);
 
-                                try {
-                                    byte[] username_bytes = username.getBytes("UTF-8");
-                                    AppSharedPref.write("ID", String.valueOf(user_id));
-                                    AppSharedPref.write("TOKEN", Base64.encodeToString(username_bytes, Base64.DEFAULT));
-                                    AppSharedPref.write("status", user_status);
-                                    checkActiveCode(active_code);
-                                } catch (UnsupportedEncodingException e1) {
-                                    e1.printStackTrace();
+                                    try {
+                                        byte[] username_bytes = username.getBytes("UTF-8");
+                                        AppSharedPref.write("ID", String.valueOf(user_id));
+                                        AppSharedPref.write("TOKEN", Base64.encodeToString(username_bytes, Base64.DEFAULT));
+                                        AppSharedPref.write("status", user_status);
+                                        checkActiveCode(active_code);
+                                    } catch (UnsupportedEncodingException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }else{
+                                    Toasty.info(context,"کاربری با این موبایل وجود ندارد لطفا ثبت نان کنید.", Toast.LENGTH_LONG,false).show();
                                 }
                             }else{
-                                Toasty.info(context,"کاربری با این موبایل وجود ندارد لطفا ثبت نان کنید.", Toast.LENGTH_LONG,false).show();
+                                Toasty.error(context,"اتصال اینترنت خود را چک کنید.", Toast.LENGTH_LONG,false).show();
                             }
                         }else{
                             Toasty.error(context,"خطا در برقراری ارتباط با سرور", Toast.LENGTH_LONG,false).show();

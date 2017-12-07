@@ -14,6 +14,8 @@ public class OrderItem {
     private String date;
     private String cat_name;
     private JsonArray attachments;
+    private boolean own_mode;
+    private String status;
 
     public OrderItem() {
         this.id = id;
@@ -78,5 +80,21 @@ public class OrderItem {
 
     public void setCat_name(String cat_name) {
         this.cat_name = cat_name;
+    }
+
+    public boolean isOwn_mode() {
+        return own_mode;
+    }
+
+    public void setOwn_mode(boolean own_mode) {
+        this.own_mode = own_mode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

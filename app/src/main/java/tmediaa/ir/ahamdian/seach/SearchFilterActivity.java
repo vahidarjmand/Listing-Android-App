@@ -58,7 +58,7 @@ public class SearchFilterActivity extends AppCompatActivity {
     private Integer segment_price_send = 0;
     private boolean feature_image_send = false;
     private Integer category_send = 0;
-    private Integer general_type_send = 0;
+    private Integer general_type_send = 2;
     private Integer naghliye_brand_send;
     private Integer amlak_type_send;
     private Integer amlak_room_send;
@@ -83,6 +83,7 @@ public class SearchFilterActivity extends AppCompatActivity {
             @Override
             public void onSegmentControlClick(int index) {
                 segment_price_send = index;
+                Log.d(CONST.APP_LOG,"index: " + index);
             }
         });
 

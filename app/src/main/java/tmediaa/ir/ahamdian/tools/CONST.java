@@ -1,5 +1,8 @@
 package tmediaa.ir.ahamdian.tools;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 
@@ -31,6 +34,8 @@ public class CONST {
     public static final String ACTIVE_USER = BASE_URL + "/api/vr1/active_user";
     public static final String CATEGORIES_URL = BASE_URL + "/api/vr1/getCategories";
     public static final String GET_ORDER = BASE_URL + "/api/vr1/getOrder";
+    public static final String GET_ORDER_WITH_STATE = BASE_URL + "/api/vr1/getOrderStates";
+    public static final String ADD_STATE = BASE_URL + "/api/vr1/addState";
     public static final String GET_CITIES = BASE_URL + "/api/vr1/getLocation";
     public static final String ADD_ORDER = BASE_URL + "/api/vr1/add_order";
     public static final String EDIT_ORDER = BASE_URL + "/api/vr1/edit_order";
@@ -38,6 +43,9 @@ public class CONST {
     public static final String GET_LOCATION_ID = BASE_URL + "/api/vr1/getLocationID";
     public static final String FINALIZE_ORDER = BASE_URL + "/api/vr1/finalize_order";
     public static final String SEARCH_API = BASE_URL + "/api/vr1/search";
+    public static final String SEARCHSTR = BASE_URL + "/api/vr1/searchByStr";
+    public static final String MY_ORDERS = BASE_URL + "/api/vr1/getuserOrders";
+
     public static ArrayList<Brand> NAGHLIYE_BRANDS_LIST = new ArrayList<>();
 
 
@@ -96,6 +104,16 @@ public class CONST {
         String str = nf.format(Double.valueOf(number));
 
         return str;
+    }
+
+    public static NetworkInfo getNetworkInfo(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return manager.getActiveNetworkInfo();
+    }
+
+    public static boolean isConnected(Context context) {
+        NetworkInfo info = getNetworkInfo(context);
+        return info != null && info.isConnected();
     }
 }
 

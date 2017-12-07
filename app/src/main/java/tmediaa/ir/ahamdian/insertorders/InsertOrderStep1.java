@@ -22,7 +22,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1469,20 +1468,19 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
         callback.getStepperLayout().showProgress("در حال ارسال اطلاعات");
         String app_token = AppSharedPref.read("TOKEN", "");
-        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+            byte[] data = Base64.decode(app_token, Base64.DEFAULT);
 
 
 
-        try {
-            String user_pass = new String(data, "UTF-8");
+            try {
+                String user_pass = new String(data, "UTF-8");
 
-            Log.d(CONST.APP_LOG,"user_pass: " + user_pass);
 
-            Ion.with(getContext())
-                    .load(CONST.APP_TOKEN)
-                    .setBodyParameter("username", user_pass)
-                    .setBodyParameter("password", user_pass.split("_")[0])
-                    .asString()
+                Ion.with(getContext())
+                        .load(CONST.APP_TOKEN)
+                        .setBodyParameter("username", user_pass)
+                        .setBodyParameter("password", user_pass.split("_")[0])
+                        .asString()
                     .setCallback(new FutureCallback<String>() {
                         @Override
                         public void onCompleted(Exception e, String result) {
@@ -1510,8 +1508,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
                                     if (is_edit) {
 
-                                        Log.d(CONST.APP_LOG,"edit order");
-
                                         ionBuilder = Ion.with(getContext()).load("POST", CONST.EDIT_ORDER);
                                         ionBuilder.setMultipartParameter("order_id", String.valueOf(edit_order_id));
 
@@ -1534,6 +1530,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                                                 callback.goToNextStep();
 
                                                 if (e == null) {
+                                                    CONST.writeFile(result.getResult());
 
                                                     JsonParser parser = new JsonParser();
                                                     JsonObject json_obj = parser.parse(result.getResult()).getAsJsonObject();
@@ -1560,7 +1557,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
                                     } else {
 
-                                        Log.d(CONST.APP_LOG,"add order");
+
                                         ionBuilder = Ion.with(getContext()).load("POST", CONST.ADD_ORDER);
                                         for (int i = 0; i < send_paramas.size(); i++) {
                                             ionBuilder.setMultipartParameter(send_paramas.get(i).getName(), send_paramas.get(i).getValue());

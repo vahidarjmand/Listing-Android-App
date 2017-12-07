@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -98,12 +99,28 @@ public class MainActivity extends PermissionCheckActivity {
         spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
             @Override
             public void onCentreButtonClick() {
-                Intent i = new Intent(MainActivity.this, InsertOrderActivity.class);
-                startActivity(i);
 
-                AppEvents.SpaceNavClick space_click_event = new AppEvents.SpaceNavClick(spaceNavigationView.getId());
-                GlobalBus.getBus().post(space_click_event);
+                if (AppSharedPref.read("online", 0) == 1) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(MainActivity.this, InsertOrderActivity.class);
+                            startActivity(i);
 
+                            AppEvents.SpaceNavClick space_click_event = new AppEvents.SpaceNavClick(spaceNavigationView.getId());
+                            GlobalBus.getBus().post(space_click_event);
+                        }
+                    }, CONST.SPLASH_TIME);
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent mainIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                            startActivity(mainIntent);
+                            finish();
+                        }
+                    }, CONST.SPLASH_TIME);
+                }
             }
 
             @Override
@@ -163,7 +180,7 @@ public class MainActivity extends PermissionCheckActivity {
         forceRTLIfSupported();
 
         target_city_id = AppSharedPref.read("CITY_ID", "");
-        if(target_city_id.equals("")){
+        if (target_city_id.equals("")) {
             showCitySelector();
         }
 
@@ -317,9 +334,11 @@ public class MainActivity extends PermissionCheckActivity {
     }
 
     private OnBackClickListener onBackClickListener;
+
     public interface OnBackClickListener {
         boolean onBackClick();
     }
+
     public void setOnBackClickListener(OnBackClickListener onBackClickListener) {
         this.onBackClickListener = onBackClickListener;
     }

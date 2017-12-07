@@ -1,21 +1,20 @@
-package tmediaa.ir.ahamdian.insertorders;
+package tmediaa.ir.ahamdian.itemView;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,13 +30,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.squareup.otto.Subscribe;
-import com.stepstone.stepper.BlockingStep;
-import com.stepstone.stepper.StepperLayout;
-import com.stepstone.stepper.VerificationError;
-import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
-import com.zarinpal.ewallets.purchase.PaymentRequest;
-import com.zarinpal.ewallets.purchase.ZarinPal;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -48,22 +40,24 @@ import es.dmoral.toasty.Toasty;
 import eu.fiskur.simpleviewpager.ImageURLLoader;
 import eu.fiskur.simpleviewpager.SimpleViewPager;
 import tmediaa.ir.ahamdian.R;
-import tmediaa.ir.ahamdian.otto.AppEvents;
+import tmediaa.ir.ahamdian.myorders.EditActivity;
 import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
 
-import static es.dmoral.toasty.Toasty.success;
+public class ShowOrder extends AppCompatActivity {
 
-public class InsertOrderStep2 extends Fragment implements BlockingStep {
-    private int TAP_THRESHOLD = 2;
+    private static final int OPEN_EDIT_ORDER = 4578;
+    private Context context;
+    private ProgressDialog progressDialog;
 
-    private Button final_post_btn, order_edit_btn, order_delete_btn, order_pay_btn;
+
+    private Button upgrade_order_btn, order_edit_btn, order_delete_btn, order_pay_btn;
     private LoadingView gallery_loading;
     private SimpleViewPager image_pager;
     private LinearLayout order_insert_info, order_btn, slider_view, all_field_view, general_field, category_container, general_price_view, general_type_view, amlak_field, amlak_metraj_view, amlak_type_view, amlak_room_view, amlak_ejareh_view,
             amlak_homeshahr_view, amlak_vadie_view, amlak_sanad_view, naghliye_field, naghliye_brand_view, naghliye_sal_view, naghliye_kardkard_view;
-    private TextView item_title, item_desc, item_category, general_price_view_tv, general_type_view_tv, amlak_metraj_view_tv, amlak_type_view_tv, amlak_room_view_tv,
+    private TextView status_txt, item_title, item_desc, item_category, general_price_view_tv, general_type_view_tv, amlak_metraj_view_tv, amlak_type_view_tv, amlak_room_view_tv,
             amlak_homeshahr_view_tv, amlak_vadie_view_tv, amlak_ejareh_view_tv, amlak_sanad_view_tv, naghliye_brand_view_tv, naghliye_sal_view_tv, naghliye_kardkard_view_tv;
 
     private View general_price_view_sep,
@@ -80,7 +74,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
             naghliye_kardkard_view_sep;
 
     private View rootView;
-
     private JsonObject order;
     private String title;
     private String desc;
@@ -89,97 +82,155 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
     private String cat_name;
     private String brand_name;
     private JsonArray attachments;
+    private String status;
 
     private List<String> image_urls;
-
-    private ProgressDialog progressDialog;
     private int finilize_order_id;
 
+
+    boolean mode;
+    int id;
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_order);
+
+
+        mode = getIntent().getExtras().getBoolean("mode");
+        id = getIntent().getExtras().getInt("id");
+
+        context = this;
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("مدیریت آگهی");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("در حال بارگذاری");
+
+
+        initViews();
+
+        order_delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeOrder(id);
+            }
+        });
+        switchmode(mode);
+        loadorder(id);
+    }
+
+    private void switchmode(boolean mode) {
+        if (mode) {
+            order_insert_info.setVisibility(View.VISIBLE);
+            order_btn.setVisibility(View.VISIBLE);
+
+
+        } else {
+            order_insert_info.setVisibility(View.GONE);
+            order_btn.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.insert_order_step_2, container, false);
-        initViews();
-        return rootView;
+    protected void onStart() {
+        super.onStart();
+        GlobalBus.getBus().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GlobalBus.getBus().unregister(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private void initViews() {
-        order_insert_info = (LinearLayout) rootView.findViewById(R.id.order_insert_info);
-        order_btn = (LinearLayout) rootView.findViewById(R.id.order_btn);
-        slider_view = (LinearLayout) rootView.findViewById(R.id.slider_view);
-        all_field_view = (LinearLayout) rootView.findViewById(R.id.all_field_view);
-        general_field = (LinearLayout) rootView.findViewById(R.id.general_field);
-        category_container = (LinearLayout) rootView.findViewById(R.id.category_container);
-        general_price_view = (LinearLayout) rootView.findViewById(R.id.general_price_view);
-        general_type_view = (LinearLayout) rootView.findViewById(R.id.general_type_view);
-        amlak_field = (LinearLayout) rootView.findViewById(R.id.amlak_field);
-        amlak_metraj_view = (LinearLayout) rootView.findViewById(R.id.amlak_metraj_view);
-        amlak_type_view = (LinearLayout) rootView.findViewById(R.id.amlak_type_view);
-        amlak_room_view = (LinearLayout) rootView.findViewById(R.id.amlak_room_view);
-        amlak_ejareh_view = (LinearLayout) rootView.findViewById(R.id.amlak_ejareh_view);
-        amlak_homeshahr_view = (LinearLayout) rootView.findViewById(R.id.amlak_homeshahr_view);
-        amlak_vadie_view = (LinearLayout) rootView.findViewById(R.id.amlak_vadie_view);
-        amlak_sanad_view = (LinearLayout) rootView.findViewById(R.id.amlak_sanad_view);
-        naghliye_field = (LinearLayout) rootView.findViewById(R.id.naghliye_field);
-        naghliye_brand_view = (LinearLayout) rootView.findViewById(R.id.naghliye_brand_view);
-        naghliye_sal_view = (LinearLayout) rootView.findViewById(R.id.naghliye_sal_view);
-        naghliye_kardkard_view = (LinearLayout) rootView.findViewById(R.id.naghliye_kardkard_view);
+        order_insert_info = (LinearLayout) findViewById(R.id.order_insert_info);
+        order_btn = (LinearLayout) findViewById(R.id.order_btn);
+        slider_view = (LinearLayout) findViewById(R.id.slider_view);
+        all_field_view = (LinearLayout) findViewById(R.id.all_field_view);
+        general_field = (LinearLayout) findViewById(R.id.general_field);
+        category_container = (LinearLayout) findViewById(R.id.category_container);
+        general_price_view = (LinearLayout) findViewById(R.id.general_price_view);
+        general_type_view = (LinearLayout) findViewById(R.id.general_type_view);
+        amlak_field = (LinearLayout) findViewById(R.id.amlak_field);
+        amlak_metraj_view = (LinearLayout) findViewById(R.id.amlak_metraj_view);
+        amlak_type_view = (LinearLayout) findViewById(R.id.amlak_type_view);
+        amlak_room_view = (LinearLayout) findViewById(R.id.amlak_room_view);
+        amlak_ejareh_view = (LinearLayout) findViewById(R.id.amlak_ejareh_view);
+        amlak_homeshahr_view = (LinearLayout) findViewById(R.id.amlak_homeshahr_view);
+        amlak_vadie_view = (LinearLayout) findViewById(R.id.amlak_vadie_view);
+        amlak_sanad_view = (LinearLayout) findViewById(R.id.amlak_sanad_view);
+        naghliye_field = (LinearLayout) findViewById(R.id.naghliye_field);
+        naghliye_brand_view = (LinearLayout) findViewById(R.id.naghliye_brand_view);
+        naghliye_sal_view = (LinearLayout) findViewById(R.id.naghliye_sal_view);
+        naghliye_kardkard_view = (LinearLayout) findViewById(R.id.naghliye_kardkard_view);
 
 
-        item_title = (TextView) rootView.findViewById(R.id.item_title);
-        item_desc = (TextView) rootView.findViewById(R.id.item_desc);
-        item_category = (TextView) rootView.findViewById(R.id.item_category);
-        general_price_view_tv = (TextView) rootView.findViewById(R.id.general_price_view_tv);
-        general_type_view_tv = (TextView) rootView.findViewById(R.id.general_type_view_tv);
-        amlak_metraj_view_tv = (TextView) rootView.findViewById(R.id.amlak_metraj_view_tv);
-        amlak_type_view_tv = (TextView) rootView.findViewById(R.id.amlak_type_view_tv);
-        amlak_room_view_tv = (TextView) rootView.findViewById(R.id.amlak_room_view_tv);
-        amlak_homeshahr_view_tv = (TextView) rootView.findViewById(R.id.amlak_homeshahr_view_tv);
-        amlak_vadie_view_tv = (TextView) rootView.findViewById(R.id.amlak_vadie_view_tv);
-        amlak_ejareh_view_tv = (TextView) rootView.findViewById(R.id.amlak_ejareh_view_tv);
-        amlak_sanad_view_tv = (TextView) rootView.findViewById(R.id.amlak_sanad_view_tv);
-        naghliye_brand_view_tv = (TextView) rootView.findViewById(R.id.naghliye_brand_view_tv);
-        naghliye_sal_view_tv = (TextView) rootView.findViewById(R.id.naghliye_sal_view_tv);
-        naghliye_kardkard_view_tv = (TextView) rootView.findViewById(R.id.naghliye_kardkard_view_tv);
+        status_txt = (TextView) findViewById(R.id.status_txt);
+        item_title = (TextView) findViewById(R.id.item_title);
+        item_desc = (TextView) findViewById(R.id.item_desc);
+        item_category = (TextView) findViewById(R.id.item_category);
+        general_price_view_tv = (TextView) findViewById(R.id.general_price_view_tv);
+        general_type_view_tv = (TextView) findViewById(R.id.general_type_view_tv);
+        amlak_metraj_view_tv = (TextView) findViewById(R.id.amlak_metraj_view_tv);
+        amlak_type_view_tv = (TextView) findViewById(R.id.amlak_type_view_tv);
+        amlak_room_view_tv = (TextView) findViewById(R.id.amlak_room_view_tv);
+        amlak_homeshahr_view_tv = (TextView) findViewById(R.id.amlak_homeshahr_view_tv);
+        amlak_vadie_view_tv = (TextView) findViewById(R.id.amlak_vadie_view_tv);
+        amlak_ejareh_view_tv = (TextView) findViewById(R.id.amlak_ejareh_view_tv);
+        amlak_sanad_view_tv = (TextView) findViewById(R.id.amlak_sanad_view_tv);
+        naghliye_brand_view_tv = (TextView) findViewById(R.id.naghliye_brand_view_tv);
+        naghliye_sal_view_tv = (TextView) findViewById(R.id.naghliye_sal_view_tv);
+        naghliye_kardkard_view_tv = (TextView) findViewById(R.id.naghliye_kardkard_view_tv);
 
-        final_post_btn = (Button) rootView.findViewById(R.id.final_post_btn);
-        order_edit_btn = (Button) rootView.findViewById(R.id.order_edit_btn);
-        order_delete_btn = (Button) rootView.findViewById(R.id.order_delete_btn);
-        order_pay_btn = (Button) rootView.findViewById(R.id.order_pay_btn);
+        upgrade_order_btn = (Button) findViewById(R.id.upgrade_order_btn);
+        order_edit_btn = (Button) findViewById(R.id.order_edit_btn);
+        order_delete_btn = (Button) findViewById(R.id.order_delete_btn);
+        order_pay_btn = (Button) findViewById(R.id.order_pay_btn);
         order_pay_btn.setVisibility(View.GONE);
 
 
-        general_price_view_sep = (View) rootView.findViewById(R.id.general_price_view_sep);
-        general_type_view_sep = (View) rootView.findViewById(R.id.general_type_view_sep);
-        amlak_metraj_view_sep = (View) rootView.findViewById(R.id.amlak_metraj_view_sep);
-        amlak_type_view_sep = (View) rootView.findViewById(R.id.amlak_type_view_sep);
-        amlak_room_view_sep = (View) rootView.findViewById(R.id.amlak_room_view_sep);
-        amlak_homeshahr_view_sep = (View) rootView.findViewById(R.id.amlak_homeshahr_view_sep);
-        amlak_vadie_view_sep = (View) rootView.findViewById(R.id.amlak_vadie_view_sep);
-        amlak_ejareh_view_sep = (View) rootView.findViewById(R.id.amlak_ejareh_view_sep);
-        amlak_sanad_view_sep = (View) rootView.findViewById(R.id.amlak_sanad_view_sep);
-        naghliye_brand_view_sep = (View) rootView.findViewById(R.id.naghliye_brand_view_sep);
-        naghliye_sal_view_sep = (View) rootView.findViewById(R.id.naghliye_sal_view_sep);
-        naghliye_kardkard_view_sep = (View) rootView.findViewById(R.id.naghliye_kardkard_view_sep);
+        general_price_view_sep = (View) findViewById(R.id.general_price_view_sep);
+        general_type_view_sep = (View) findViewById(R.id.general_type_view_sep);
+        amlak_metraj_view_sep = (View) findViewById(R.id.amlak_metraj_view_sep);
+        amlak_type_view_sep = (View) findViewById(R.id.amlak_type_view_sep);
+        amlak_room_view_sep = (View) findViewById(R.id.amlak_room_view_sep);
+        amlak_homeshahr_view_sep = (View) findViewById(R.id.amlak_homeshahr_view_sep);
+        amlak_vadie_view_sep = (View) findViewById(R.id.amlak_vadie_view_sep);
+        amlak_ejareh_view_sep = (View) findViewById(R.id.amlak_ejareh_view_sep);
+        amlak_sanad_view_sep = (View) findViewById(R.id.amlak_sanad_view_sep);
+        naghliye_brand_view_sep = (View) findViewById(R.id.naghliye_brand_view_sep);
+        naghliye_sal_view_sep = (View) findViewById(R.id.naghliye_sal_view_sep);
+        naghliye_kardkard_view_sep = (View) findViewById(R.id.naghliye_kardkard_view_sep);
 
-        gallery_loading = (LoadingView) rootView.findViewById(R.id.gallery_loading);
-        image_pager = (SimpleViewPager) rootView.findViewById(R.id.image_pager);
-
-
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("در حال پردازش اطلاعات پرداخت");
-
-
-
+        gallery_loading = (LoadingView) findViewById(R.id.gallery_loading);
+        image_pager = (SimpleViewPager) findViewById(R.id.image_pager);
 
         order_pay_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payment(finilize_order_id);
 
 
             }
@@ -187,94 +238,11 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
         //getItemOrder();
     }
 
-    private void finalizeOrder(final int id) {
-        //progressDialog.show();
-        String app_token = AppSharedPref.read("TOKEN", "");
-        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
-        try {
-            String user_pass = new String(data, "UTF-8");
-            Ion.with(getContext())
-                    .load(CONST.APP_TOKEN)
-                    .setBodyParameter("username", user_pass)
-                    .setBodyParameter("password", user_pass.split("_")[0])
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String result) {
-                            //progressDialog.dismiss();
-                            if (e == null) {
-                                JsonParser parser = new JsonParser();
-                                JsonObject json_obj = parser.parse(result).getAsJsonObject();
-                                if (json_obj.has("token")) {
-                                    String token = json_obj.get("token").getAsString();
-                                    //progressDialog.show();
-                                    Ion.with(getContext())
-                                            .load(CONST.FINALIZE_ORDER)
-                                            .setHeader("Authorization", "Bearer " + token)
-                                            .setBodyParameter("order_id", AppSharedPref.read("PAY_ID", "0"))
-                                            .asString()
-                                            .setCallback(new FutureCallback<String>() {
-                                                @Override
-                                                public void onCompleted(Exception e, String result) {
-                                                    //progressDialog.dismiss();
-                                                    if (e == null) {
-                                                        finishActivity();
-                                                        JsonParser jsonParser = new JsonParser();
-                                                        JsonObject root = (JsonObject) jsonParser.parse(result);
-                                                        if (root.has("status")) {
-                                                            if (root.get("status").getAsString().equals("ok")) {
-
-
-                                                                Toasty.success(getContext(), "آگهی با موفقیت ثبت شد و بعد از تایید منتشر خواهد شد", Toast.LENGTH_LONG).show();
-
-                                                            } else {
-                                                                Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        }
-                                                    } else {
-                                                        Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                }
-                            } else {
-                                Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void finishActivity() {
-        Log.d(CONST.APP_LOG,"activity: " + getActivity().getLocalClassName());
-        getActivity().finish();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        GlobalBus.getBus().register(this);
-    }
-
-    @Override
-    public void onDetach() {
-        GlobalBus.getBus().unregister(this);
-        super.onDetach();
-    }
-
-    @Subscribe
-    public void getId(final AppEvents.sendOrderID events) {
-
-
-        AppSharedPref.write("PAY_ID", String.valueOf(events.getId()));
-        finilize_order_id = events.getId();
-        final_post_btn.setOnClickListener(new View.OnClickListener() {
+    private void loadorder(int id) {
+        upgrade_order_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
-                success(getContext(), "اگهی شما با موفقیت منتشر شد.", Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -282,19 +250,20 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
         order_edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppEvents.BackStep back_event = new AppEvents.BackStep(events.getId());
-                GlobalBus.getBus().post(back_event);
+                Intent i_edit = new Intent(ShowOrder.this, EditActivity.class);
+                startActivityForResult(i_edit,OPEN_EDIT_ORDER);
             }
         });
 
-        removeOrder(events.getId());
-        Ion.with(getContext())
-                .load(CONST.GET_ORDER)
-                .setBodyParameter("order_id", String.valueOf(events.getId()))
+        //removeOrder(events.getId());
+        Ion.with(context)
+                .load(CONST.GET_ORDER_WITH_STATE)
+                .setBodyParameter("order_id", String.valueOf(id))
                 .asString()
                 .setCallback(new FutureCallback<String>() {
                     @Override
                     public void onCompleted(Exception e, String result) {
+
                         if (e == null) {
                             JsonParser parser = new JsonParser();
                             JsonObject obj = parser.parse(result).getAsJsonObject();
@@ -306,87 +275,14 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                                 }
                             }
                         } else {
-                            Toasty.error(getContext(), "خطا در برقراری ارتباط با سرور", Toast.LENGTH_LONG).show();
+                            Toasty.error(context, "خطا در برقراری ارتباط با سرور", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
 
 
-    private void removeOrder(final int id) {
-        order_delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*getActivity().finish();
-                Toasty.success(getContext(),"اگهی شما با موفقیت منتشر شد.",Toast.LENGTH_LONG).show();*/
-                alertShow(id);
-            }
-        });
-    }
-
-    private void alertShow(final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("حذف آگهی");
-        builder.setMessage("آیا مطمئن هستید ؟");
-
-        builder.setPositiveButton("بله", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                String app_token = AppSharedPref.read("TOKEN", "");
-                byte[] data = Base64.decode(app_token, Base64.DEFAULT);
-                try {
-                    String user_pass = new String(data, "UTF-8");
-                    Ion.with(getContext())
-                            .load(CONST.APP_TOKEN)
-                            .setBodyParameter("username", user_pass)
-                            .setBodyParameter("password", user_pass.split("_")[0])
-                            .asString()
-                            .setCallback(new FutureCallback<String>() {
-                                @Override
-                                public void onCompleted(Exception e, String result) {
-                                    if (e == null) {
-                                        JsonParser parser = new JsonParser();
-                                        JsonObject json_obj = parser.parse(result).getAsJsonObject();
-                                        if (json_obj.has("token")) {
-                                            String token = json_obj.get("token").getAsString();
-                                            Ion.with(getContext())
-                                                    .load(CONST.REMOVE_ORDER)
-                                                    .setHeader("Authorization", "Bearer " + token)
-                                                    .setBodyParameter("order_id", String.valueOf(id))
-                                                    .asString()
-                                                    .setCallback(new FutureCallback<String>() {
-                                                        @Override
-                                                        public void onCompleted(Exception e, String result) {
-                                                            success(getContext(), "آگهی با موفقیت حذف شد.", Toast.LENGTH_LONG).show();
-                                                            getActivity().finish();
-                                                        }
-                                                    });
-                                        }
-                                    } else {
-                                        Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNegativeButton("نه", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     private void showOrderView(int cat_id, JsonObject obj) {
-
-
         order = obj.get("order").getAsJsonObject();
         title = order.get("title").getAsString();
         desc = order.get("desc").getAsString();
@@ -395,7 +291,14 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
         cat_name = obj.get("cat_name").getAsString();
         brand_name = obj.get("brand_name").getAsString();
         attachments = obj.get("order").getAsJsonObject().get("attachments").getAsJsonArray();
+        status = obj.get("order").getAsJsonObject().get("status").getAsString();
 
+
+        if(mode){
+            showstate(obj.get("states").getAsJsonArray());
+        }
+
+        initstatus(status);
         item_title.setText(title);
         item_desc.setText(desc);
         item_category.setText(cat_name);
@@ -448,6 +351,32 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 disableNaghliyeField();
                 break;
         }
+    }
+
+    private void showstate(JsonArray datas) {
+        Log.d(CONST.APP_LOG,"stat: " +datas.size());
+    }
+
+    private void initstatus(String status) {
+        if(status.equals("enabled")){
+            upgrade_order_btn.setVisibility(View.VISIBLE);
+            status_txt.setText("آگهی شما منتشر شده و در حال نمایش بصورت عمومی می باشد.");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                status_txt.setTextColor(getColor(R.color.green_700));
+            }else{
+                status_txt.setTextColor(getResources().getColor(R.color.green_700));
+            }
+        }
+        if(status.equals("disabled")){
+            upgrade_order_btn.setVisibility(View.GONE);
+            status_txt.setText("آگهی شما در صف انتشار می باشد و بعد از تایید توسط تیم پلاک منتشر خواهد شد.");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                status_txt.setTextColor(getColor(R.color.deep_orange_A700));
+            }else{
+                status_txt.setTextColor(getResources().getColor(R.color.deep_orange_A700));
+            }
+        }
+
     }
 
     private void showGeneralForm(int id, JsonObject order) {
@@ -789,20 +718,17 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 naghliye_brand_view.setVisibility(View.GONE);
                 naghliye_sal_view.setVisibility(View.GONE);
                 naghliye_kardkard_view.setVisibility(View.GONE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.GONE);
                 naghliye_brand_view_sep.setVisibility(View.GONE);
                 naghliye_sal_view_sep.setVisibility(View.GONE);
                 naghliye_kardkard_view_sep.setVisibility(View.GONE);
-
                 break;
             case 31:
                 //motor cycle
                 naghliye_brand_view.setVisibility(View.GONE);
                 naghliye_sal_view.setVisibility(View.VISIBLE);
                 naghliye_kardkard_view.setVisibility(View.VISIBLE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.VISIBLE);
                 naghliye_brand_view_sep.setVisibility(View.GONE);
@@ -814,7 +740,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 naghliye_brand_view.setVisibility(View.GONE);
                 naghliye_sal_view.setVisibility(View.GONE);
                 naghliye_kardkard_view.setVisibility(View.GONE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.GONE);
                 naghliye_brand_view_sep.setVisibility(View.GONE);
@@ -826,7 +751,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 naghliye_brand_view.setVisibility(View.GONE);
                 naghliye_sal_view.setVisibility(View.GONE);
                 naghliye_kardkard_view.setVisibility(View.GONE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.GONE);
                 naghliye_brand_view_sep.setVisibility(View.GONE);
@@ -838,7 +762,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 naghliye_brand_view.setVisibility(View.VISIBLE);
                 naghliye_sal_view.setVisibility(View.VISIBLE);
                 naghliye_kardkard_view.setVisibility(View.VISIBLE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.VISIBLE);
                 naghliye_brand_view_sep.setVisibility(View.VISIBLE);
@@ -850,7 +773,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 naghliye_brand_view.setVisibility(View.GONE);
                 naghliye_sal_view.setVisibility(View.VISIBLE);
                 naghliye_kardkard_view.setVisibility(View.VISIBLE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.VISIBLE);
                 naghliye_brand_view_sep.setVisibility(View.GONE);
@@ -862,7 +784,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 naghliye_brand_view.setVisibility(View.GONE);
                 naghliye_sal_view.setVisibility(View.VISIBLE);
                 naghliye_kardkard_view.setVisibility(View.VISIBLE);
-
                 general_price_view_sep.setVisibility(View.VISIBLE);
                 general_type_view_sep.setVisibility(View.VISIBLE);
                 naghliye_brand_view_sep.setVisibility(View.GONE);
@@ -885,35 +806,10 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
     private void showPezeshkForm(final int id) {
         order_pay_btn.setVisibility(View.VISIBLE);
-        final_post_btn.setVisibility(View.GONE);
+        upgrade_order_btn.setVisibility(View.GONE);
         all_field_view.setVisibility(View.GONE);
 
 
-    }
-
-    private void payment(int id) {
-
-        ZarinPal purchase = ZarinPal.getPurchase(getContext());
-        PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
-
-        paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
-        paymentRequest.setAmount(100);
-        paymentRequest.setDescription("پرداخت حق عضویت");
-        paymentRequest.setAuthority("id," + finilize_order_id);
-        paymentRequest.setCallbackURL("return://zarinpalpayment");
-
-        purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
-            @Override
-            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
-
-                if (status == 100) {
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), "خطا در پرداخت", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
     }
 
     private void disableAmlakField() {
@@ -922,6 +818,49 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
     private void disableNaghliyeField() {
         naghliye_field.setVisibility(View.GONE);
+    }
+
+    private void showSliderView(JsonArray images) {
+        slider_view.setVisibility(View.VISIBLE);
+
+        if (image_urls != null) {
+            image_urls.clear();
+            image_pager.clearIndicator();
+        }
+
+        if (images.size() > 0) {
+            image_urls = new ArrayList<>();
+            for (int i = 0; i < images.size(); i++) {
+                image_urls.add(CONST.STORAGE + images.get(i).getAsString());
+            }
+
+            gallery_loading.setVisibility(View.GONE);
+            image_pager.setVisibility(View.VISIBLE);
+
+            image_pager.setImageUrls(image_urls, new ImageURLLoader() {
+                @Override
+                public void loadImage(ImageView view, String url) {
+                    Glide.with(context).load(url).listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String s, Target<GlideDrawable> target, boolean b) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable glideDrawable, String s, Target<GlideDrawable> target, boolean b, boolean b1) {
+
+                            return false;
+                        }
+                    }).into(view);
+                }
+            });
+
+            int indicatorColor = Color.parseColor("#ffffff");
+            int selectedIndicatorColor = Color.parseColor("#c1c1c1");
+            image_pager.showIndicator(indicatorColor, selectedIndicatorColor);
+        } else {
+            slider_view.setVisibility(View.GONE);
+        }
     }
 
     private void showGeneralPrice(JsonObject order) {
@@ -949,7 +888,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 }
             }
         }
-
     }
 
     private void showGeneralType(JsonObject order) {
@@ -966,81 +904,72 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 }
             }
         }
-
     }
 
-    private void showSliderView(JsonArray images) {
-        slider_view.setVisibility(View.VISIBLE);
 
-        if (image_urls != null) {
-            image_urls.clear();
-            image_pager.clearIndicator();
-        }
+    private void removeOrder(final int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("حذف آگهی");
+        builder.setMessage("آیا مطمئن هستید ؟");
 
-        if (images.size() > 0) {
-            image_urls = new ArrayList<>();
-            for (int i = 0; i < images.size(); i++) {
-                image_urls.add(CONST.STORAGE + images.get(i).getAsString());
-            }
 
-            gallery_loading.setVisibility(View.GONE);
-            image_pager.setVisibility(View.VISIBLE);
+        builder.setPositiveButton("بله", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String app_token = AppSharedPref.read("TOKEN", "");
+                byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+                try {
+                    String user_pass = new String(data, "UTF-8");
+                    Ion.with(context)
+                            .load(CONST.APP_TOKEN)
+                            .setBodyParameter("username", user_pass)
+                            .setBodyParameter("password", user_pass.split("_")[0])
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    if (e == null) {
+                                        JsonParser parser = new JsonParser();
+                                        JsonObject json_obj = parser.parse(result).getAsJsonObject();
+                                        if (json_obj.has("token")) {
+                                            String token = json_obj.get("token").getAsString();
+                                            Ion.with(context)
+                                                    .load(CONST.REMOVE_ORDER)
+                                                    .setHeader("Authorization", "Bearer " + token)
+                                                    .setBodyParameter("order_id", String.valueOf(id))
+                                                    .asString()
+                                                    .setCallback(new FutureCallback<String>() {
+                                                        @Override
+                                                        public void onCompleted(Exception e, String result) {
+                                                            Toasty.success(context, "آگهی با موفقیت حذف شد.", Toast.LENGTH_LONG).show();
 
-            image_pager.setImageUrls(image_urls, new ImageURLLoader() {
-                @Override
-                public void loadImage(ImageView view, String url) {
-                    Glide.with(getContext()).load(url).listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String s, Target<GlideDrawable> target, boolean b) {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GlideDrawable glideDrawable, String s, Target<GlideDrawable> target, boolean b, boolean b1) {
-
-                            return false;
-                        }
-                    }).into(view);
+                                                            Intent resultIntent = new Intent();
+                                                            resultIntent.putExtra("update", true);
+                                                            finish();
+                                                        }
+                                                    });
+                                        }
+                                    } else {
+                                        Toasty.error(context, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
-            });
+                dialog.dismiss();
+            }
+        });
 
-            int indicatorColor = Color.parseColor("#ffffff");
-            int selectedIndicatorColor = Color.parseColor("#c1c1c1");
-            image_pager.showIndicator(indicatorColor, selectedIndicatorColor);
-        } else {
-            slider_view.setVisibility(View.GONE);
-        }
+        builder.setNegativeButton("نه", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
-    @Override
-    public VerificationError verifyStep() {
-        //return null if the user can go to the next step, create a new VerificationError instance otherwise
-        return null;
-    }
 
-    @Override
-    public void onSelected() {
-        //update UI when selected
-    }
-
-    @Override
-    public void onError(@NonNull VerificationError error) {
-        //handle error inside of the fragment, e.g. show error on EditText
-    }
-
-    @Override
-    public void onNextClicked(StepperLayout.OnNextClickedCallback callback) {
-
-    }
-
-    @Override
-    public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
-
-
-    }
-
-    @Override
-    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
-
-    }
 }

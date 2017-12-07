@@ -39,6 +39,14 @@
                 android:orientation="vertical"
                 android:layout_below="@id/logoView"
                 >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/White"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="جهت افزودن آگهی و مشاهده آگهی های خودتان باید ثبت نام کنید."/>
 
                 <EditText
                     android:id="@+id/register_mobile_txt"

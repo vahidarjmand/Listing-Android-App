@@ -41,16 +41,18 @@ public class AppEvents {
         private String _name;
         private int _id;
         private Objects obj;
-        public DialogCategoryChose(String name,int id) {
+
+        public DialogCategoryChose(String name, int id) {
             _id = id;
             _name = name;
         }
 
         public int getTargetChosseID() {
-            return _id ;
+            return _id;
         }
+
         public String getTargetChosseName() {
-            return _name ;
+            return _name;
         }
     }
 
@@ -95,7 +97,7 @@ public class AppEvents {
         private int _id;
         private ArrayList<CategoryItem> _list;
 
-        public ChangePager(int id,ArrayList<CategoryItem> list) {
+        public ChangePager(int id, ArrayList<CategoryItem> list) {
             _list = list;
             _id = id;
         }
@@ -103,6 +105,7 @@ public class AppEvents {
         public ArrayList<CategoryItem> getChangeList() {
             return _list;
         }
+
         public int getID() {
             return _id;
         }

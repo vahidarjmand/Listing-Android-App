@@ -28,12 +28,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:padding="10dp"
             android:textColor="@android:color/darker_gray"
             />
 
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end|bottom"
+            android:padding="10dp"
+            android:layout_alignParentBottom="true"/>
 
         <!--<com.github.curioustechizen.ago.RelativeTimeTextView
             android:id="@+id/order_time"

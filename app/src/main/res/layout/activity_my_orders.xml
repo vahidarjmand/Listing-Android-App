@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tmediaa.ir.ahamdian.myorders.MyOrdersActivity"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    app:theme="@style/AppThemNoBar">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
+
+    <com.santalu.emptyview.EmptyView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:emptyDrawable="@drawable/ic_sentiment_dissatisfied"
+        app:emptyDrawableTint="@color/colorPrimary"
+        app:emptyGravity="center"
+        app:emptyText="@string/empty"
+        app:errorBackgroundColor="@color/red_btn_bg_color"
+        app:errorButtonBackgroundColor="@color/white"
+        app:errorButtonText="ورود"
+        app:errorButtonTextColor="@color/black"
+        app:errorDrawable="@drawable/ic_sentiment_very_dissatisfied"
+        app:errorDrawableTint="@color/white"
+        app:errorText="@string/error_unknown"
+        app:errorTextColor="@color/white"
+        app:loadingDrawable="@drawable/ic_sentiment_satisfied"
+        app:loadingStyle="circular"
+        app:loadingText="@string/loading"
+        app:loadingTint="@color/colorPrimary">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/orders_recyclerview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </com.santalu.emptyview.EmptyView>
+
+</LinearLayout>

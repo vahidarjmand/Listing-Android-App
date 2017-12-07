@@ -2,6 +2,7 @@ package tmediaa.ir.ahamdian.all_category;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +33,7 @@ import es.dmoral.toasty.Toasty;
 import tmediaa.ir.ahamdian.R;
 import tmediaa.ir.ahamdian.adapters.AllItemAdapter;
 import tmediaa.ir.ahamdian.adapters.CategoryButtonListPagerAdapter;
+import tmediaa.ir.ahamdian.itemView.ShowOrder;
 import tmediaa.ir.ahamdian.model.CategoryItem;
 import tmediaa.ir.ahamdian.model.OrderItem;
 import tmediaa.ir.ahamdian.otto.AppEvents;
@@ -177,7 +178,10 @@ public class ShowCategory extends Fragment {
         mAdapter.setOnItemClickListener(new AllItemAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, OrderItem data) {
-                Log.d(CONST.APP_LOG, "view: " + data.getId());
+                Intent i =new Intent(getActivity(), ShowOrder.class);
+                i.putExtra("id",data.getId());
+                i.putExtra("mode",false);
+                startActivity(i);
             }
         });
 

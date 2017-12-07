@@ -16,7 +16,9 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         AppSharedPref.init(this);
-        if(AppSharedPref.read("online", 0) == 1){
+
+
+        /*if(AppSharedPref.read("online", 0) == 1){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -34,7 +36,15 @@ public class SplashScreen extends AppCompatActivity {
                     finish();
                 }
             }, CONST.SPLASH_TIME);
-        }
+        }*/
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
+                startActivity(mainIntent);
+                finish();
+            }
+        }, CONST.SPLASH_TIME);
 
     }
 }

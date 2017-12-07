@@ -2,6 +2,7 @@ package tmediaa.ir.ahamdian;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 
 import tmediaa.ir.ahamdian.adapters.AllItemAdapter;
+import tmediaa.ir.ahamdian.itemView.ShowOrder;
 import tmediaa.ir.ahamdian.model.OrderItem;
 import tmediaa.ir.ahamdian.otto.AppEvents;
 import tmediaa.ir.ahamdian.otto.GlobalBus;
@@ -140,7 +141,10 @@ public class All_Item_Fragment extends Fragment {
         mAdapter.setOnItemClickListener(new AllItemAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, OrderItem data) {
-                Log.d(CONST.APP_LOG, "view: " + data.getId());
+                Intent i =new Intent(getContext(), ShowOrder.class);
+                i.putExtra("id",data.getId());
+                i.putExtra("mode",false);
+                startActivity(i);
             }
         });
 
@@ -150,7 +154,6 @@ public class All_Item_Fragment extends Fragment {
             public void onOrdersLoad(ArrayList<OrderItem> items, boolean status) {
                 listData.addAll(items);
                 mAdapter.notifyDataSetChanged();
-
                 // mRecyclerView.refreshComplete();
             }
         });

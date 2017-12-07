@@ -12,8 +12,8 @@
 
 
     <style name="WindowAnimationStyle">
-        <item name="android:windowEnterAnimation">@anim/from_right</item>
-        <item name="android:windowExitAnimation">@anim/modal_in</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <!-- Base application theme. -->

@@ -1,15 +1,18 @@
 package tmediaa.ir.ahamdian;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.squareup.otto.Subscribe;
 
+import tmediaa.ir.ahamdian.myorders.MyOrdersActivity;
 import tmediaa.ir.ahamdian.otto.AppEvents;
 import tmediaa.ir.ahamdian.otto.GlobalBus;
 
@@ -18,6 +21,8 @@ import tmediaa.ir.ahamdian.otto.GlobalBus;
  */
 
 public class Profile_Fragment extends Fragment {
+    private View rootView;
+    private Button my_orders_btn;
     public static Profile_Fragment newInstance() {
         Profile_Fragment fragment = new Profile_Fragment();
         return fragment;
@@ -38,6 +43,16 @@ public class Profile_Fragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        rootView = view;
+
+        my_orders_btn = (Button) rootView.findViewById(R.id.my_orders_btn);
+        my_orders_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MyOrdersActivity.class);
+                startActivity(i);
+            }
+        });
 
         ((MainActivity) getActivity()).setOnBackClickListener(new MainActivity.OnBackClickListener() {
             @Override

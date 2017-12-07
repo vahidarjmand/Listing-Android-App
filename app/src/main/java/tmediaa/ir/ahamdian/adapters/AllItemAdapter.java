@@ -71,6 +71,24 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         viewHolder.order_title.setText(datas.get(position).getTitle());
         viewHolder.order_desc.setText("در: " + datas.get(position).getCat_name());
 
+        viewHolder.status.setVisibility(View.GONE);
+        if(datas.get(position).isOwn_mode()){
+            viewHolder.status.setVisibility(View.VISIBLE);
+            if(datas.get(position).getStatus().equals("disabled")){
+                viewHolder.status.setText("در صف انتشار");
+                viewHolder.status.setTextColor(mContext.getResources().getColor(R.color.white));
+                viewHolder.status.setBackgroundColor(mContext.getResources().getColor(R.color.maroon));
+            }else if(datas.get(position).getStatus().equals("enabled")){
+                viewHolder.status.setText("منتشر شده");
+                viewHolder.status.setTextColor(mContext.getResources().getColor(R.color.white));
+                viewHolder.status.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+            }else if(datas.get(position).getStatus().equals("expired")){
+                viewHolder.status.setText("منقضی شده");
+                viewHolder.status.setTextColor(mContext.getResources().getColor(R.color.white));
+                viewHolder.status.setBackgroundColor(mContext.getResources().getColor(R.color.text_color));
+            }
+        }
+
         SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             TimeZone tz = TimeZone.getTimeZone("Asia/Tehran");
@@ -122,12 +140,14 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView order_title;
         public TextView order_desc;
+        public TextView status;
         public RelativeTimeTextView order_time;
         public ImageView order_thumb;
 
         public ViewHolder(View view) {
             super(view);
             order_title = (TextView) view.findViewById(R.id.order_title);
+            status = (TextView) view.findViewById(R.id.status);
             //order_time = (RelativeTimeTextView) view.findViewById(R.id.order_time);
             order_desc = (TextView) view.findViewById(R.id.order_desc);
             order_thumb = (ImageView) view.findViewById(R.id.order_thumb);
