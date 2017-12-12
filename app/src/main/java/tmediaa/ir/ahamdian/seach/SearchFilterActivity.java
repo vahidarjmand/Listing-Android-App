@@ -1,5 +1,6 @@
 package tmediaa.ir.ahamdian.seach;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -34,6 +35,8 @@ import tmediaa.ir.ahamdian.otto.AppEvents;
 import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.CONST;
 import tmediaa.ir.ahamdian.tools.NoDefaultSpinner;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static java.lang.Integer.parseInt;
 
@@ -162,6 +165,12 @@ public class SearchFilterActivity extends AppCompatActivity {
                 sendFilterParams();
             }
         });
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.fontpath))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
 
@@ -712,5 +721,10 @@ public class SearchFilterActivity extends AppCompatActivity {
         if(can_finish){
             finish();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -45,6 +44,8 @@ import tmediaa.ir.ahamdian.tools.CONST;
 import tmediaa.ir.ahamdian.tools.PermissionCheckActivity;
 import tmediaa.ir.ahamdian.tools.SampleErrorListener;
 import tmediaa.ir.ahamdian.tools.SampleMultiplePermissionListener;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RegisterActivity extends PermissionCheckActivity {
     private CheckBox gavanin_checkbox;
@@ -125,6 +126,13 @@ public class RegisterActivity extends PermissionCheckActivity {
         });
 
         permisionCheck();
+
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.fontpath))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     private void permisionCheck() {
@@ -355,4 +363,8 @@ public class RegisterActivity extends PermissionCheckActivity {
     }
 
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 }

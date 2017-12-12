@@ -3,9 +3,7 @@ package tmediaa.ir.ahamdian.insertorders;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,15 +33,13 @@ import com.squareup.otto.Subscribe;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
-import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
-import com.zarinpal.ewallets.purchase.PaymentRequest;
-import com.zarinpal.ewallets.purchase.ZarinPal;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import app.dinus.com.loadingdrawable.LoadingView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import es.dmoral.toasty.Toasty;
 import eu.fiskur.simpleviewpager.ImageURLLoader;
 import eu.fiskur.simpleviewpager.SimpleViewPager;
@@ -57,6 +53,7 @@ import static es.dmoral.toasty.Toasty.success;
 
 public class InsertOrderStep2 extends Fragment implements BlockingStep {
     private int TAP_THRESHOLD = 2;
+    private Context context;
 
     private Button final_post_btn, order_edit_btn, order_delete_btn, order_pay_btn;
     private LoadingView gallery_loading;
@@ -104,8 +101,15 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.insert_order_step_2, container, false);
         initViews();
+        context = getContext();
+
+
+
+
         return rootView;
     }
+
+
 
     private void initViews() {
         order_insert_info = (LinearLayout) rootView.findViewById(R.id.order_insert_info);
@@ -172,6 +176,7 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("در حال پردازش اطلاعات پرداخت");
+        progressDialog.setCancelable(false);
 
 
 
@@ -179,7 +184,30 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
         order_pay_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payment(finilize_order_id);
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("پرداخت هزینه آگهی")
+                        .setContentText("با پرداخت هزینه ثبت آگهی، آگهی شما ثبت و بعد از تایید منتشر خواهد شد.")
+                        .setConfirmText("تایید")
+                        .setCancelText("انصراف")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog
+                                        .setTitleText("تایید نهایی!")
+                                        .setContentText("پرداخت هزینه " + AppSharedPref.read("order_price","1000") + " تومان ")
+                                        .setConfirmText("تایید")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                                                sweetAlertDialog.dismissWithAnimation();
+                                                payment();
+                                            }
+                                        })
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            }
+                        })
+                        .show();
 
 
             }
@@ -187,65 +215,7 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
         //getItemOrder();
     }
 
-    private void finalizeOrder(final int id) {
-        //progressDialog.show();
-        String app_token = AppSharedPref.read("TOKEN", "");
-        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
-        try {
-            String user_pass = new String(data, "UTF-8");
-            Ion.with(getContext())
-                    .load(CONST.APP_TOKEN)
-                    .setBodyParameter("username", user_pass)
-                    .setBodyParameter("password", user_pass.split("_")[0])
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String result) {
-                            //progressDialog.dismiss();
-                            if (e == null) {
-                                JsonParser parser = new JsonParser();
-                                JsonObject json_obj = parser.parse(result).getAsJsonObject();
-                                if (json_obj.has("token")) {
-                                    String token = json_obj.get("token").getAsString();
-                                    //progressDialog.show();
-                                    Ion.with(getContext())
-                                            .load(CONST.FINALIZE_ORDER)
-                                            .setHeader("Authorization", "Bearer " + token)
-                                            .setBodyParameter("order_id", AppSharedPref.read("PAY_ID", "0"))
-                                            .asString()
-                                            .setCallback(new FutureCallback<String>() {
-                                                @Override
-                                                public void onCompleted(Exception e, String result) {
-                                                    //progressDialog.dismiss();
-                                                    if (e == null) {
-                                                        finishActivity();
-                                                        JsonParser jsonParser = new JsonParser();
-                                                        JsonObject root = (JsonObject) jsonParser.parse(result);
-                                                        if (root.has("status")) {
-                                                            if (root.get("status").getAsString().equals("ok")) {
 
-
-                                                                Toasty.success(getContext(), "آگهی با موفقیت ثبت شد و بعد از تایید منتشر خواهد شد", Toast.LENGTH_LONG).show();
-
-                                                            } else {
-                                                                Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        }
-                                                    } else {
-                                                        Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                }
-                            } else {
-                                Toasty.error(getContext(), "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void finishActivity() {
         Log.d(CONST.APP_LOG,"activity: " + getActivity().getLocalClassName());
@@ -266,6 +236,7 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
     @Subscribe
     public void getId(final AppEvents.sendOrderID events) {
+
 
 
         AppSharedPref.write("PAY_ID", String.valueOf(events.getId()));
@@ -891,29 +862,12 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
     }
 
-    private void payment(int id) {
+    private void payment() {
 
-        ZarinPal purchase = ZarinPal.getPurchase(getContext());
-        PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
+        AppEvents.PayOrder id_event = new AppEvents.PayOrder(1);
+        GlobalBus.getBus().post(id_event);
 
-        paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
-        paymentRequest.setAmount(100);
-        paymentRequest.setDescription("پرداخت حق عضویت");
-        paymentRequest.setAuthority("id," + finilize_order_id);
-        paymentRequest.setCallbackURL("return://zarinpalpayment");
 
-        purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
-            @Override
-            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
-
-                if (status == 100) {
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), "خطا در پرداخت", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
     }
 
     private void disableAmlakField() {

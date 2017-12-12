@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +27,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -38,10 +39,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.luseen.spacenavigation.SpaceItem;
-import com.luseen.spacenavigation.SpaceNavigationView;
-import com.luseen.spacenavigation.SpaceOnClickListener;
-import com.luseen.spacenavigation.SpaceOnLongClickListener;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -56,11 +53,13 @@ import tmediaa.ir.ahamdian.tools.NoAPIGPSTracker;
 import tmediaa.ir.ahamdian.tools.PermissionCheckActivity;
 import tmediaa.ir.ahamdian.tools.SampleErrorListener;
 import tmediaa.ir.ahamdian.tools.SampleMultiplePermissionListener;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 
 public class MainActivity extends PermissionCheckActivity {
-    private SpaceNavigationView spaceNavigationView;
+    //private SpaceNavigationView spaceNavigationView;
 
     private int mSelectedItem;
     private int current_city_id = 0;
@@ -75,7 +74,7 @@ public class MainActivity extends PermissionCheckActivity {
     private CoordinatorLayout rootView;
     private NoAPIGPSTracker mGPS;
     private String target_city_id = "";
-
+    private AHBottomNavigation bottomNavigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,16 +85,101 @@ public class MainActivity extends PermissionCheckActivity {
         rootView = (CoordinatorLayout) findViewById(R.id.rootView);
 
 
-        spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
+        bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
+        /*spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.search_icon));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.profile_icon));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.category_icon));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.all_item_icon));
-        spaceNavigationView.setInActiveCentreButtonIconColor(Color.WHITE);
+        spaceNavigationView.setInActiveCentreButtonIconColor(Color.WHITE);*/
+
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem("همه آگهی ها", R.drawable.all_item_icon, R.color.tabcolor1);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem("دسته بندیها", R.drawable.category_icon, R.color.tabcolor2);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem("افزودن آگهی", R.drawable.add_new_item_icon, R.color.tabcolor3);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem("جستجو", R.drawable.search_icon, R.color.tabcolor4);
+        AHBottomNavigationItem item5 = new AHBottomNavigationItem("پروفایل", R.drawable.profile_icon, R.color.tabcolor5);
+
+// Add items
+        bottomNavigation.addItem(item1);
+        bottomNavigation.addItem(item2);
+        bottomNavigation.addItem(item3);
+        bottomNavigation.addItem(item4);
+        bottomNavigation.addItem(item5);
+
+        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
+
+// Disable the translation inside the CoordinatorLayout
+        bottomNavigation.setBehaviorTranslationEnabled(false);
+
+// Enable the translation of the FloatingActionButton
+        //bottomNavigation.manageFloatingActionButtonBehavior(floatingActionButton);
+
+// Change colors
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            bottomNavigation.setAccentColor(getColor(R.color.primary_dark));
+            bottomNavigation.setInactiveColor(getColor(R.color.primary));
+        }else{
+            bottomNavigation.setAccentColor(getResources().getColor(R.color.primary_dark));
+            bottomNavigation.setInactiveColor(getResources().getColor(R.color.primary));
+        }
+
+// Force to tint the drawable (useful for font with icon for example)
+        bottomNavigation.setForceTint(true);
+
+        bottomNavigation.setTranslucentNavigationEnabled(true);
+
+        bottomNavigation.setTitleState(AHBottomNavigation.TitleState.SHOW_WHEN_ACTIVE);
+
+        bottomNavigation.setColored(true);
+
+        bottomNavigation.setCurrentItem(0);
+        bottomNavigation.enableItemAtPosition(0);
 
 
-        spaceNavigationView.changeCurrentItem(2);
+// Add or remove notification for each item
+       /* bottomNavigation.setNotification("1", 3);
+// OR
+        AHNotification notification = new AHNotification.Builder()
+                .setText("1")
+                .setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorBottomNavigationAccent))
+                .setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent))
+                .build();
+        bottomNavigation.setNotification(notification, 1);*/
+
+// Enable / disable item & set disable color
+        bottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));
+// Set listeners
+        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+            @Override
+            public boolean onTabSelected(final int position, boolean wasSelected) {
+                // Do something cool here...
+
+                if(position == 2){
+                    if (AppSharedPref.read("online", 0) == 1) {
+                        Intent i = new Intent(MainActivity.this, InsertOrderActivity.class);
+                        startActivity(i);
+                        AppEvents.SpaceNavClick space_click_event = new AppEvents.SpaceNavClick(position);
+                        GlobalBus.getBus().post(space_click_event);
+                    }
+                }else{
+                    selectFragment(position);
+
+                    /*AppEvents.SpaceNavClick space_click_event = new AppEvents.SpaceNavClick(position);
+                    GlobalBus.getBus().post(space_click_event);*/
+                }
+
+                return true;
+            }
+        });
+        bottomNavigation.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
+            @Override public void onPositionChange(int y) {
+                // Manage the new y position
+            }
+        });
+
+
+        /*spaceNavigationView.changeCurrentItem(2);
         spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
             @Override
             public void onCentreButtonClick() {
@@ -147,7 +231,7 @@ public class MainActivity extends PermissionCheckActivity {
             public void onItemLongClick(int itemIndex, String itemName) {
                 Toast.makeText(MainActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -157,7 +241,6 @@ public class MainActivity extends PermissionCheckActivity {
         int height = size.y;
 
 
-        selectFragment(2);
         if (CONST.IS_HELP) {
             new MaterialTapTargetPrompt.Builder(MainActivity.this, 0)
                     .setTarget((width / 2) + 5f, height - 90f)
@@ -186,6 +269,11 @@ public class MainActivity extends PermissionCheckActivity {
 
         //getUserLocation();
 
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.fontpath))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -198,16 +286,16 @@ public class MainActivity extends PermissionCheckActivity {
     private void selectFragment(int item) {
         Fragment selectedFragment = null;
         switch (item) {
-            case 0:
+            case 3:
                 selectedFragment = Search_Fragment.newInstance();
                 break;
-            case 1:
+            case 4:
                 selectedFragment = Profile_Fragment.newInstance();
                 break;
-            case 2:
+            case 0:
                 selectedFragment = All_Item_Fragment.newInstance();
                 break;
-            case 3:
+            case 1:
                 selectedFragment = Category_Fragment.newInstance();
                 break;
         }
@@ -269,7 +357,7 @@ public class MainActivity extends PermissionCheckActivity {
     private void showCitySelectorDialog() {
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, citiesList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_title, citiesList);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.titlebar, null);
@@ -305,7 +393,7 @@ public class MainActivity extends PermissionCheckActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        spaceNavigationView.onSaveInstanceState(outState);
+        //spaceNavigationView.onSaveInstanceState(outState);
     }
 
 
@@ -367,7 +455,7 @@ public class MainActivity extends PermissionCheckActivity {
 
     @Subscribe
     public void ChangeToolbarOrder(final AppEvents.ChangeToolbarOrder events) {
-        spaceNavigationView.bringToFront();
+        //spaceNavigationView.bringToFront();
     }
 
     /*
@@ -452,4 +540,8 @@ public class MainActivity extends PermissionCheckActivity {
 
     }*/
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 }

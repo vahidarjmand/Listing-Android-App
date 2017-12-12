@@ -265,6 +265,7 @@ public class Search_Fragment extends Fragment {
 
 
                 listData.clear();
+                mAdapter.notifyDataSetChanged();
                 apiCall.getOrdersByBundle(getContext(), CONST.SEARCH_API, target_city_id, current_page, send_paramas, new ApiCallTools.onOrderLoad() {
                     @Override
                     public void onOrdersLoad(ArrayList<OrderItem> items, boolean status) {

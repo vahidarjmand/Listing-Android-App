@@ -16,7 +16,7 @@
         android:layout_weight="1">
     </FrameLayout>
 
-    <com.luseen.spacenavigation.SpaceNavigationView
+    <!--<com.luseen.spacenavigation.SpaceNavigationView
         android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +27,13 @@
         app:centre_button_icon="@drawable/add_new_item_icon"
         app:active_centre_button_icon_color="@color/colorPrimary"
         app:centre_button_color="@color/colorAccent"
-        app:inactive_centre_button_icon_color="@color/colorPrimary"/>
+        app:inactive_centre_button_icon_color="@color/colorPrimary"/>-->
+
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 
 

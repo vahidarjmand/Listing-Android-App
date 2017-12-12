@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import es.dmoral.toasty.Toasty;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -83,6 +84,12 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.fontpath))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     private void checkForm() {

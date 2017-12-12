@@ -39,7 +39,7 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".InsertOrderActivity"
+            android:name=".InsertOrderActivity" android:launchMode="singleTask"
             android:theme="@style/AppThemNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -61,7 +61,18 @@
             android:theme="@style/AppThemNoBar" />
         <activity
             android:name=".itemView.ShowOrder"
-            android:theme="@style/AppThemNoBar" />
+            android:theme="@style/AppThemNoBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="zarinpalpayment"
+                    android:scheme="return" />
+            </intent-filter>
+        </activity>
         <activity android:name=".myorders.EditActivity"
             android:theme="@style/AppThemNoBar"></activity>
     </application>

@@ -36,6 +36,8 @@ import tmediaa.ir.ahamdian.itemView.ShowOrder;
 import tmediaa.ir.ahamdian.model.OrderItem;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MyOrdersActivity extends AppCompatActivity {
 
@@ -116,6 +118,12 @@ public class MyOrdersActivity extends AppCompatActivity {
             error_view.showError("جهت مشاهده این قسمت باید وارد نرم افزار شوید.");
 
         }
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.fontpath))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     private void loadOrders() {
@@ -234,6 +242,11 @@ public class MyOrdersActivity extends AppCompatActivity {
 */
             }
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

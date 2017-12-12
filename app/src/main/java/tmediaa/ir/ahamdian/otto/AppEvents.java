@@ -119,5 +119,17 @@ public class AppEvents {
         }
     }
 
+    //for update bottom toolabr to bring front
+    public static class PayOrder {
+        private int _id;
+        public PayOrder(int id) {
+            _id = id;
+        }
+
+        public int getOrderID(){
+            return  _id;
+        }
+    }
+
 
 }

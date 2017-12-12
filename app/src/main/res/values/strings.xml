@@ -145,4 +145,7 @@
     <string name="try_again">تلاش مجدد</string>
     <string name="error_unknown">خطای ناشناخته بوجود آمد.</string>
     <string name="loading">در حال بارگذاری</string>
+    <string name="fontpath">fonts/GanjNamehSans-Regular.ttf</string>
+    .build()
+    );
 </resources>

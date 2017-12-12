@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <color name="colorPrimary">#1176dc</color>
     <color name="colorPrimaryDark">#085eb4</color>
     <color name="colorAccent">#FF4081</color>
@@ -16,6 +18,16 @@
     <color name="colorBackgroundHighlightWhite">#8dc1c1c1</color>
     <color name="white">#ffffff</color>
     <color name="colorPrimaryLight">#e0effd</color>
+
+
+    <color name="tabcolor1">#1176dc</color>
+    <color name="tabcolor2">#085eb4</color>
+    <color name="tabcolor3">#FF5412</color>
+    <color name="tabcolor4">#4CAF50</color>
+    <color name="tabcolor5">#6200EA</color>
+
+
+
 
     <color name="black">#000000</color>
     <color name="orange">#FF5412</color>
@@ -143,7 +155,6 @@
     <color name="item_view_value_color">#4b4b4b</color>
     <color name="item_view_label_color">#797979</color>
     <color name="color_green">#491bea00</color>
-    <color name="colorBottomNavigationSelectedBackground">#ececec</color>
 
 
     <color name="float_transparent">#00000000</color>
@@ -656,5 +667,15 @@
     <color name="dark_blue">#0000A0</color>
     <!-- Mixed Colors -->
 
+
+    <color name="colorBottomNavigationPrimary">#3F51B5</color>
+    <color name="colorBottomNavigationPrimaryDark">#303F9F</color>
+    <color name="colorBottomNavigationAccent">#FF4081</color>
+    <color name="colorBottomNavigationInactive">#747474</color>
+    <color name="colorBottomNavigationDisable">#3A000000</color>
+    <color name="colorBottomNavigationActiveColored">#FFFFFF</color>
+    <color name="colorBottomNavigationInactiveColored">#50FFFFFF</color>
+    <color name="colorBottomNavigationNotification">#F63D2B</color>
+    <color name="colorBottomNavigationSelectedBackground">#ececec</color>
 
 </resources>

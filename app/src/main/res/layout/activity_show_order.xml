@@ -76,19 +76,22 @@
             android:textColor="@color/white"
             android:text="حذف" />
 
-
         <Button
-            android:id="@+id/order_pay_btn"
+            android:id="@+id/order_renew_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/renew_button_background"
+            android:layout_weight="1"
             android:textColor="@color/white"
-            android:background="@drawable/main_button_background"
-            android:text="پرداخت و ثبت نهایی" />
+            android:text="تمدید" />
+
+
+
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -613,6 +616,27 @@
                     android:layout_width="match_parent"
 
                     android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/chart_con"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/state_info_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.github.mikephil.charting.charts.BarChart
+                    android:layoutDirection="ltr"
+                    android:id="@+id/state_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+
             </LinearLayout>
 
         </LinearLayout>

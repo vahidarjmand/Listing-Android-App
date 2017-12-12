@@ -16,6 +16,7 @@
   -->
 
 <resources>
+  <item name="calligraphy_tag_id" type="id"/>
   <item name="material_target_prompt_view" type="id"/>
   <item name="programmatic_viewpager" type="id"/>
 </resources>

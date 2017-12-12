@@ -28,6 +28,7 @@ public class CONST {
     public static String APP_LOG = "APP_LOG";
     public static String GET_ORDERS = BASE_URL + "/api/vr1/getOrders";
     public static String GET_ORDERS_WITH_ID = BASE_URL + "/api/vr1/getOrdersByCat";
+    public static String GET_ORDER_EDIT = BASE_URL + "/api/vr1/getOrderedit";
     public static final String APP_TOKEN = BASE_URL + "/api/vr1/accessapi";
     public static final String USER_REGISTER = BASE_URL + "/api/vr1/registerUser";
     public static final String USER_LOGIN = BASE_URL + "/api/vr1/loginUser";
@@ -39,6 +40,9 @@ public class CONST {
     public static final String GET_CITIES = BASE_URL + "/api/vr1/getLocation";
     public static final String ADD_ORDER = BASE_URL + "/api/vr1/add_order";
     public static final String EDIT_ORDER = BASE_URL + "/api/vr1/edit_order";
+    public static final String EDIT_ORDER_V2  = BASE_URL + "/api/vr1/edit_order_2";
+    public static final String GET_SETS = BASE_URL + "/api/vr1/getSettings";
+
     public static final String REMOVE_ORDER = BASE_URL + "/api/vr1/del_order";
     public static final String GET_LOCATION_ID = BASE_URL + "/api/vr1/getLocationID";
     public static final String FINALIZE_ORDER = BASE_URL + "/api/vr1/finalize_order";
@@ -63,7 +67,7 @@ public class CONST {
             path.mkdirs();
         }
 
-        final File file = new File(path, "output.txt");
+        final File file = new File(path, "output.html");
 
         // Save your stream, don't forget to flush() it before closing it.
 

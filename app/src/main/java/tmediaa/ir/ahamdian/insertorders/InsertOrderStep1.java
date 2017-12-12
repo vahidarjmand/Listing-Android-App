@@ -1506,6 +1506,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                                         }
                                     }
 
+
                                     if (is_edit) {
 
                                         ionBuilder = Ion.with(getContext()).load("POST", CONST.EDIT_ORDER);
@@ -1576,6 +1577,8 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
                                                 callback.getStepperLayout().hideProgress();
                                                 callback.goToNextStep();
+
+
 
                                                 if (e == null) {
 

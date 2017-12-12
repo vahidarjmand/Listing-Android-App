@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,17 +29,36 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
+import com.zarinpal.ewallets.purchase.OnCallbackVerificationPaymentListener;
+import com.zarinpal.ewallets.purchase.PaymentRequest;
+import com.zarinpal.ewallets.purchase.ZarinPal;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import app.dinus.com.loadingdrawable.LoadingView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import es.dmoral.toasty.Toasty;
 import eu.fiskur.simpleviewpager.ImageURLLoader;
 import eu.fiskur.simpleviewpager.SimpleViewPager;
@@ -44,6 +67,11 @@ import tmediaa.ir.ahamdian.myorders.EditActivity;
 import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
+import tmediaa.ir.ahamdian.tools.PersianDate;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static tmediaa.ir.ahamdian.tools.AppSharedPref.read;
 
 public class ShowOrder extends AppCompatActivity {
 
@@ -52,13 +80,14 @@ public class ShowOrder extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
 
-    private Button upgrade_order_btn, order_edit_btn, order_delete_btn, order_pay_btn;
+    private ScrollView scrollView;
+    private Button upgrade_order_btn, order_edit_btn, order_delete_btn, order_renew_btn;
     private LoadingView gallery_loading;
     private SimpleViewPager image_pager;
     private LinearLayout order_insert_info, order_btn, slider_view, all_field_view, general_field, category_container, general_price_view, general_type_view, amlak_field, amlak_metraj_view, amlak_type_view, amlak_room_view, amlak_ejareh_view,
             amlak_homeshahr_view, amlak_vadie_view, amlak_sanad_view, naghliye_field, naghliye_brand_view, naghliye_sal_view, naghliye_kardkard_view;
     private TextView status_txt, item_title, item_desc, item_category, general_price_view_tv, general_type_view_tv, amlak_metraj_view_tv, amlak_type_view_tv, amlak_room_view_tv,
-            amlak_homeshahr_view_tv, amlak_vadie_view_tv, amlak_ejareh_view_tv, amlak_sanad_view_tv, naghliye_brand_view_tv, naghliye_sal_view_tv, naghliye_kardkard_view_tv;
+            amlak_homeshahr_view_tv, amlak_vadie_view_tv, amlak_ejareh_view_tv, amlak_sanad_view_tv, naghliye_brand_view_tv, naghliye_sal_view_tv, naghliye_kardkard_view_tv, state_info_tv;
 
     private View general_price_view_sep,
             general_type_view_sep,
@@ -84,12 +113,18 @@ public class ShowOrder extends AppCompatActivity {
     private JsonArray attachments;
     private String status;
 
+    private boolean is_expired = false;
+
     private List<String> image_urls;
     private int finilize_order_id;
 
 
     boolean mode;
     int id;
+
+    protected BarChart state_chart;
+    private TextView tvX, tvY;
+    private LinearLayout chart_con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,17 +156,63 @@ public class ShowOrder extends AppCompatActivity {
         });
         switchmode(mode);
         loadorder(id);
+
+        Uri data = getIntent().getData();
+
+        ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
+            @Override
+            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
+
+
+                Log.d(CONST.APP_LOG,"isPaymentSuccess from show: " + isPaymentSuccess);
+                if (!isPaymentSuccess) {
+                    /* When Payment Request is Success :) */
+                    String message = "Your Payment is Success :) " + refID;
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                } else {
+                    /* When Payment Request is Failure :) */
+                    String message = "Your Payment is Failure :(";
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.fontpath))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
     }
 
     private void switchmode(boolean mode) {
         if (mode) {
             order_insert_info.setVisibility(View.VISIBLE);
             order_btn.setVisibility(View.VISIBLE);
-
+            chart_con.setVisibility(View.VISIBLE);
 
         } else {
             order_insert_info.setVisibility(View.GONE);
             order_btn.setVisibility(View.GONE);
+            chart_con.setVisibility(View.GONE);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   Ion.with(context)
+                           .load(CONST.ADD_STATE)
+                           .setBodyParameter("order_id", String.valueOf(id))
+                           .asString()
+                           .setCallback(new FutureCallback<String>() {
+                               @Override
+                               public void onCompleted(Exception e, String result) {
+                                   Log.d(CONST.APP_LOG,"resukt: " + result);
+                               }
+                           });
+                }
+            }, 3000);
         }
     }
 
@@ -166,6 +247,7 @@ public class ShowOrder extends AppCompatActivity {
     }
 
     private void initViews() {
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
         order_insert_info = (LinearLayout) findViewById(R.id.order_insert_info);
         order_btn = (LinearLayout) findViewById(R.id.order_btn);
         slider_view = (LinearLayout) findViewById(R.id.slider_view);
@@ -204,12 +286,12 @@ public class ShowOrder extends AppCompatActivity {
         naghliye_brand_view_tv = (TextView) findViewById(R.id.naghliye_brand_view_tv);
         naghliye_sal_view_tv = (TextView) findViewById(R.id.naghliye_sal_view_tv);
         naghliye_kardkard_view_tv = (TextView) findViewById(R.id.naghliye_kardkard_view_tv);
+        state_info_tv = (TextView) findViewById(R.id.state_info_tv);
 
         upgrade_order_btn = (Button) findViewById(R.id.upgrade_order_btn);
         order_edit_btn = (Button) findViewById(R.id.order_edit_btn);
         order_delete_btn = (Button) findViewById(R.id.order_delete_btn);
-        order_pay_btn = (Button) findViewById(R.id.order_pay_btn);
-        order_pay_btn.setVisibility(View.GONE);
+        order_renew_btn = (Button) findViewById(R.id.order_renew_btn);
 
 
         general_price_view_sep = (View) findViewById(R.id.general_price_view_sep);
@@ -224,25 +306,74 @@ public class ShowOrder extends AppCompatActivity {
         naghliye_brand_view_sep = (View) findViewById(R.id.naghliye_brand_view_sep);
         naghliye_sal_view_sep = (View) findViewById(R.id.naghliye_sal_view_sep);
         naghliye_kardkard_view_sep = (View) findViewById(R.id.naghliye_kardkard_view_sep);
+        chart_con = (LinearLayout) findViewById(R.id.chart_con);
 
         gallery_loading = (LoadingView) findViewById(R.id.gallery_loading);
         image_pager = (SimpleViewPager) findViewById(R.id.image_pager);
 
-        order_pay_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        state_chart = (BarChart) findViewById(R.id.state_chart);
+        state_chart.setVisibility(View.GONE);
 
 
-            }
-        });
         //getItemOrder();
+
+
+        final Rect scrollBounds = new Rect();
+        scrollView.getHitRect(scrollBounds);
+        final boolean[] is_visible_chart = {false};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                    if (scrollView.getLocalVisibleRect(scrollBounds)) {
+
+                        if (state_chart.getGlobalVisibleRect(scrollBounds)
+                                && state_chart.getHeight() == scrollBounds.height()
+                                && state_chart.getWidth() == scrollBounds.width()) {
+                            is_visible_chart[0] = true;
+
+                        } else {
+                            is_visible_chart[0] = false;
+                        }
+                        if (is_visible_chart[0]) {
+
+                            state_chart.animateY(1000);
+                            state_chart.fitScreen();
+                        }
+                    }
+                }
+            });
+        }
     }
 
-    private void loadorder(int id) {
+    private void loadorder(final int id) {
         upgrade_order_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("ارتقاء آگهی")
+                        .setContentText("با تمدید آگهی ، اگهی شما تا زمانی که آگهی جدید در دسته مورد نظر منتشر نشود در رتبه اول نمایش داده خواهد شد، آیا مطمئن هستید؟")
+                        .setConfirmText("تایید")
+                        .setCancelText("انصراف")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog
+                                        .setTitleText("تایید نهایی!")
+                                        .setContentText("پرداخت هزینه " + AppSharedPref.read("upgrade_price","1000") + " تومان ")
+                                        .setConfirmText("تایید")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                Log.d(CONST.APP_LOG, "start to pay");
+                                                upgradeOrder();
+                                            }
+                                        })
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -251,7 +382,8 @@ public class ShowOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i_edit = new Intent(ShowOrder.this, EditActivity.class);
-                startActivityForResult(i_edit,OPEN_EDIT_ORDER);
+                i_edit.putExtra("id", id);
+                startActivityForResult(i_edit, OPEN_EDIT_ORDER);
             }
         });
 
@@ -263,13 +395,13 @@ public class ShowOrder extends AppCompatActivity {
                 .setCallback(new FutureCallback<String>() {
                     @Override
                     public void onCompleted(Exception e, String result) {
-
                         if (e == null) {
                             JsonParser parser = new JsonParser();
                             JsonObject obj = parser.parse(result).getAsJsonObject();
                             if (obj.has("status")) {
                                 String status = obj.get("status").getAsString();
                                 if (status.equals("found")) {
+                                    progressDialog.dismiss();
                                     int cat_id = obj.get("order").getAsJsonObject().get("cat_id").getAsInt();
                                     showOrderView(cat_id, obj);
                                 }
@@ -281,6 +413,31 @@ public class ShowOrder extends AppCompatActivity {
                 });
     }
 
+
+    private void upgradeOrder() {
+        ZarinPal purchase = ZarinPal.getPurchase(context);
+        PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
+
+        int renew_price = Integer.parseInt(AppSharedPref.read("upgrade_price","1000"));
+        paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
+        paymentRequest.setAmount(renew_price);
+        paymentRequest.setDescription("ارتقاء آگهی شما در پلاک");
+        paymentRequest.setCallbackURL("return://zarinpalpayment");
+
+
+        purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
+            @Override
+            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
+
+                if (status == 100) {
+                    startActivity(intent);
+                } else {
+                    Toasty.error(context, "خطا در پرداخت", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+    }
 
     private void showOrderView(int cat_id, JsonObject obj) {
         order = obj.get("order").getAsJsonObject();
@@ -294,8 +451,20 @@ public class ShowOrder extends AppCompatActivity {
         status = obj.get("order").getAsJsonObject().get("status").getAsString();
 
 
-        if(mode){
-            showstate(obj.get("states").getAsJsonArray());
+        int expire_val = obj.get("order").getAsJsonObject().get("is_expired").getAsInt();
+
+        if(expire_val == 0){
+            order_renew_btn.setVisibility(View.GONE);
+            upgrade_order_btn.setVisibility(View.VISIBLE);
+
+        }else{
+            order_renew_btn.setVisibility(View.VISIBLE);
+            upgrade_order_btn.setVisibility(View.GONE);
+        }
+
+        if (mode) {
+            state_chart.setVisibility(View.VISIBLE);
+            showstate(obj.get("states"));
         }
 
         initstatus(status);
@@ -353,26 +522,108 @@ public class ShowOrder extends AppCompatActivity {
         }
     }
 
-    private void showstate(JsonArray datas) {
-        Log.d(CONST.APP_LOG,"stat: " +datas.size());
+    private void showstate(JsonElement datas) {
+
+        BarData data = new BarData();
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
+
+
+        int all_view = 0;
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        int data_count = 0;
+
+        if (datas.isJsonObject()) {
+            for (Map.Entry<String, JsonElement> entry : datas.getAsJsonObject().entrySet()) {
+                JsonArray array = entry.getValue().getAsJsonArray();
+                try {
+                    Date d = dateFormat.parse(entry.getKey());
+                    PersianDate pdate = new PersianDate(d);
+                    String data_fa = pdate.getShMonth() + "-" + pdate.getShDay();
+                    BarEntry B_entry = new BarEntry(data_count, array.size());
+                    entries.add(B_entry);
+                    labels.add(data_fa);
+                    data_count++;
+                    all_view += array.size();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        state_info_tv.setText("کل بازدید صورت گرفته : " + all_view + " بار نمایش");
+
+        List<IBarDataSet> dataSets = new ArrayList<>();
+        BarDataSet bds = new BarDataSet(entries, "Bazdid");
+        int[] colors = {R.color.primary_dark};
+        bds.setColors(ColorTemplate.createColors(colors));
+        String[] xAxisLabels = labels.toArray(new String[0]);
+
+        bds.setStackLabels(xAxisLabels);
+        dataSets.add(bds);
+        data.addDataSet(bds);
+        data.setDrawValues(true);
+        data.setBarWidth(.8f);
+
+        XAxis xaxis = state_chart.getXAxis();
+        xaxis.setDrawGridLines(false);
+        xaxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xaxis.setGranularityEnabled(true);
+        xaxis.setGranularity(1);
+        xaxis.setDrawLabels(true);
+        xaxis.setCenterAxisLabels(true);
+        xaxis.setLabelCount(data_count + 1);
+        xaxis.setXOffset(-120f);
+        xaxis.setDrawAxisLine(false);
+        xaxis.setTextSize(12f);
+        xaxis.setTextColor(Color.DKGRAY);
+        CategoryBarChartXaxisFormatter xaxisFormatter = new CategoryBarChartXaxisFormatter(xAxisLabels);
+        xaxis.setValueFormatter(xaxisFormatter);
+
+        YAxis yAxisRight = state_chart.getAxisRight();
+        yAxisRight.setDrawGridLines(false);
+        yAxisRight.setDrawAxisLine(false);
+        yAxisRight.setEnabled(false);
+
+        Legend legend = state_chart.getLegend();
+        legend.setEnabled(false);
+
+        state_chart.setFitBars(true);
+        state_chart.setPadding(0, 50, 0, 0);
+        state_chart.setData(data);
+        state_chart.setDescription(null);
+        state_chart.animateXY(1000, 1000);
+        state_chart.invalidate();
+        /*state_chart.setScaleEnabled(false);
+        state_chart.setDoubleTapToZoomEnabled(false);
+        state_chart.setDragEnabled(false);*/
+
     }
 
+
     private void initstatus(String status) {
-        if(status.equals("enabled")){
+        if (status.equals("enabled")) {
             upgrade_order_btn.setVisibility(View.VISIBLE);
             status_txt.setText("آگهی شما منتشر شده و در حال نمایش بصورت عمومی می باشد.");
+            chart_con.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 status_txt.setTextColor(getColor(R.color.green_700));
-            }else{
+
+            } else {
                 status_txt.setTextColor(getResources().getColor(R.color.green_700));
             }
         }
-        if(status.equals("disabled")){
+        if (status.equals("disabled")) {
             upgrade_order_btn.setVisibility(View.GONE);
+            chart_con.setVisibility(View.GONE);
             status_txt.setText("آگهی شما در صف انتشار می باشد و بعد از تایید توسط تیم پلاک منتشر خواهد شد.");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 status_txt.setTextColor(getColor(R.color.deep_orange_A700));
-            }else{
+            } else {
                 status_txt.setTextColor(getResources().getColor(R.color.deep_orange_A700));
             }
         }
@@ -805,8 +1056,7 @@ public class ShowOrder extends AppCompatActivity {
     }
 
     private void showPezeshkForm(final int id) {
-        order_pay_btn.setVisibility(View.VISIBLE);
-        upgrade_order_btn.setVisibility(View.GONE);
+        upgrade_order_btn.setVisibility(View.VISIBLE);
         all_field_view.setVisibility(View.GONE);
 
 
@@ -915,7 +1165,7 @@ public class ShowOrder extends AppCompatActivity {
 
         builder.setPositiveButton("بله", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                String app_token = AppSharedPref.read("TOKEN", "");
+                String app_token = read("TOKEN", "");
                 byte[] data = Base64.decode(app_token, Base64.DEFAULT);
                 try {
                     String user_pass = new String(data, "UTF-8");
@@ -971,5 +1221,17 @@ public class ShowOrder extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == OPEN_EDIT_ORDER) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 }
