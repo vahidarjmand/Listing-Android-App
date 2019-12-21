@@ -55,7 +55,7 @@ public class BrandAdapter extends BaseAdapter {
         TextView label = (TextView) convertView.findViewById(R.id.label);
         label.setTextColor(Color.BLACK);
         label.setText(mBrands.get(position).getName());
-        return label;
+        return convertView;
     }
 
     @Override

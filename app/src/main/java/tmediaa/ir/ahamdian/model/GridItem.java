@@ -5,6 +5,7 @@ package tmediaa.ir.ahamdian.model;
  */
 
 public class GridItem {
+    private int _index;
     private int _id;
     private String _name;
     private int _path;
@@ -40,5 +41,13 @@ public class GridItem {
 
     public void set_id(int _id) {
         this._id = _id;
+    }
+
+    public int get_index() {
+        return _index;
+    }
+
+    public void set_index(int _index) {
+        this._index = _index;
     }
 }

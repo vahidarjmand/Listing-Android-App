@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_200"
+    android:layoutDirection="rtl"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,7 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="آگهی شمابا موفقیت به ثبت رسید، لعد از تایید آگهی توسط کارشناسان ما اگهی در نرم افزار منتشر خواهد شد."
+            android:text="آگهی شمابا موفقیت به ثبت رسید، بعد از تایید آگهی توسط کارشناسان ما اگهی در نرم افزار منتشر خواهد شد."
             android:textColor="@color/color1" />
     </LinearLayout>
 

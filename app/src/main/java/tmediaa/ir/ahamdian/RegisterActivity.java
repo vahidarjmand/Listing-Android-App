@@ -1,17 +1,14 @@
 package tmediaa.ir.ahamdian;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -25,29 +22,23 @@ import com.droidbyme.dialoglib.AnimUtils;
 import com.droidbyme.dialoglib.DroidDialog;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequestErrorListener;
-import com.karumi.dexter.listener.multi.CompositeMultiplePermissionsListener;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
 import tmediaa.ir.ahamdian.tools.ApiCallTools;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
-import tmediaa.ir.ahamdian.tools.PermissionCheckActivity;
-import tmediaa.ir.ahamdian.tools.SampleErrorListener;
-import tmediaa.ir.ahamdian.tools.SampleMultiplePermissionListener;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class RegisterActivity extends PermissionCheckActivity {
+public class RegisterActivity extends AppCompatActivity {
     private CheckBox gavanin_checkbox;
     private RelativeLayout gavanin_box;
     private LinearLayout active_code_box;
@@ -62,9 +53,6 @@ public class RegisterActivity extends PermissionCheckActivity {
 
     private String mobile_str, codemmeli_str = "";
 
-
-    private MultiplePermissionsListener allPermissionsListener;
-    private PermissionRequestErrorListener errorListener;
     private String android_id;
 
     @Override
@@ -133,89 +121,121 @@ public class RegisterActivity extends PermissionCheckActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+
     }
 
     private void permisionCheck() {
-        MultiplePermissionsListener feedbackViewMultiplePermissionListener =
-                new SampleMultiplePermissionListener(RegisterActivity.this);
-        errorListener = new SampleErrorListener();
-        allPermissionsListener =
-                new CompositeMultiplePermissionsListener(feedbackViewMultiplePermissionListener,
-                        SnackbarOnAnyDeniedMultiplePermissionsListener.Builder.with(rootView,
-                                R.string.all_permissions_denied_feedback)
-                                .withOpenSettingsButton("تایید دسترسی به محوزها")
-                                .build());
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //Toast.makeText(RegisterActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
 
-        Dexter.withActivity(this)
-                .withPermissions(
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                DroidDialog dialog = new DroidDialog.Builder(context)
+                        .cancelable(true, true)
+                        .title("مجوزهای لازم جهت کارکرد صحیح برنامه")
+                        .content("این نرم افزار جهت استفاده در تلفن همراه شما نیاز به دسترسی های لازم جهت کارکرد صحیح خود می باشد، لطفا مجوزهای لازم جهت کارکرد صحیح نرم افزار را تایید کنید.")
+                        .positiveButton("تایید", new DroidDialog.onPositiveListener() {
+                            @Override
+                            public void onPositive(Dialog droidDialog) {
+                                droidDialog.dismiss();
+                            }
+                        })
+                        .negativeButton("بی خیال", new DroidDialog.onNegativeListener() {
+                            @Override
+                            public void onNegative(Dialog droidDialog) {
+
+                                droidDialog.dismiss();
+                            }
+
+                        })
+                        .typeface("GanjNamehSans-Regular.ttf")
+                        .animation(AnimUtils.AnimFadeInOut)
+                        .divider(true, ContextCompat.getColor(context, R.color.orange))
+                        .color(
+                                ContextCompat.getColor(context, R.color.colorAccent),
+                                ContextCompat.getColor(context, R.color.colorAccent),
+                                ContextCompat.getColor(context, R.color.indigo))
+                        .show();
+            }
+
+
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleTitle(R.string.rationale_title)
+                .setRationaleMessage(R.string.rationale_message)
+                .setDeniedTitle("رد درخواست صدور مجوز")
+                .setDeniedMessage(
+                        "در صورت عدم صدور مجوز نمی توانید از همه امکانات نرم افزار استفاده کنید.")
+                .setGotoSettingButtonText("مراجعه به بخش مجوزهای نرم افزار")
+                .setPermissions(
+                        Manifest.permission.CAMERA,
                         Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_NETWORK_STATE,
-                        Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
                 )
-                .withListener(allPermissionsListener)
-                .withErrorListener(errorListener)
                 .check();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public void showPermissionRationale(final PermissionToken token) {
-        new AlertDialog.Builder(this).setTitle(R.string.permission_rationale_title)
-                .setMessage(R.string.permission_rationale_message)
-                .setNegativeButton("انصراف", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        token.continuePermissionRequest();
-                    }
-                })
-                .setPositiveButton("تایید", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        token.continuePermissionRequest();
 
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        token.cancelPermissionRequest();
-                    }
-                })
-                .show();
-    }
 
 
     private void loadConditions() {
-        DroidDialog dialog = new DroidDialog.Builder(context)
-                .cancelable(true, true)
-                .title("قوانین و مقررات")
-                .content("gavanin sdf")
-                .positiveButton("موافقم", new DroidDialog.onPositiveListener() {
+        progressDialog.setMessage("در حال بارگذاری");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Ion.with(context)
+                .load(CONST.GET_SETS)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
                     @Override
-                    public void onPositive(Dialog droidDialog) {
-                        gavanin_checkbox.setChecked(true);
-                        droidDialog.dismiss();
-                    }
-                })
-                .negativeButton("موافق نیستم", new DroidDialog.onNegativeListener() {
-                    @Override
-                    public void onNegative(Dialog droidDialog) {
-                        gavanin_checkbox.setChecked(false);
-                        droidDialog.dismiss();
-                    }
+                    public void onCompleted(Exception e, String result) {
+                        progressDialog.dismiss();
+                        if(e == null){
+                            JsonParser parser = new JsonParser();
+                            JsonObject root = parser.parse(result).getAsJsonObject();
+                            String ghavanin = root.get("settings").getAsJsonObject().get("ghavanin").getAsString();
+                            DroidDialog dialog = new DroidDialog.Builder(context)
+                                    .cancelable(true, true)
+                                    .title("قوانین و مقررات")
+                                    .content(ghavanin)
+                                    .positiveButton("موافقم", new DroidDialog.onPositiveListener() {
+                                        @Override
+                                        public void onPositive(Dialog droidDialog) {
+                                            gavanin_checkbox.setChecked(true);
+                                            droidDialog.dismiss();
+                                        }
+                                    })
+                                    .negativeButton("موافق نیستم", new DroidDialog.onNegativeListener() {
+                                        @Override
+                                        public void onNegative(Dialog droidDialog) {
+                                            gavanin_checkbox.setChecked(false);
+                                            droidDialog.dismiss();
+                                        }
 
-                })
-                .typeface("GanjNamehSans-Regular.ttf")
-                .animation(AnimUtils.AnimFadeInOut)
-                .divider(true, ContextCompat.getColor(context, R.color.orange))
-                .color(
-                        ContextCompat.getColor(context, R.color.colorAccent),
-                        ContextCompat.getColor(context, R.color.colorAccent),
-                        ContextCompat.getColor(context, R.color.indigo))
-                .show();
+                                    })
+                                    .typeface("GanjNamehSans-Regular.ttf")
+                                    .animation(AnimUtils.AnimFadeInOut)
+                                    .divider(true, ContextCompat.getColor(context, R.color.orange))
+                                    .color(
+                                            ContextCompat.getColor(context, R.color.colorAccent),
+                                            ContextCompat.getColor(context, R.color.colorAccent),
+                                            ContextCompat.getColor(context, R.color.indigo))
+                                    .show();
+
+
+                            /**/
+                        }else{
+                            Toasty.error(context,getString(R.string.connection_error),Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
     }
 
 
@@ -235,7 +255,7 @@ public class RegisterActivity extends PermissionCheckActivity {
 
     private boolean checkMobile() {
         mobile_str = register_mobile_txt.getText().toString();
-        boolean is_mobile_ok = Pattern.matches("09(1[0-9]|3[0-9]|2[1-9])\\d{7}", mobile_str);
+        boolean is_mobile_ok = Pattern.matches("09(0(\\d)|1(\\d)|2(\\d)|3(\\d)|(9(\\d)))\\d{7}$", mobile_str);
         return is_mobile_ok;
     }
 
@@ -251,8 +271,6 @@ public class RegisterActivity extends PermissionCheckActivity {
                 .setCallback(new FutureCallback<String>() {
                     @Override
                     public void onCompleted(Exception e, String result) {
-
-
                         progressDialog.dismiss();
                         if (e != null) {
                             Toast.makeText(context, "خطا در اتصال به سرور", Toast.LENGTH_LONG).show();

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -25,6 +25,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import tmediaa.ir.ahamdian.R;
 import tmediaa.ir.ahamdian.adapters.CategoryMenuPagerAdapter;
 import tmediaa.ir.ahamdian.interfaces.CategoryCallback;
@@ -63,6 +64,7 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement Callback interface");
         }
+
         context = getActivity();
     }
 
@@ -70,6 +72,7 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.category_selector_dialog, container);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         progress_container = (LinearLayout) rootView.findViewById(R.id.progress_container);
         pager_container = (LinearLayout) rootView.findViewById(R.id.pager_container);
         pager_container.setVisibility(View.GONE);
@@ -133,7 +136,7 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
 
 
                         } else {
-                            Log.d(CONST.APP_LOG, "error: " + e.getMessage());
+                            Toasty.error(getContext(),getString(R.string.connection_error), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -145,6 +148,7 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
             JsonObject obj = element.getAsJsonObject();
             if (!obj.get("parent_id").isJsonNull()) {
                 if (obj.get("parent_id").getAsInt() == target_parent_id) {
+
                     CategoryItem item = new CategoryItem();
                     item.setId(obj.get("id").getAsInt());
                     item.setName(obj.get("name").getAsString());
@@ -162,6 +166,7 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
     public void onResume() {
         super.onResume();
 
+
         Window window = getDialog().getWindow();
         Point size = new Point();
 
@@ -170,7 +175,7 @@ public class CategorySelector extends DialogFragment implements DialogInterface.
 
         int width = size.x;
         int height = size.y;
-        window.setLayout((int) (width * 0.75), (int) (height * 0.75));
+        window.setLayout((int) (width * 0.75), (int) (height * 0.9));
         window.setGravity(Gravity.CENTER);
         getDialog().setOnKeyListener(this);
     }

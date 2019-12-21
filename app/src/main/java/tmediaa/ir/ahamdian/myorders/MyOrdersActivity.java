@@ -64,6 +64,7 @@ public class MyOrdersActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("در حال بارگذاری");
+        progressDialog.setCancelable(false);
 
 
         mRecyclerView = (XRecyclerView) findViewById(R.id.orders_recyclerview);

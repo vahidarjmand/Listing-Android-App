@@ -112,7 +112,7 @@ public class ApiCallTools {
     }
 
 
-    public void getOrdersWithID(Context context, String url, final int city, final int page, int id, final onOrderLoad orderLoad) {
+    public void getOrdersWithID(Context context, String url, final int city, final int page, final int id, final onOrderLoad orderLoad) {
 
 
         this.orderLoad = orderLoad;

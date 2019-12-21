@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey_200"
     android:orientation="vertical"
+    android:layoutDirection="rtl"
     android:padding="10dp">
 
     <ScrollView
@@ -511,7 +512,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
-                            android:maxLength="60"
+                            android:maxLength="100"
                             android:hint="@string/general_title_hint" />
                     </LinearLayout>
 

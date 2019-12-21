@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "976555706497",
+    "firebase_url": "https://pelak-a9861.firebaseio.com",
+    "project_id": "pelak-a9861",
+    "storage_bucket": "pelak-a9861.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976555706497:android:757decc2e0a0cc2d",
+        "android_client_info": {
+          "package_name": "tmediaa.ir.ahamdian"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976555706497-r5aed7rrg0087a6b21d5f0h1cdl0cctu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tmediaa.ir.ahamdian",
+            "certificate_hash": "825e69cc34a809e0cee8ed9b35ad53cbb1abbb82"
+          }
+        },
+        {
+          "client_id": "976555706497-sf5vp2odjqas9cunc9l9ftgaaeth876s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJFZg5IakMT71kgKb23XlG1nl6FVkFx14"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976555706497-sf5vp2odjqas9cunc9l9ftgaaeth876s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

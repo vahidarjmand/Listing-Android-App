@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:layout_gravity="right"
+        android:textColor="@color/black"
         android:id="@+id/title_tv"/>
 
 </LinearLayout>

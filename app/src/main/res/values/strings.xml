@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">پلاک</string>
 
-    <string name="toast_message">Toast message</string>
+    <string name="tedpermission_setting">تنظیمات</string>
+    <string name="tedpermission_close">بستن</string>
+    <string name="tedpermission_confirm">تایید</string>
+
+    <string name="toast_message">پیام هشدار</string>
     <string name="connection_error">خطا در برقراری ارتباط با سرور</string>
     <string name="space_scrolling_view_behavior">com.luseen.spacenavigation.SpaceNavigationViewBehavior</string>
     <string name="title_activity_main2">Main2Activity</string>
@@ -12,21 +16,21 @@
     <string name="text_category">item 2</string>
     <string name="text_search">item 3</string>
 
-    <string name="listview_header_hint_normal">pull to refresh</string>
-    <string name="listview_header_hint_release">release to start refresh</string>
-    <string name="listview_loading">loading...</string>
-    <string name="nomore_loading">no more to be loaded</string>
-    <string name="refreshing">refreshing...</string>
-    <string name="refresh_done">refresh done</string>
-    <string name="loading_done">loading done</string>
-    <string name="listview_header_last_time">last update：</string>
+    <string name="listview_header_hint_normal">بروزرسانی لیست</string>
+    <string name="nomore_loading">همه آگهی ها بارگذاری شده اند.</string>
+    <string name="refreshing">در حال بروزرسانی...</string>
+    <string name="refresh_done">اتمام بروزرسانی</string>
+    <string name="loading_done">اتمام بارگذاری</string>
+    <string name="listview_loading">بروزرسانی لیست</string>
+    <string name="listview_header_last_time">آخرین بروزرسانی：</string>
+    <string name="listview_header_hint_release">آخرین بروزرسانی：</string>
 
     <string name="permission_rationale_title">جهت عملکرد صحیح نرم افزار دسترسی به این مجورها باید توسط شما تایید شود.</string>
     <string name="permission_rationale_message">جهت عملکرد صحیح نرم افزار دسترسی به این مجورها باید توسط شما تایید شود.</string>
     <string name="permission_rationale_settings_button_text">تنظیمات</string>
 
 
-    <string name="title_activity_temp">TempActivity</string>
+    <string name="title_activity_temp">صفحه نمایش</string>
     <string name="yesterday">دیروز</string>
     <string name="tomorrow">فردا</string>
     <string name="today">امروز</string>
@@ -126,14 +130,13 @@
     <item name="category_list" type="id" />
     <item name="_id" type="id" />
 
-    <string name="dialog_default_title">Here\'s a message!</string>
-    <string name="dialog_ok">OK</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="LOADING">Loading...</string>
+    <string name="dialog_default_title">پیاگ هشدار</string>
+    <string name="dialog_ok">تایید</string>
+    <string name="dialog_cancel">انصراف</string>
+    <string name="LOADING">در حال بارگذاری</string>
 
 
-    <string name="default_progressbar">Default Progressbar:</string>
-
+    <string name="default_progressbar">بروزرسانی :</string>
 
     <!-- empty view -->
     <string name="emptyview_loading">در حال بارگزاری …</string>
@@ -146,6 +149,29 @@
     <string name="error_unknown">خطای ناشناخته بوجود آمد.</string>
     <string name="loading">در حال بارگذاری</string>
     <string name="fontpath">fonts/GanjNamehSans-Regular.ttf</string>
-    .build()
-    );
+    <string name="all_order_label">همه آگهی ها</string>
+    <string name="category_tab_label">دسته بندیها</string>
+    <string name="add_order_label">افزودن آگهی</string>
+    <string name="search_tab_label">جستجو</string>
+    <string name="profile_tab_label">پروفایل</string>
+    <string name="about_us_3">بازار خرید و فروش وسایل نو  و دست  دوم\n
+سریعتر بفروشید\n
+سریعتر  بخرید\n
+بدون واسطه
+    </string>
+
+    <string name="rationale_title">صدور مجوز دسترسی</string>
+    <string name="rationale_message">جهت کارکرد صحیح نرم افزار مجوزهای لازم را تایید کنید.</string>
+
+    <string name="crop_image_activity_title"></string>
+    <string name="crop_image_menu_rotate_left">چرخش(چپ)</string>
+    <string name="crop_image_menu_rotate_right">چرخش(راست)</string>
+    <string name="crop_image_menu_crop">برش</string>
+    <string name="pick_image_intent_chooser_title">انتخاب تصویر</string>
+    <string name="saving_image">در حال ذخیره تصویر...</string>
+    <string name="contact_str">
+        شماره تماس:  09147797129\n
+        ایمیل: info@pelakapp.ir
+
+    </string>
 </resources>

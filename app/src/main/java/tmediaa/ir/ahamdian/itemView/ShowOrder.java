@@ -10,9 +10,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -44,6 +46,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.marcoscg.dialogsheet.DialogSheet;
 import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
 import com.zarinpal.ewallets.purchase.OnCallbackVerificationPaymentListener;
 import com.zarinpal.ewallets.purchase.PaymentRequest;
@@ -112,6 +115,7 @@ public class ShowOrder extends AppCompatActivity {
     private String brand_name;
     private JsonArray attachments;
     private String status;
+    private FloatingActionButton contact_info;
 
     private boolean is_expired = false;
 
@@ -119,12 +123,17 @@ public class ShowOrder extends AppCompatActivity {
     private int finilize_order_id;
 
 
-    boolean mode;
-    int id;
+    private boolean mode;
+    private int id;
 
     protected BarChart state_chart;
     private TextView tvX, tvY;
     private LinearLayout chart_con;
+    private String contact_email;
+    private String contact_tel;
+    private String contact_sms;
+
+    private String payment_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +150,8 @@ public class ShowOrder extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("در حال بارگذاری");
-
 
         initViews();
 
@@ -155,29 +162,9 @@ public class ShowOrder extends AppCompatActivity {
             }
         });
         switchmode(mode);
+
+
         loadorder(id);
-
-        Uri data = getIntent().getData();
-
-        ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
-            @Override
-            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
-
-
-                Log.d(CONST.APP_LOG,"isPaymentSuccess from show: " + isPaymentSuccess);
-                if (!isPaymentSuccess) {
-                    /* When Payment Request is Success :) */
-                    String message = "Your Payment is Success :) " + refID;
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                } else {
-                    /* When Payment Request is Failure :) */
-                    String message = "Your Payment is Failure :(";
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(getString(R.string.fontpath))
@@ -201,20 +188,20 @@ public class ShowOrder extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   Ion.with(context)
-                           .load(CONST.ADD_STATE)
-                           .setBodyParameter("order_id", String.valueOf(id))
-                           .asString()
-                           .setCallback(new FutureCallback<String>() {
-                               @Override
-                               public void onCompleted(Exception e, String result) {
-                                   Log.d(CONST.APP_LOG,"resukt: " + result);
-                               }
-                           });
+                    Ion.with(context)
+                            .load(CONST.ADD_STATE)
+                            .setBodyParameter("order_id", String.valueOf(id))
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                }
+                            });
                 }
             }, 3000);
         }
     }
+
 
     @Override
     protected void onStart() {
@@ -292,7 +279,7 @@ public class ShowOrder extends AppCompatActivity {
         order_edit_btn = (Button) findViewById(R.id.order_edit_btn);
         order_delete_btn = (Button) findViewById(R.id.order_delete_btn);
         order_renew_btn = (Button) findViewById(R.id.order_renew_btn);
-
+        order_renew_btn.setVisibility(View.GONE);
 
         general_price_view_sep = (View) findViewById(R.id.general_price_view_sep);
         general_type_view_sep = (View) findViewById(R.id.general_type_view_sep);
@@ -310,12 +297,19 @@ public class ShowOrder extends AppCompatActivity {
 
         gallery_loading = (LoadingView) findViewById(R.id.gallery_loading);
         image_pager = (SimpleViewPager) findViewById(R.id.image_pager);
+        contact_info = (FloatingActionButton) findViewById(R.id.fab);
 
         state_chart = (BarChart) findViewById(R.id.state_chart);
         state_chart.setVisibility(View.GONE);
 
 
         //getItemOrder();
+
+        if (mode) {
+            contact_info.setVisibility(View.GONE);
+        } else {
+            contact_info.setVisibility(View.VISIBLE);
+        }
 
 
         final Rect scrollBounds = new Rect();
@@ -348,34 +342,6 @@ public class ShowOrder extends AppCompatActivity {
     }
 
     private void loadorder(final int id) {
-        upgrade_order_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("ارتقاء آگهی")
-                        .setContentText("با تمدید آگهی ، اگهی شما تا زمانی که آگهی جدید در دسته مورد نظر منتشر نشود در رتبه اول نمایش داده خواهد شد، آیا مطمئن هستید؟")
-                        .setConfirmText("تایید")
-                        .setCancelText("انصراف")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog
-                                        .setTitleText("تایید نهایی!")
-                                        .setContentText("پرداخت هزینه " + AppSharedPref.read("upgrade_price","1000") + " تومان ")
-                                        .setConfirmText("تایید")
-                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                Log.d(CONST.APP_LOG, "start to pay");
-                                                upgradeOrder();
-                                            }
-                                        })
-                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                            }
-                        })
-                        .show();
-            }
-        });
 
 
         order_edit_btn.setOnClickListener(new View.OnClickListener() {
@@ -387,6 +353,10 @@ public class ShowOrder extends AppCompatActivity {
             }
         });
 
+
+        progressDialog.setMessage("در حال بارگذاری آگهی");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         //removeOrder(events.getId());
         Ion.with(context)
                 .load(CONST.GET_ORDER_WITH_STATE)
@@ -413,114 +383,6 @@ public class ShowOrder extends AppCompatActivity {
                 });
     }
 
-
-    private void upgradeOrder() {
-        ZarinPal purchase = ZarinPal.getPurchase(context);
-        PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
-
-        int renew_price = Integer.parseInt(AppSharedPref.read("upgrade_price","1000"));
-        paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
-        paymentRequest.setAmount(renew_price);
-        paymentRequest.setDescription("ارتقاء آگهی شما در پلاک");
-        paymentRequest.setCallbackURL("return://zarinpalpayment");
-
-
-        purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
-            @Override
-            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
-
-                if (status == 100) {
-                    startActivity(intent);
-                } else {
-                    Toasty.error(context, "خطا در پرداخت", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-    }
-
-    private void showOrderView(int cat_id, JsonObject obj) {
-        order = obj.get("order").getAsJsonObject();
-        title = order.get("title").getAsString();
-        desc = order.get("desc").getAsString();
-        email = order.get("email").isJsonNull() ? "" : order.get("email").getAsString();
-        tel = order.get("title").getAsString();
-        cat_name = obj.get("cat_name").getAsString();
-        brand_name = obj.get("brand_name").getAsString();
-        attachments = obj.get("order").getAsJsonObject().get("attachments").getAsJsonArray();
-        status = obj.get("order").getAsJsonObject().get("status").getAsString();
-
-
-        int expire_val = obj.get("order").getAsJsonObject().get("is_expired").getAsInt();
-
-        if(expire_val == 0){
-            order_renew_btn.setVisibility(View.GONE);
-            upgrade_order_btn.setVisibility(View.VISIBLE);
-
-        }else{
-            order_renew_btn.setVisibility(View.VISIBLE);
-            upgrade_order_btn.setVisibility(View.GONE);
-        }
-
-        if (mode) {
-            state_chart.setVisibility(View.VISIBLE);
-            showstate(obj.get("states"));
-        }
-
-        initstatus(status);
-        item_title.setText(title);
-        item_desc.setText(desc);
-        item_category.setText(cat_name);
-
-        showSliderView(attachments);
-
-        switch (cat_id) {
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-            case 23:
-            case 24:
-            case 25:
-            case 26:
-            case 27:
-                showAmlakForm(cat_id, order);
-                disableNaghliyeField();
-                break;
-
-            case 30:
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-                showNaghliyeForm(cat_id, order);
-                disableAmlakField();
-                break;
-            case 104:
-            case 105:
-            case 106:
-            case 107:
-            case 108:
-            case 109:
-            case 110:
-            case 111:
-                showPezeshkForm(cat_id);
-                disableAmlakField();
-                disableNaghliyeField();
-                break;
-            default:
-                showGeneralForm(cat_id, order);
-                disableAmlakField();
-                disableNaghliyeField();
-                break;
-        }
-    }
 
     private void showstate(JsonElement datas) {
 
@@ -609,12 +471,17 @@ public class ShowOrder extends AppCompatActivity {
         if (status.equals("enabled")) {
             upgrade_order_btn.setVisibility(View.VISIBLE);
             status_txt.setText("آگهی شما منتشر شده و در حال نمایش بصورت عمومی می باشد.");
-            chart_con.setVisibility(View.VISIBLE);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 status_txt.setTextColor(getColor(R.color.green_700));
 
             } else {
                 status_txt.setTextColor(getResources().getColor(R.color.green_700));
+            }
+            if (mode) {
+                chart_con.setVisibility(View.VISIBLE);
+            } else {
+                chart_con.setVisibility(View.GONE);
             }
         }
         if (status.equals("disabled")) {
@@ -1073,6 +940,7 @@ public class ShowOrder extends AppCompatActivity {
     private void showSliderView(JsonArray images) {
         slider_view.setVisibility(View.VISIBLE);
 
+
         if (image_urls != null) {
             image_urls.clear();
             image_pager.clearIndicator();
@@ -1081,11 +949,13 @@ public class ShowOrder extends AppCompatActivity {
         if (images.size() > 0) {
             image_urls = new ArrayList<>();
             for (int i = 0; i < images.size(); i++) {
+                Log.d(CONST.APP_LOG,"url: " + images.get(i).getAsString());
                 image_urls.add(CONST.STORAGE + images.get(i).getAsString());
             }
 
             gallery_loading.setVisibility(View.GONE);
             image_pager.setVisibility(View.VISIBLE);
+
 
             image_pager.setImageUrls(image_urls, new ImageURLLoader() {
                 @Override
@@ -1101,7 +971,7 @@ public class ShowOrder extends AppCompatActivity {
 
                             return false;
                         }
-                    }).into(view);
+                    }).skipMemoryCache(true).into(view);
                 }
             });
 
@@ -1146,7 +1016,7 @@ public class ShowOrder extends AppCompatActivity {
                 int general_type = order.get("general_type").getAsInt();
                 switch (general_type) {
                     case 0:
-                        general_type_view_tv.setText("فروشی");
+                        general_type_view_tv.setText("ارائه");
                         break;
                     case 1:
                         general_type_view_tv.setText("درخواستی");
@@ -1234,4 +1104,386 @@ public class ShowOrder extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+
+    private void showOrderView(int cat_id, JsonObject obj) {
+        order = obj.get("order").getAsJsonObject();
+        title = order.get("title").getAsString();
+        desc = order.get("desc").getAsString();
+        email = order.get("email").isJsonNull() ? "" : order.get("email").getAsString();
+        tel = order.get("tel").getAsString();
+        cat_name = obj.get("cat_name").getAsString();
+        brand_name = obj.get("brand_name").getAsString();
+        attachments = obj.get("order").getAsJsonObject().get("attachments").getAsJsonArray();
+        status = obj.get("order").getAsJsonObject().get("status").getAsString();
+        int expire_val = obj.get("order").getAsJsonObject().get("is_expired").getAsInt();
+
+
+        if (expire_val == 0) {
+            order_renew_btn.setVisibility(View.GONE);
+            upgrade_order_btn.setVisibility(View.VISIBLE);
+
+        } else {
+            order_renew_btn.setVisibility(View.VISIBLE);
+            upgrade_order_btn.setVisibility(View.GONE);
+        }
+
+        if (!status.equals("expired")) {
+            order_renew_btn.setVisibility(View.GONE);
+            upgrade_order_btn.setVisibility(View.VISIBLE);
+
+        } else {
+            order_renew_btn.setVisibility(View.VISIBLE);
+            upgrade_order_btn.setVisibility(View.GONE);
+        }
+
+        if (mode) {
+            state_chart.setVisibility(View.VISIBLE);
+            showstate(obj.get("states"));
+        }
+
+        initstatus(status);
+        item_title.setText(title);
+        item_desc.setText(desc);
+        item_category.setText(cat_name);
+
+        showSliderView(attachments);
+
+        switch (cat_id) {
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+                showAmlakForm(cat_id, order);
+                disableNaghliyeField();
+                break;
+
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+                showNaghliyeForm(cat_id, order);
+                disableAmlakField();
+                break;
+            case 104:
+            case 105:
+            case 106:
+            case 107:
+            case 108:
+            case 109:
+            case 110:
+            case 111:
+                showPezeshkForm(cat_id);
+                disableAmlakField();
+                disableNaghliyeField();
+                break;
+            default:
+                showGeneralForm(cat_id, order);
+                disableAmlakField();
+                disableNaghliyeField();
+                break;
+        }
+
+        contact_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                View view = View.inflate(context, R.layout.show_order_contact_layout, null);
+                TextView tel_tv = (TextView) view.findViewById(R.id.tel_tv);
+                TextView sms_tv = (TextView) view.findViewById(R.id.sms_tv);
+                TextView email_tv = (TextView) view.findViewById(R.id.email_tv);
+                TextView desc_tv = (TextView) view.findViewById(R.id.desc);
+                View sep1 = (View) view.findViewById(R.id.sep1);
+                View sep2 = (View) view.findViewById(R.id.sep2);
+
+                contact_email = " ایمیل : " + email ;
+                contact_tel = " تلفن تماس : " + tel ;
+                contact_sms = " ارسال پیامک : " + tel ;
+
+                tel_tv.setText(contact_tel);
+                email_tv.setText(contact_email);
+                sms_tv.setText(contact_sms);
+
+                tel_tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", tel, null)));
+                    }
+                });
+
+                sms_tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + tel));
+                        intent.putExtra("sms_body", "");
+                        startActivity(intent);
+                    }
+                });
+
+                desc_tv.setText(Html.fromHtml("هشدار:<br/>لطفا پیش از انجام معامله و هر گونه اقدامی به خرید یا فروش، از صحت اطلاعات ارائه شده اطمینان حاصل کنید. <font color=#1176dc;>پلاک</font> هیچ گونه مسئولیتی در مورد عواقب این کار ندارد."), TextView.BufferType.SPANNABLE);
+
+                if (email.equals("")) {
+                    sep1.setVisibility(View.GONE);
+                    email_tv.setVisibility(View.GONE);
+                }
+
+                if (tel.equals("")) {
+                    sep1.setVisibility(View.GONE);
+                    email_tv.setVisibility(View.GONE);
+                }
+
+                DialogSheet dialogSheet = null;
+                dialogSheet = new DialogSheet(context)
+                        .setView(view)
+                        .setNegativeButton("بستن", new DialogSheet.OnNegativeClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                dialogSheet.show();
+
+
+
+            }
+        });
+
+        order_renew_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("تمدید آگهی")
+                        .setContentText("با تمدید آگهی ، اگهی شما به مدت 30 روز دیگر در نرم افزار باقی خواهد ماند.")
+                        .setConfirmText("تایید")
+                        .setCancelText("انصراف")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(final SweetAlertDialog sDialog) {
+                                sDialog
+                                        .setTitleText("تایید نهایی!")
+                                        .setContentText("پرداخت هزینه " + AppSharedPref.read("renew_price", "1000") + " تومان ")
+                                        .setConfirmText("تایید")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sDialog.dismissWithAnimation();
+                                                renewOrder();
+                                            }
+                                        })
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        upgrade_order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("ارتقاء آگهی")
+                        .setContentText("با تمدید آگهی ، اگهی شما تا زمانی که آگهی جدید در دسته مورد نظر منتشر نشود در رتبه اول نمایش داده خواهد شد، آیا مطمئن هستید؟")
+                        .setConfirmText("تایید")
+                        .setCancelText("انصراف")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(final SweetAlertDialog sDialog) {
+                                sDialog
+                                        .setTitleText("تایید نهایی!")
+                                        .setContentText("پرداخت هزینه " + AppSharedPref.read("upgrade_price", "1000") + " تومان ")
+                                        .setConfirmText("تایید")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                upgradeOrder();
+                                                sDialog.dismissWithAnimation();
+                                            }
+                                        })
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
+
+
+    private void renewOrder() {
+        ZarinPal purchase = ZarinPal.getPurchase(context);
+        PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
+        payment_mode = "renew";
+
+        progressDialog.show();
+        progressDialog.setMessage("در حال اتصال به درگاه بانکی");
+        progressDialog.setCancelable(true);
+
+        int renew_price = Integer.parseInt(AppSharedPref.read("renew_price", "1000"));
+        paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
+        paymentRequest.setAmount(renew_price);
+        paymentRequest.setDescription("تمدید آگهی شما در پلاک");
+        paymentRequest.setCallbackURL("return://zarinpalpayment");
+
+        purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
+            @Override
+            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
+                progressDialog.dismiss();
+                if (status == 100) {
+                    startActivity(intent);
+                } else {
+                    Toasty.error(context, "خطا در پرداخت", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void upgradeOrder() {
+        progressDialog.show();
+        progressDialog.setMessage("در حال اتصال به درگاه بانکی");
+        progressDialog.setCancelable(true);
+        ZarinPal purchase = ZarinPal.getPurchase(context);
+        PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
+
+        int renew_price = Integer.parseInt(AppSharedPref.read("upgrade_price", "1000"));
+        paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
+
+        payment_mode = "upgrade";
+        paymentRequest.setAmount(renew_price);
+        paymentRequest.setDescription("ارتقاء آگهی شما در پلاک");
+        paymentRequest.setCallbackURL("return://zarinpalpayment");
+        purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
+            @Override
+            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
+                progressDialog.dismiss();
+                if (status == 100) {
+                    startActivity(intent);
+                } else {
+                    Toasty.error(context, "خطا در پرداخت", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri data = intent.getData();
+        ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
+            @Override
+            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
+                if (isPaymentSuccess) {
+                    if (payment_mode.equals("upgrade")) {
+                        finalizeUpgrade();
+                    } else if (payment_mode.equals("renew")) {
+                        finalizeRenew();
+                    }
+
+                } else {
+                    Toasty.error(getApplicationContext(), "پرداخت شما با موفقیت صورت نگرفت.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void finalizeRenew() {
+        final String app_token = AppSharedPref.read("TOKEN", "");
+        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+
+        try {
+            String user_pass = new String(data, "UTF-8");
+            Ion.with(context)
+                    .load(CONST.APP_TOKEN)
+                    .setBodyParameter("username", user_pass)
+                    .setBodyParameter("password", user_pass.split("_")[0])
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+
+                            if (e == null) {
+                                JsonParser parser = new JsonParser();
+                                if (!parser.parse(result).isJsonNull()) {
+                                    JsonObject json_obj = parser.parse(result).getAsJsonObject();
+                                    if (json_obj.has("token")) {
+                                        String token = json_obj.get("token").getAsString();
+                                        Ion.with(context)
+                                                .load(CONST.RENEW_ORDER)
+                                                .setHeader("Authorization", "Bearer " + token)
+                                                .setBodyParameter("order_id", String.valueOf(id))
+                                                .asString()
+                                                .setCallback(new FutureCallback<String>() {
+                                                    @Override
+                                                    public void onCompleted(Exception e, String result) {
+                                                        Toasty.success(getApplicationContext(), "پرداخت شما با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }
+                                                });
+                                    }
+                                }
+                            }
+
+
+                        }
+                    });
+        } catch (UnsupportedEncodingException e) {
+
+        }
+
+    }
+
+    private void finalizeUpgrade() {
+        final String app_token = AppSharedPref.read("TOKEN", "");
+        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+
+        try {
+            String user_pass = new String(data, "UTF-8");
+            Ion.with(context)
+                    .load(CONST.APP_TOKEN)
+                    .setBodyParameter("username", user_pass)
+                    .setBodyParameter("password", user_pass.split("_")[0])
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            if (e == null) {
+                                JsonParser parser = new JsonParser();
+                                if (!parser.parse(result).isJsonNull()) {
+                                    JsonObject json_obj = parser.parse(result).getAsJsonObject();
+                                    if (json_obj.has("token")) {
+                                        String token = json_obj.get("token").getAsString();
+                                        Ion.with(context)
+                                                .load(CONST.UPGRADE_ORDER)
+                                                .setHeader("Authorization", "Bearer " + token)
+                                                .setBodyParameter("order_id", String.valueOf(id))
+                                                .asString()
+                                                .setCallback(new FutureCallback<String>() {
+                                                    @Override
+                                                    public void onCompleted(Exception e, String result) {
+                                                        Toasty.success(getApplicationContext(), "پرداخت شما با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }
+                                                });
+                                    }
+                                }
+                            }
+
+
+                        }
+                    });
+        } catch (UnsupportedEncodingException e) {
+
+        }
+    }
+
 }

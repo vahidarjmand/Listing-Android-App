@@ -3,6 +3,7 @@ package tmediaa.ir.ahamdian;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.linchaolong.android.imagepicker.ImagePicker;
+import com.linchaolong.android.imagepicker.cropper.CropImage;
+import com.linchaolong.android.imagepicker.cropper.CropImageView;
+import com.marcoscg.dialogsheet.DialogSheet;
 import com.squareup.otto.Subscribe;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
@@ -40,11 +45,12 @@ import tmediaa.ir.ahamdian.tools.CONST;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class InsertOrderActivity extends AppCompatActivity  implements StepperLayout.StepperListener{
+public class InsertOrderActivity extends AppCompatActivity implements StepperLayout.StepperListener {
 
     private Context context;
     private StepperLayout stepperLayout;
     private ProgressDialog progressDialog;
+    private ImagePicker imagePicker = new ImagePicker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
         context = this;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
             setContentView(R.layout.activity_insert_order_above);
-        }else{
+        } else {
             setContentView(R.layout.activity_insert_order);
         }
 
@@ -65,7 +71,7 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
 
         stepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
         stepperLayout.setTabNavigationEnabled(true);
-        stepperLayout.setAdapter(new InserOrderAdapter(getSupportFragmentManager(), this),0);
+        stepperLayout.setAdapter(new InserOrderAdapter(getSupportFragmentManager(), this), 0);
         stepperLayout.setShowErrorStateEnabled(true);
         stepperLayout.setShowErrorStateOnBackEnabled(true);
         stepperLayout.setListener(this);
@@ -73,31 +79,6 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
-
-        Uri data = getIntent().getData();
-        ZarinPal.getPurchase(context).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
-            @Override
-            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
-                Log.d(CONST.APP_LOG,"isPaymentSuccess from insert: " + isPaymentSuccess);
-                if (isPaymentSuccess) {
-                    finalizeOrder();
-
-                } else {
-                    new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("خطا در پرداخت")
-                            .setContentText("اطلاعات پرداخت تایید نشد.")
-                            .setConfirmText("تلاش دوباره")
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-
-                                }
-                            })
-                            .show();
-                }
-            }
-        });
-
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(getString(R.string.fontpath))
@@ -107,68 +88,8 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
     }
 
 
-    private void finalizeOrder() {
-        //progressDialog.show();
-        String app_token = AppSharedPref.read("TOKEN", "");
-        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
-        try {
-            String user_pass = new String(data, "UTF-8");
-            Ion.with(context)
-                    .load(CONST.APP_TOKEN)
-                    .setBodyParameter("username", user_pass)
-                    .setBodyParameter("password", user_pass.split("_")[0])
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String result) {
-                            //progressDialog.dismiss();
-                            if (e == null) {
-                                JsonParser parser = new JsonParser();
-                                JsonObject json_obj = parser.parse(result).getAsJsonObject();
-                                if (json_obj.has("token")) {
-                                    String token = json_obj.get("token").getAsString();
-                                    //progressDialog.show();
-                                    Ion.with(context)
-                                            .load(CONST.FINALIZE_ORDER)
-                                            .setHeader("Authorization", "Bearer " + token)
-                                            .setBodyParameter("order_id", AppSharedPref.read("PAY_ID", "0"))
-                                            .asString()
-                                            .setCallback(new FutureCallback<String>() {
-                                                @Override
-                                                public void onCompleted(Exception e, String result) {
-                                                    //progressDialog.dismiss();
-                                                    if (e == null) {
-                                                        /*finishActivity(1);
-                                                        JsonParser jsonParser = new JsonParser();
-                                                        JsonObject root = (JsonObject) jsonParser.parse(result);
-                                                        if (root.has("status")) {
-                                                            if (root.get("status").getAsString().equals("ok")) {
-
-
-                                                                Toasty.success(context, "آگهی با موفقیت ثبت شد و بعد از تایید منتشر خواهد شد", Toast.LENGTH_LONG).show();
-
-                                                            } else {
-                                                                Toasty.error(getContext, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        }*/
-                                                    } else {
-                                                        Toasty.error(context, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                }
-                            } else {
-                                Toasty.error(context, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();                            }
-                        }
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     @Subscribe
-    public void getBack(AppEvents.BackStep events){
+    public void getBack(AppEvents.BackStep events) {
         stepperLayout.setCurrentStepPosition(0);
     }
     /*@Override
@@ -211,9 +132,9 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
 
     @Override
     public void onStepSelected(int newStepPosition) {
-        if(newStepPosition == 0){
+        if (newStepPosition == 0) {
             stepperLayout.showBottomNavgiation();
-        }else{
+        } else {
 
             stepperLayout.hideBottomNavgiation();
             stepperLayout.setTabNavigationEnabled(false);
@@ -256,19 +177,14 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
         progressDialog.show();
         ZarinPal purchase = ZarinPal.getPurchase(context);
         PaymentRequest paymentRequest = ZarinPal.getPaymentRequest();
-
-
-        int order_price = Integer.parseInt(AppSharedPref.read("order_price","1000"));
-
+        int order_price = Integer.parseInt(AppSharedPref.read("order_price", "1000"));
         paymentRequest.setMerchantID("62f24130-d20a-11e7-b22b-000c295eb8fc");
         paymentRequest.setAmount(order_price);
         paymentRequest.setDescription("پرداخت هزینه ثبت آگهی");
-        paymentRequest.setCallbackURL("return://zarinpalpayment");
-
+        paymentRequest.setCallbackURL("return://zarinpalpaymentPay");
         purchase.startPayment(paymentRequest, new OnCallbackRequestPaymentListener() {
             @Override
             public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
-
                 if (status == 100) {
                     progressDialog.dismiss();
                     startActivity(intent);
@@ -281,14 +197,91 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
 
     }
 
+    private void finalizeOrder() {
+        progressDialog.show();
+        String app_token = AppSharedPref.read("TOKEN", "");
+        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+        try {
+            String user_pass = new String(data, "UTF-8");
+            Ion.with(context)
+                    .load(CONST.APP_TOKEN)
+                    .setBodyParameter("username", user_pass)
+                    .setBodyParameter("password", user_pass.split("_")[0])
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            if (e == null) {
+                                JsonParser parser = new JsonParser();
+                                JsonObject json_obj = parser.parse(result).getAsJsonObject();
+                                if (json_obj.has("token")) {
+                                    String token = json_obj.get("token").getAsString();
+                                    //progressDialog.show();
+                                    Ion.with(context)
+                                            .load(CONST.FINALIZE_ORDER)
+                                            .setHeader("Authorization", "Bearer " + token)
+                                            .setBodyParameter("order_id", AppSharedPref.read("PAY_ID", "0"))
+                                            .asString()
+                                            .setCallback(new FutureCallback<String>() {
+                                                @Override
+                                                public void onCompleted(Exception e, String result) {
+                                                    progressDialog.dismiss();
+                                                    CONST.writeFile(result);
+                                                    if (e == null) {
+                                                        finishActivity(1);
+                                                        JsonParser jsonParser = new JsonParser();
+                                                        JsonObject root = (JsonObject) jsonParser.parse(result);
+                                                        if (root.has("status")) {
+                                                            if (root.get("status").getAsString().equals("ok")) {
+                                                                finish();
+                                                                Toasty.success(context, "آگهی با موفقیت ثبت شد و بعد از تایید منتشر خواهد شد", Toast.LENGTH_LONG).show();
+
+                                                            } else {
+                                                                Toasty.error(context, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        }
+                                                    } else {
+                                                        Toasty.error(context, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
+                                }
+                            } else {
+                                progressDialog.dismiss();
+                                Toasty.error(context, "خطا در برفراری ارتباط با سرور", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri data = intent.getData();
+        ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
+            @Override
+            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
+                if (isPaymentSuccess) {
+                    finalizeOrder();
+
+                } else {
+                    Toasty.error(getApplicationContext(), "پرداخت شما با موفقیت صورت نگرفت.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 
-
-    public void showAlert(){
+    public void showAlert() {
         new SweetAlertDialog(InsertOrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                 .setTitleText("پرداخت موفق")
                 .setContentText("آگهی شما با موفقیت ثبت شد.")
@@ -297,10 +290,82 @@ public class InsertOrderActivity extends AppCompatActivity  implements StepperLa
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         ActivityCompat.finishAffinity(InsertOrderActivity.this);
-                        Intent i = new Intent(InsertOrderActivity.this,MainActivity.class);
+                        Intent i = new Intent(InsertOrderActivity.this, MainActivity.class);
                         startActivity(i);
                     }
                 })
                 .show();
+    }
+
+
+    @Subscribe
+    public void openImagePicker(AppEvents.openImagePicker event) {
+        openImagePickerIntent();
+    }
+
+
+    private void openImagePickerIntent() {
+        imagePicker.setTitle("تصویر مورد نظر را انتخاب کنید.");
+        imagePicker.setCropImage(true);
+        startCameraOrGallery();
+
+    }
+
+    private void startCameraOrGallery() {
+        final ImagePicker.Callback callback = new ImagePicker.Callback() {
+            @Override
+            public void onPickImage(Uri imageUri) {
+
+            }
+
+            @Override
+            public void onCropImage(Uri imageUri) {
+                AppEvents.onPickCrop id_event = new AppEvents.onPickCrop(imageUri);
+                GlobalBus.getBus().post(id_event);
+            }
+
+            @Override
+            public void cropConfig(CropImage.ActivityBuilder builder) {
+                builder
+                        .setMultiTouchEnabled(true)
+                        .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .setOutputCompressQuality(60)
+                        .setFixAspectRatio(true)
+                        .setAspectRatio(16, 9);
+            }
+
+        };
+
+        new DialogSheet(this)
+                .setTitle("انتخاب تصویر")
+                .setMessage("لطفا توجه داشته باشید در صورتی که تصویر شما شرایط لازم جهت انتشار را نداشته باشد حذف خواهد شد.")
+                .setCancelable(true)
+                .setPositiveButton("گالری", new DialogSheet.OnPositiveClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imagePicker.startGallery(InsertOrderActivity.this, callback);
+
+                    }
+                })
+                .setNegativeButton("دوربین", new DialogSheet.OnNegativeClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imagePicker.startCamera(InsertOrderActivity.this, callback);
+
+                    }
+                })
+                .setButtonsColorRes(R.color.colorPrimary)  // Default color is accent
+                .show();
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        imagePicker.onActivityResult(this, requestCode, resultCode, data);
+        Log.d("APP_LOG", "data: " + data);
     }
 }

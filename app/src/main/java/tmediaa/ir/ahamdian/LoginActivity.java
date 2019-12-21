@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean checkMobile() {
         mobile_str = register_mobile_txt.getText().toString();
-        boolean is_mobile_ok = Pattern.matches("09(1[0-9]|3[0-9]|2[1-9])\\d{7}", mobile_str);
+        boolean is_mobile_ok = Pattern.matches("09(0(\\d)|1(\\d)|2(\\d)|3(\\d)|(9(\\d)))\\d{7}$", mobile_str);
         return is_mobile_ok;
     }
 

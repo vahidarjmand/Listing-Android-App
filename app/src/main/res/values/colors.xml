@@ -73,6 +73,7 @@
     <color name="active_indicator">@android:color/white</color>
     <color name="inactive_indicator">#4D000000</color>
     <color name="transparent_gray">#81e2e2e2</color>
+    <color name="gray_variant">#868686</color>
     <color name="bg">#757575</color>
 
 	<color name="ms_black">#000000</color>
@@ -359,6 +360,7 @@
     <color name="green_700">#388E3C</color>
     <color name="green_800">#2E7D32</color>
     <color name="green_900">#1B5E20</color>
+    <color name="dark_green">#1B5E20</color>
     <color name="green_A100">#B9F6CA</color>
     <color name="green_A200">#69F0AE</color>
     <color name="green_A400">#00E676</color>
@@ -677,5 +679,6 @@
     <color name="colorBottomNavigationInactiveColored">#50FFFFFF</color>
     <color name="colorBottomNavigationNotification">#F63D2B</color>
     <color name="colorBottomNavigationSelectedBackground">#ececec</color>
+
 
 </resources>

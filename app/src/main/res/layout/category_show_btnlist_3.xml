@@ -4,6 +4,7 @@
     android:id="@+id/view3_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     app:flexWrap="wrap"
     app:flexDirection="row"
     app:alignItems="flex_start"

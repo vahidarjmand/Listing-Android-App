@@ -7,6 +7,7 @@
     android:layout_height="@dimen/bottom_navigation_height"
     android:background="@drawable/item_background"
     android:minWidth="@dimen/bottom_navigation_min_width"
+    android:layoutDirection="rtl"
     android:paddingLeft="@dimen/bottom_navigation_padding_left"
     android:paddingRight="@dimen/bottom_navigation_padding_right">
 

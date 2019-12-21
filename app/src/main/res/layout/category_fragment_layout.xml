@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
     android:padding="10dp">
 
-    <FrameLayout
-        android:id="@+id/frame_box"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-    </FrameLayout>
-    <tmediaa.ir.ahamdian.all_category.CustomGridView
-        android:id="@+id/grid_view"
+
+    <tmediaa.ir.ahamdian.tools.NonSwipeableViewPager
+        android:id="@+id/category_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="3"
-        android:columnWidth="120dp"
-        android:stretchMode="columnWidth"
-        android:drawSelectorOnTop="true"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        android:gravity="center" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

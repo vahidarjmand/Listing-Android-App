@@ -10,13 +10,11 @@ import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import tmediaa.ir.ahamdian.R;
 import tmediaa.ir.ahamdian.tools.CONST;
@@ -28,7 +26,7 @@ import tmediaa.ir.ahamdian.tools.CONST;
  * @see #setReferenceTime(long)
  *
  */
-public class RelativeTimeTextView extends TextView {
+public class RelativeTimeTextView extends android.support.v7.widget.AppCompatTextView {
 
     private static final long INITIAL_UPDATE_INTERVAL = DateUtils.MINUTE_IN_MILLIS;
 
@@ -213,6 +211,7 @@ public class RelativeTimeTextView extends TextView {
                 }
             }
         } else if (hours > 24 && days < 7) {
+
             dateStr.append(String.format("%s %s %s",
                     days,
                     getContext().getString(R.string.days)

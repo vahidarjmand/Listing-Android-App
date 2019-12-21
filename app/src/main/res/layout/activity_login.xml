@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_overly"
+    android:layoutDirection="rtl"
     android:orientation="vertical"
     tools:context=".RegisterActivity">
 

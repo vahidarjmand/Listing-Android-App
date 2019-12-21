@@ -5,13 +5,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl"
-    >
+    android:layoutDirection="rtl">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -20,7 +20,46 @@
                 android:id="@+id/my_orders_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/profile_btn_backgroun"
+                android:gravity="right"
+                android:drawableRight="@drawable/profile_icon_gray"
+                android:drawablePadding="15dp"
                 android:text="آگهی های من"/>
+            <Button
+                android:id="@+id/city_selector_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_btn_backgroun"
+                android:drawableRight="@drawable/location_icon"
+                android:drawablePadding="15dp"
+                android:gravity="right"
+                android:text="انتخاب شهر"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/grey_200"/>
+
+            <Button
+                android:id="@+id/about_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_btn_backgroun"
+                android:drawableRight="@drawable/about_icon"
+                android:drawablePadding="15dp"
+                android:gravity="right"
+                android:text="درباره ما"/>
+            <Button
+                android:id="@+id/contact_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_btn_backgroun"
+                android:drawableRight="@drawable/contact_icon"
+                android:drawablePadding="15dp"
+                android:gravity="right"
+                android:text="تماس با ما"/>
+
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

@@ -64,14 +64,14 @@ public class CategoryListAdapter extends BaseAdapter{
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv);
             viewHolder.arrow = (ImageView) convertView.findViewById(R.id.arrowView);
 
+
+
             viewHolder.tvName.setText(item.getName());
 
             if(item.getChilds().size() < 1){
                 viewHolder.arrow.setVisibility(View.GONE);
             }
 
-        }else {
-            viewHolder = (ViewHolder) convertView.getTag();
         }
 
 

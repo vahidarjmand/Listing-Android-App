@@ -4,11 +4,15 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="rtl"
     android:background="@drawable/order_item_row_bg">
+
+
     <ImageView
         android:id="@+id/order_thumb"
         android:layout_width="110dp"
         android:layout_height="110dp"
+        android:scaleType="centerCrop"
         android:layout_margin="5dp"
         />
     <RelativeLayout
@@ -23,15 +27,17 @@
             android:gravity="right"
             android:textSize="16sp"
             />
-        <TextView
+
+        <!--<TextView
             android:id="@+id/order_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:layout_marginTop="10dp"
+            android:layout_below="@+id/order_title"
             android:padding="10dp"
             android:textColor="@android:color/darker_gray"
-            />
+            />-->
 
         <TextView
             android:id="@+id/status"
@@ -42,12 +48,15 @@
             android:padding="10dp"
             android:layout_alignParentBottom="true"/>
 
-        <!--<com.github.curioustechizen.ago.RelativeTimeTextView
+        <TextView
             android:id="@+id/order_time"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             app:relative_time_prefix=""
-            app:relative_time_suffix="" />-->
+            app:relative_time_suffix="" />
 
     </RelativeLayout>
 </LinearLayout>

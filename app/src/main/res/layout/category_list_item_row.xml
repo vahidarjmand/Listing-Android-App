@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:layoutDirection="ltr"
     android:background="@drawable/order_item_row_bg"
     android:padding="12dp"
     android:clickable="false"

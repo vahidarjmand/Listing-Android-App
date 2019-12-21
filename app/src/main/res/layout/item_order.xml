@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:gravity="center_vertical"
+    android:layoutDirection="rtl"
     android:foreground="?android:attr/selectableItemBackground"
     android:background="@android:color/white">
     <ImageView
@@ -16,7 +17,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/person_face"
+        android:layout_toRightOf="@+id/order_thumb"
         android:gravity="center_vertical"
         android:layout_marginLeft="16dp"
         android:orientation="vertical">

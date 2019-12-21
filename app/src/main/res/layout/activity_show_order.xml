@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,636 +12,657 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/order_insert_info"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/maincon"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_200"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/status_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="آگهی شمابا موفقیت به ثبت رسید، لعد از تایید آگهی توسط کارشناسان ما اگهی در نرم افزار منتشر خواهد شد."
-            android:textColor="@color/color1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/order_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/upgrade_order_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:textColor="@color/white"
-            android:background="@drawable/main_button_background"
-            android:text="ارتقاء" />
-
-        <Button
-            android:id="@+id/order_edit_btn"
-            android:layout_width="0dp"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/main_light_button_background"
-            android:layout_weight="1"
-            android:text="ویرایش" />
-
-        <Button
-            android:id="@+id/order_delete_btn"
-            android:layout_width="0dp"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/main_del_button_background"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:text="حذف" />
-
-        <Button
-            android:id="@+id/order_renew_btn"
-            android:layout_width="0dp"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/renew_button_background"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:text="تمدید" />
-
-
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:layout_height="wrap_content">
             <LinearLayout
-                android:id="@+id/slider_view"
+                android:id="@+id/order_insert_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@color/grey_200"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-                <app.dinus.com.loadingdrawable.LoadingView
-                    android:id="@+id/gallery_loading"
+                <TextView
+                    android:id="@+id/status_txt"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="آگهی شمابا موفقیت به ثبت رسید، لعد از تایید آگهی توسط کارشناسان ما اگهی در نرم افزار منتشر خواهد شد."
+                    android:textColor="@color/color1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/order_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/upgrade_order_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#eaeaea"
-                    app:loading_renderer="LevelLoadingRenderer" />
+                    android:layout_margin="5dp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/main_button_background"
+                    android:text="ارتقاء" />
 
-                <eu.fiskur.simpleviewpager.SimpleViewPager
-                    android:id="@+id/image_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:visibility="gone"
-                    app:scaleType="CENTER_CROP" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/item_title"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/order_edit_btn"
+                    android:layout_width="0dp"
+                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingTop="10dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:background="@drawable/main_light_button_background"
+                    android:layout_weight="1"
+                    android:text="ویرایش" />
 
-            <LinearLayout
-                android:id="@+id/category_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingTop="5dp"
-                android:weightSum="6">
-
-                <TextView
-                    android:id="@+id/item_category"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/order_delete_btn"
+                    android:layout_width="0dp"
+                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:paddingRight="15dp"
-                    android:textColor="#969696"
-                    android:textSize="12sp" />
+                    android:background="@drawable/main_del_button_background"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:text="حذف" />
+
+                <Button
+                    android:id="@+id/order_renew_btn"
+                    android:layout_width="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/renew_button_background"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:text="تمدید" />
+
+
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/all_field_view"
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#ffffff"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/general_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/general_price_view"
+                        android:id="@+id/slider_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="قیمت"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
+                        <app.dinus.com.loadingdrawable.LoadingView
+                            android:id="@+id/gallery_loading"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:layout_weight="1"
+                            android:background="#eaeaea"
+                            app:loading_renderer="LevelLoadingRenderer" />
 
-                        <TextView
-                            android:id="@+id/general_price_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
+                        <eu.fiskur.simpleviewpager.SimpleViewPager
+                            android:id="@+id/image_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:visibility="gone"
+                            app:scaleType="CENTER_INSIDE" />
                     </LinearLayout>
-
-                    <View
-                        android:id="@+id/general_price_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
 
                     <LinearLayout
-                        android:id="@+id/general_type_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:background="#ffffff"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="0dip"
+                            android:id="@+id/item_title"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="نوع"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/general_type_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="10dp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <View
-                        android:id="@+id/general_type_view_sep"
+                    <LinearLayout
+                        android:id="@+id/category_container"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:orientation="vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="5dp"
+                        android:weightSum="6">
+
+                        <TextView
+                            android:id="@+id/item_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:paddingRight="15dp"
+                            android:textColor="#969696"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/all_field_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="#ffffff"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:id="@+id/general_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/general_price_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="قیمت"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/general_price_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/general_price_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/general_type_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="نوع"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/general_type_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/general_type_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/amlak_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/amlak_metraj_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="متراژ"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_metraj_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_metraj_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/amlak_type_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="نوع آگهی دهنده"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_type_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_type_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/amlak_room_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="تعداد اتاق"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_room_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_room_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/amlak_homeshahr_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="بیرون شهر"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_homeshahr_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_homeshahr_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/amlak_vadie_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="ودیعه"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_vadie_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_vadie_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/amlak_ejareh_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="اجاره بها"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_ejareh_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_ejareh_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/amlak_sanad_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="سند اداری"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/amlak_sanad_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/amlak_sanad_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/naghliye_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/naghliye_brand_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="برند"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/naghliye_brand_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/naghliye_brand_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/naghliye_sal_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="سال"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/naghliye_sal_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/naghliye_sal_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+
+                            <LinearLayout
+                                android:id="@+id/naghliye_kardkard_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="2"
+                                    android:gravity="left"
+                                    android:text="کارکرد"
+                                    android:textColor="@color/item_view_label_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+
+                                <TextView
+                                    android:id="@+id/naghliye_kardkard_view_tv"
+                                    android:layout_width="0dip"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="4"
+                                    android:gravity="right"
+                                    android:paddingRight="@dimen/item_view_value_padding"
+                                    android:textColor="@color/item_view_value_color"
+                                    android:textSize="@dimen/default_item_text_size" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/naghliye_kardkard_view_sep"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorBottomNavigationSelectedBackground" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="#ffffff"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:id="@+id/item_desc"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/chart_con"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:background="#ffffff"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:id="@+id/state_info_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/state_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layoutDirection="ltr" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/amlak_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/amlak_metraj_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="متراژ"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_metraj_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_metraj_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/amlak_type_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="نوع آگهی دهنده"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_type_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_type_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/amlak_room_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="تعداد اتاق"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_room_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_room_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/amlak_homeshahr_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="بیرون شهر"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_homeshahr_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_homeshahr_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/amlak_vadie_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="ودیعه"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_vadie_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_vadie_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/amlak_ejareh_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="اجاره بها"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_ejareh_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_ejareh_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/amlak_sanad_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="سند اداری"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/amlak_sanad_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/amlak_sanad_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/naghliye_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/naghliye_brand_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="برند"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/naghliye_brand_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/naghliye_brand_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/naghliye_sal_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="سال"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/naghliye_sal_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/naghliye_sal_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-
-                    <LinearLayout
-                        android:id="@+id/naghliye_kardkard_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="2"
-                            android:gravity="left"
-                            android:text="کارکرد"
-                            android:textColor="@color/item_view_label_color"
-                            android:textSize="@dimen/default_item_text_size" />
-
-                        <TextView
-                            android:id="@+id/naghliye_kardkard_view_tv"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="4"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/item_view_value_padding"
-                            android:textColor="@color/item_view_value_color"
-                            android:textSize="@dimen/default_item_text_size" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/naghliye_kardkard_view_sep"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBottomNavigationSelectedBackground" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#ffffff"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <TextView
-                    android:id="@+id/item_desc"
-                    android:layout_width="match_parent"
-
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/chart_con"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#ffffff"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <TextView
-                    android:id="@+id/state_info_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <com.github.mikephil.charting.charts.BarChart
-                    android:layoutDirection="ltr"
-                    android:id="@+id/state_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"/>
-
-            </LinearLayout>
-
+            </ScrollView>
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-
-    </ScrollView>
-
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="16dp"
+        android:src="@drawable/fab_contact"
+        app:fabSize="normal"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"/>
+</android.support.design.widget.CoordinatorLayout>

@@ -86,7 +86,6 @@ public class SearchFilterActivity extends AppCompatActivity {
             @Override
             public void onSegmentControlClick(int index) {
                 segment_price_send = index;
-                Log.d(CONST.APP_LOG,"index: " + index);
             }
         });
 
@@ -268,7 +267,6 @@ public class SearchFilterActivity extends AppCompatActivity {
 
     private void initsearchform(int id) {
 
-        Log.d(CONST.APP_LOG, "id: " + id);
         switch (id) {
             case 15:
             case 16:
@@ -383,7 +381,6 @@ public class SearchFilterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Brand item = (Brand) naghliye_brand.getSelectedItem();
                 naghliye_brand_send = item.getId();
-                Log.d(CONST.APP_LOG, "brnad: " + item.getId());
             }
 
             @Override

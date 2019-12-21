@@ -1,28 +1,21 @@
 package tmediaa.ir.ahamdian.myorders;
 
-import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,11 +45,12 @@ import com.koushikdutta.async.http.BasicNameValuePair;
 import com.koushikdutta.async.http.NameValuePair;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.Builders;
-import com.nileshp.multiphotopicker.photopicker.activity.PickImageActivity;
+import com.linchaolong.android.imagepicker.ImagePicker;
+import com.linchaolong.android.imagepicker.cropper.CropImage;
+import com.linchaolong.android.imagepicker.cropper.CropImageView;
+import com.marcoscg.dialogsheet.DialogSheet;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,7 +67,6 @@ import tmediaa.ir.ahamdian.model.Brand;
 import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
-import tmediaa.ir.ahamdian.tools.ScalingUtilities;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -139,6 +132,7 @@ public class EditActivity extends AppCompatActivity {
     private int select_id;
     RadioButton amlak_type_shakhsi, amlak_type_moshaver, amlak_homeshahr_no, amlak_homeshahr_yes, amlak_sanad_yes, amlak_sanad_no;
     private boolean can_send = false;
+    private ImagePicker imagePicker = new ImagePicker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +166,6 @@ public class EditActivity extends AppCompatActivity {
                 .build()
         );
     }
-
 
     private void getLayouts() {
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
@@ -238,7 +231,6 @@ public class EditActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
     }
 
-
     private void showTargetForm(int id) {
         switch (id) {
             case 15:
@@ -290,7 +282,6 @@ public class EditActivity extends AppCompatActivity {
 
     private void showAmlakForm(int id) {
 
-        Log.d(CONST.APP_LOG,"amlak: " + id);
         disableNaghliyeField();
         form_container.setVisibility(View.VISIBLE);
         general_container.setVisibility(View.VISIBLE);
@@ -521,7 +512,6 @@ public class EditActivity extends AppCompatActivity {
         general_price_con.setVisibility(View.VISIBLE);
     }
 
-
     private void checkForm() {
 
         if (!category_selector_btn.getText().equals("انتخاب")) {
@@ -585,7 +575,6 @@ public class EditActivity extends AppCompatActivity {
             Toasty.error(context, "لطفا دسته بندی مورد نظر را انتخاب کنید", Toast.LENGTH_LONG, true).show();
         }
     }
-
 
     private boolean checkKarkardField() {
         if (naghliye_kardkard.getText().toString().trim().equals("")) {
@@ -742,7 +731,7 @@ public class EditActivity extends AppCompatActivity {
 
     private boolean checkTelField() {
         String mobile_str = general_tel.getText().toString();
-        boolean is_mobile_ok = Pattern.matches("09(1[0-9]|3[0-9]|2[1-9])\\d{7}", mobile_str);
+        boolean is_mobile_ok = Pattern.matches("09(0(\\d)|1(\\d)|2(\\d)|3(\\d)|(9(\\d)))\\d{7}$", mobile_str);
         if (is_mobile_ok) {
             general_tel_send = mobile_str;
             return true;
@@ -906,7 +895,6 @@ public class EditActivity extends AppCompatActivity {
             return false;
         }
     }
-
 
     private boolean checkNaghliye(int id) {
         if (id == 34) {
@@ -1125,7 +1113,6 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-
     private void initilizeFields() {
         initilizePriceField();
         initilizeTypeField();
@@ -1193,7 +1180,7 @@ public class EditActivity extends AppCompatActivity {
 
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_item);
-        arrayAdapter.add("فروشی");
+        arrayAdapter.add("ارائه");
         arrayAdapter.add("درخواستی");
 
         alert.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -1260,7 +1247,6 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
-
     private void showPezeshkForm(int id) {
         initilizeFields();
         form_container.setVisibility(View.VISIBLE);
@@ -1271,56 +1257,71 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void openImagePickerIntent() {
-        if (isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Intent mIntent = new Intent(context, PickImageActivity.class);
-            mIntent.putExtra(PickImageActivity.KEY_LIMIT_MAX_IMAGE, (8 - final_path.size()));
-            mIntent.putExtra(PickImageActivity.KEY_LIMIT_MIN_IMAGE, 1);
-            startActivityForResult(mIntent, PickImageActivity.PICKER_REQUEST_CODE);
-        } else {
-            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_CODE);
-        }
-    }
+        imagePicker.setTitle("تصویر مورد نظر را انتخاب کنید.");
+        imagePicker.setCropImage(true);
 
+        final ImagePicker.Callback callback = new ImagePicker.Callback() {
+            @Override
+            public void onPickImage(Uri imageUri) {
 
-    private boolean isPermissionGranted(String permission) {
-        //Getting the permission status
-        int result = ContextCompat.checkSelfPermission(context, permission);
+            }
 
-        //If permission is granted returning true
-        if (result == PackageManager.PERMISSION_GRANTED)
-            return true;
+            @Override
+            public void onCropImage(Uri imageUri) {
+                horizontalScrollView.setVisibility(View.VISIBLE);
+                viewItemSelected = getLayoutInflater().inflate(R.layout.piclist_item_selected, layoutListItemSelect, false);
+                viewItemSelected.setTag(imageUri.getPath());
+                btnDelete = (ImageView) viewItemSelected.findViewById(R.id.btnDelete);
+                pathList.add(imageUri.getPath());
+                calcbtnDelete();
+                viewItemSelected.setId(0);
+                ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
+                imageItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageItem.setLayoutParams(imageView_lp);
+                imageItem.setImageURI(imageUri);
+                layoutListItemSelect.addView(viewItemSelected);
+            }
 
-        //If permission is not granted returning false
-        return false;
-    }
+            @Override
+            public void cropConfig(CropImage.ActivityBuilder builder) {
+                builder
+                        .setMultiTouchEnabled(true)
+                        .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .setOutputCompressQuality(60)
+                        .setFixAspectRatio(true)
+                        .setAspectRatio(16, 9);
+            }
 
-    private void requestPermission(String permission, int code) {
+        };
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-            //If the user has denied the permission previously your code will come to this block
-            //Here you can explain why you need this permission
-            //Explain here why you need this permission
-        }
-        //And finally ask for the permission
-        ActivityCompat.requestPermissions(this, new String[]{permission}, code);
+        new DialogSheet(this)
+                .setTitle("انتخاب تصویر")
+                .setMessage("لطفا توجه داشته باشید در صورتی که تصویر شما شرایط لازم جهت انتشار را نداشته باشد حذف خواهد شد.")
+                .setCancelable(true)
+                .setPositiveButton("گالری", new DialogSheet.OnPositiveClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imagePicker.startGallery(EditActivity.this, callback);
+
+                    }
+                })
+                .setNegativeButton("دوربین", new DialogSheet.OnNegativeClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imagePicker.startCamera(EditActivity.this, callback);
+
+                    }
+                })
+                .setButtonsColorRes(R.color.colorPrimary)  // Default color is accent
+                .show();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //Checking the request code of our request
-        if (requestCode == READ_STORAGE_CODE) {
-            //If permission is granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openImagePickerIntent();
-            } else {
-                finish();
-            }
-        } else if (requestCode == WRITE_STORAGE_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                finish();
-            }
-        }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        imagePicker.onActivityResult(this, requestCode, resultCode, data);
     }
 
     private void addGeneralField() {
@@ -1330,6 +1331,7 @@ public class EditActivity extends AppCompatActivity {
         String DateToStr = format.format(curDate);
 
 
+
         send_paramas.add(new BasicNameValuePair("cat_id", String.valueOf(selected_cat_value)));
         send_paramas.add(new BasicNameValuePair("city_id", AppSharedPref.read("CITY_ID", "")));
         send_paramas.add(new BasicNameValuePair("title", general_title_send));
@@ -1337,7 +1339,6 @@ public class EditActivity extends AppCompatActivity {
         send_paramas.add(new BasicNameValuePair("email", general_email_send));
         send_paramas.add(new BasicNameValuePair("tel", general_tel_send));
         send_paramas.add(new BasicNameValuePair("title", general_title_send));
-        send_paramas.add(new BasicNameValuePair("expire_date", DateToStr));
         send_paramas.add(new BasicNameValuePair("price", price_send));
         send_paramas.add(new BasicNameValuePair("selected_client", user_id));
         send_paramas.add(new BasicNameValuePair("status", "disabled"));
@@ -1393,57 +1394,31 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (resultCode == -1 && requestCode == PickImageActivity.PICKER_REQUEST_CODE) {
-            this.pathList = intent.getExtras().getStringArrayList(PickImageActivity.KEY_DATA_RESULT);
-            if (this.pathList != null && !this.pathList.isEmpty()) {
-                horizontalScrollView.setVisibility(View.VISIBLE);
-                for (int i = 0; i < pathList.size(); i++) {
-                    viewItemSelected = getLayoutInflater().inflate(R.layout.piclist_item_selected, layoutListItemSelect, false);
-                    viewItemSelected.setTag(pathList.get(i));
-                    btnDelete = (ImageView) viewItemSelected.findViewById(R.id.btnDelete);
-                    calcbtnDelete();
-                    Bitmap bmImg = BitmapFactory.decodeFile(pathList.get(i), options);
-                    viewItemSelected.setId(i);
-                    ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
-                    imageItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageItem.setLayoutParams(imageView_lp);
-                    imageItem.setImageBitmap(bmImg);
-                    layoutListItemSelect.addView(viewItemSelected);
-                }
-            }
-        }
-    }
-
-
     private void sendMainform() {
         final_path.clear();
         int total = layoutListItemSelect.getChildCount() - web_pathList.size();
         int _temp = 0;
-        if(checkhavelocalimage()){
+
+        uploaddata();
+        /*if(checkhavelocalimage()){
             for (int i = 0; i < layoutListItemSelect.getChildCount(); i++) {
                 View item = layoutListItemSelect.getChildAt(i);
                 String tag = (String) item.getTag();
-                if (!tag.substring(0, 5).equals("users")) {
+                if (!tag.substring(0, 6).equals("images")) {
                     _temp++;
                     DecodeFileAsync task = new DecodeFileAsync(tag, total);
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, _temp);
                 }
             }
         }else{
-            uploaddata();
-        }
+
+        }*/
 
 
     }
 
     private boolean checkhavelocalimage() {
-        boolean condition = false;
-
+        boolean condition;
         if(web_pathList.size() > 0){
             if(layoutListItemSelect.getChildCount() == web_pathList.size()){
                 condition = false;
@@ -1461,89 +1436,8 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
-    private class DecodeFileAsync extends AsyncTask<Integer, Void, String> {
-        private static final int DESIREDWIDTH = 800;
-        private static final int DESIREDHEIGHT = 800;
-        private String import_url;
-
-        private int _id;
-        private int _total;
-
-        public DecodeFileAsync(String url, int total) {
-            import_url = url;
-            _total = total;
-        }
-
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showProgress("در حال ارسال تصاویر");
-        }
-
-
-        @Override
-        protected String doInBackground(Integer... params) {
-
-            _id = params[0];
-
-            String strMyImagePath = null;
-            Bitmap scaledBitmap = null;
-
-            try {
-                // Part 1: Decode image
-                Bitmap unscaledBitmap = ScalingUtilities.decodeFile(import_url, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-                // Store to tmp file
-                String extr = Environment.getExternalStorageDirectory().toString();
-                File mFolder = new File(extr + "/PELAK_TMMFOLDER");
-                if (!mFolder.exists()) {
-                    mFolder.mkdir();
-                }
-
-                String s = (Math.round(Math.random() * 100)) + "_tmp.jpg";
-
-                File f = new File(mFolder.getAbsolutePath(), s);
-
-                strMyImagePath = f.getAbsolutePath();
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(f);
-                    scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-
-                    e.printStackTrace();
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-
-                scaledBitmap.recycle();
-            } catch (Throwable e) {
-            }
-
-            if (strMyImagePath == null) {
-                return import_url;
-            }
-            return strMyImagePath;
-        }
-
-        @Override
-        protected void onPostExecute(String url) {
-            super.onPostExecute(url);
-
-
-            final_path.add(url);
-            if (_id == _total) {
-                progressDialog.dismiss();
-
-                uploaddata();
-            }
-        }
-    }
 
     private void uploaddata() {
-
         String app_token = AppSharedPref.read("TOKEN", "");
         byte[] data = Base64.decode(app_token, Base64.DEFAULT);
 
@@ -1552,8 +1446,6 @@ public class EditActivity extends AppCompatActivity {
         progressDialog.show();
         try {
             String user_pass = new String(data, "UTF-8");
-
-
             Ion.with(context)
                     .load(CONST.APP_TOKEN)
                     .setBodyParameter("username", user_pass)
@@ -1581,15 +1473,17 @@ public class EditActivity extends AppCompatActivity {
 
 
                                     ionBuilder.setHeader("Authorization", "Bearer " + token);
-                                    for (int j = 0; j < final_path.size(); j++) {
-                                        File file = new File(final_path.get(j));
+                                    for (int j = 0; j < pathList.size(); j++) {
+                                        File file = new File(pathList.get(j));
                                         String name = "img_" + j;
                                         ionBuilder.setMultipartFile(name, "image//*", file);
+
                                     }
 
                                     for (int  m = 0; m < web_pathList.size(); m++) {
                                         String name = web_pathList.get(m);
                                         ionBuilder.setMultipartParameter("keepimg[]",name);
+
                                     }
 
                                     ionBuilder.asString().withResponse().setCallback(new FutureCallback<com.koushikdutta.ion.Response<String>>() {
@@ -1772,7 +1666,7 @@ public class EditActivity extends AppCompatActivity {
         }
 
         if (general_type_value == 0) {
-            general_type_btn.setText("فروشی");
+            general_type_btn.setText("ارائه");
         } else if (general_type_value == 1) {
             general_type_btn.setText("درخواستی");
         }
@@ -1804,7 +1698,10 @@ public class EditActivity extends AppCompatActivity {
                 viewItemSelected.setTag(name);
                 ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
                 web_pathList.add(name);
-                Glide.with(context).load(CONST.STORAGE + attachments.get(i).getAsString().replace("\"", "")).into(imageItem);
+                Glide.with(context)
+                        .load(CONST.STORAGE + attachments.get(i).getAsString().replace("\"", ""))
+                        .skipMemoryCache(true)
+                        .into(imageItem);
                 imageItem.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                     imageItem.setBackgroundDrawable(border);
@@ -1829,7 +1726,7 @@ public class EditActivity extends AppCompatActivity {
                     String tag = (String) child.getTag();
                     parent.removeView(child);
 
-                    if (tag.substring(0, 5).equals("users")) {
+                    if (tag.substring(0,6).equals("images")) {
                         web_pathList.remove(tag);
                     } else {
                         pathList.remove(tag);

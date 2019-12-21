@@ -2,6 +2,7 @@ package tmediaa.ir.ahamdian.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import tmediaa.ir.ahamdian.R;
 import tmediaa.ir.ahamdian.model.CategoryItem;
+import tmediaa.ir.ahamdian.tools.CONST;
 
 public class CategoryMenuPagerAdapter extends PagerAdapter implements AdapterView.OnItemClickListener {
     private Context mContext;
@@ -66,16 +68,16 @@ public class CategoryMenuPagerAdapter extends PagerAdapter implements AdapterVie
                 ResId = R.layout.category_pager2_item;
                 itemView = mLayoutInflater.inflate(ResId, container, false);
                 listView2 = (ListView) itemView.findViewById(R.id.category_2_list);
-                adapter2 = new CategoryListAdapter(mContext, mList2);
-                listView2.setAdapter(adapter2);
+                adapter2 = new CategoryListAdapter(mContext, mList1);
+                //listView2.setAdapter(adapter2);
                 listView2.setOnItemClickListener(this);
                 break;
             case 2:
                 ResId = R.layout.category_pager3_item;
                 itemView = mLayoutInflater.inflate(ResId, container, false);
                 listView3 = (ListView) itemView.findViewById(R.id.category_3_list);
-                adapter3 = new CategoryListAdapter(mContext, mList3);
-                listView3.setAdapter(adapter3);
+                adapter3 = new CategoryListAdapter(mContext, mList1);
+               // listView3.setAdapter(adapter3);
                 listView3.setOnItemClickListener(this);
                 break;
         }
@@ -107,6 +109,7 @@ public class CategoryMenuPagerAdapter extends PagerAdapter implements AdapterVie
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CategoryItem item = (CategoryItem) parent.getItemAtPosition(position);
 
+        Log.d(CONST.APP_LOG,"depth: " + item.getDepth() + " -- : name: " + item.getName());
         if (item.getDepth() == 0) {
             adapter2.getData().clear();
             adapter2.getData().addAll(item.getChilds());

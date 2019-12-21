@@ -1,6 +1,7 @@
 package tmediaa.ir.ahamdian.otto;
 
 import android.app.Activity;
+import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -131,5 +132,58 @@ public class AppEvents {
         }
     }
 
+
+
+    public static class ChangePagerToID_L2 {
+        private int _page;
+        private int _id;
+        private ArrayList<CategoryItem> _lists;
+
+
+        public ChangePagerToID_L2(int id, ArrayList<CategoryItem> lists) {
+            _id = id;
+            _lists = lists;
+        }
+
+        public int getID() {
+            return _id;
+        }
+        public ArrayList<CategoryItem> getLists() {
+            return _lists;
+        }
+    }
+
+    public static class ChangePagerToID_L3 {
+        private int _id;
+        private ArrayList<CategoryItem> _lists;
+
+
+        public ChangePagerToID_L3(int id, ArrayList<CategoryItem> lists) {
+            _id = id;
+            _lists = lists;
+        }
+
+        public int getID() {
+            return _id;
+        }
+        public ArrayList<CategoryItem> getLists() {
+            return _lists;
+        }
+    }
+
+    public static class openImagePicker{
+        public openImagePicker(){
+
+        }
+    }
+    public static class onPickCrop{
+        private Uri _url;
+        public onPickCrop(Uri url){
+            _url = url;
+        }
+        public Uri getURL(){
+            return _url;
+        }
+    }
 
 }

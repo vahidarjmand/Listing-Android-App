@@ -51,6 +51,7 @@ public class All_Item_Fragment extends Fragment {
 
     public static All_Item_Fragment newInstance() {
         All_Item_Fragment fragment = new All_Item_Fragment();
+
         return fragment;
     }
 

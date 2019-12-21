@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -255,7 +254,6 @@ public class Search_Fragment extends Fragment {
                 if (bundle != null) {
                     for (String key : bundle.keySet()) {
                         Object value = bundle.get(key);
-                        Log.d(CONST.APP_LOG, String.format("%s %s (%s)", key, value.toString(), value.getClass().getName()));
                         send_paramas.add(new BasicNameValuePair(key, value.toString()));
                     }
                 }

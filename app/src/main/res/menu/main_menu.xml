@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:pelak="http://schemas.android.com/tools"
+    tools:context="tmediaa.ir.ahamdian.MainActivity">
 
     <item
-        android:title="موقعیت"
+        android:title="افزودن آگهی"
         android:id="@+id/map_action"
         android:orderInCategory="1"
         app:showAsAction="always|withText"
-        android:icon="@drawable/map_icon"/>
+        android:titleCondensed="@string/app_name"
+        android:icon="@drawable/insert_icon"/>
 
 </menu>

@@ -218,7 +218,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
 
     private void finishActivity() {
-        Log.d(CONST.APP_LOG,"activity: " + getActivity().getLocalClassName());
         getActivity().finish();
     }
 
@@ -266,6 +265,8 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 .setCallback(new FutureCallback<String>() {
                     @Override
                     public void onCompleted(Exception e, String result) {
+
+                        Log.d(CONST.APP_LOG,"step 2: " + result);
                         if (e == null) {
                             JsonParser parser = new JsonParser();
                             JsonObject obj = parser.parse(result).getAsJsonObject();
@@ -866,8 +867,6 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
         AppEvents.PayOrder id_event = new AppEvents.PayOrder(1);
         GlobalBus.getBus().post(id_event);
-
-
     }
 
     private void disableAmlakField() {
@@ -912,7 +911,7 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
                 int general_type = order.get("general_type").getAsInt();
                 switch (general_type) {
                     case 0:
-                        general_type_view_tv.setText("فروشی");
+                        general_type_view_tv.setText("ارائه");
                         break;
                     case 1:
                         general_type_view_tv.setText("درخواستی");
@@ -954,7 +953,7 @@ public class InsertOrderStep2 extends Fragment implements BlockingStep {
 
                             return false;
                         }
-                    }).into(view);
+                    }).skipMemoryCache(true).into(view);
                 }
             });
 

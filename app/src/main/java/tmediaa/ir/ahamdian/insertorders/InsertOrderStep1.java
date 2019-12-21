@@ -1,13 +1,10 @@
 package tmediaa.ir.ahamdian.insertorders;
 
-import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -17,11 +14,10 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +44,6 @@ import com.koushikdutta.async.http.NameValuePair;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.builder.Builders;
-import com.nileshp.multiphotopicker.photopicker.activity.PickImageActivity;
 import com.squareup.otto.Subscribe;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
@@ -62,7 +57,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
@@ -78,8 +72,6 @@ import tmediaa.ir.ahamdian.otto.GlobalBus;
 import tmediaa.ir.ahamdian.tools.AppSharedPref;
 import tmediaa.ir.ahamdian.tools.CONST;
 import tmediaa.ir.ahamdian.tools.ScalingUtilities;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by tmediaa on 8/20/2017.
@@ -152,7 +144,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.insert_order_step_1, container, false);
-
 
         getLayouts();
         category_selector_btn = (Button) rootView.findViewById(R.id.category_selector_btn);
@@ -248,7 +239,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     public void onError(@NonNull VerificationError error) {
         //handle error inside of the fragment, e.g. show error on EditText
     }
-
 
     @Override
     public void onCategoryChoose(int id, String value) {
@@ -372,7 +362,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
             Toasty.error(getContext(), "لطفا دسته بندی مورد نظر را انتخاب کنید", Toast.LENGTH_LONG, true).show();
         }
     }
-
 
     private boolean checkKarkardField() {
         if (naghliye_kardkard.getText().toString().trim().equals("")) {
@@ -528,7 +517,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
     private boolean checkTelField() {
         String mobile_str = general_tel.getText().toString();
-        boolean is_mobile_ok = Pattern.matches("09(1[0-9]|3[0-9]|2[1-9])\\d{7}", mobile_str);
+        boolean is_mobile_ok = Pattern.matches("09(0(\\d)|1(\\d)|2(\\d)|3(\\d)|(9(\\d)))\\d{7}$", mobile_str);
         if (is_mobile_ok) {
             general_tel_send = mobile_str;
             return true;
@@ -692,7 +681,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
             return false;
         }
     }
-
 
     private boolean checkNaghliye(int id) {
         if (id == 34) {
@@ -898,7 +886,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         callback.goToPrevStep();
     }
 
-
     private void showGeneralForm(int id) {
         initilizeFields();
         form_container.setVisibility(View.VISIBLE);
@@ -913,15 +900,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         initilizePriceField();
         initilizeTypeField();
         initilizeImagePickerField();
-    }
-
-    private void initilizeImagePickerField() {
-        general_select_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openImagePickerIntent();
-            }
-        });
     }
 
     private void initilizePriceField() {
@@ -976,7 +954,7 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item);
-        arrayAdapter.add("فروشی");
+        arrayAdapter.add("ارائه");
         arrayAdapter.add("درخواستی");
 
         alert.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -1298,63 +1276,47 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         naghliye_sal_send = null;
     }
 
-
-    private void openImagePickerIntent() {
-        if (isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Intent mIntent = new Intent(getContext(), PickImageActivity.class);
-            mIntent.putExtra(PickImageActivity.KEY_LIMIT_MAX_IMAGE, (8 - final_path.size()));
-            mIntent.putExtra(PickImageActivity.KEY_LIMIT_MIN_IMAGE, 1);
-            startActivityForResult(mIntent, PickImageActivity.PICKER_REQUEST_CODE);
-        } else {
-            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_CODE);
-        }
+    private void initilizeImagePickerField() {
+        general_select_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppEvents.openImagePicker id_event = new AppEvents.openImagePicker();
+                GlobalBus.getBus().post(id_event);
+            }
+        });
     }
 
+    @Subscribe
+    public void openImagePicker(AppEvents.onPickCrop event) {
+        Log.d(CONST.APP_LOG, "croped image: " + event.getURL());
 
-    private boolean isPermissionGranted(String permission) {
-        //Getting the permission status
-        int result = ContextCompat.checkSelfPermission(getContext(), permission);
+        horizontalScrollView.setVisibility(View.VISIBLE);
+        viewItemSelected = getActivity().getLayoutInflater().inflate(R.layout.piclist_item_selected, layoutListItemSelect, false);
+        viewItemSelected.setTag(event.getURL().getPath());
+        btnDelete = (ImageView) viewItemSelected.findViewById(R.id.btnDelete);
+        pathList.add(event.getURL().getPath());
+        calcbtnDelete();
+        viewItemSelected.setId(0);
+        ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
+        imageItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageItem.setLayoutParams(imageView_lp);
+        imageItem.setImageURI(event.getURL());
+        layoutListItemSelect.addView(viewItemSelected);
 
-        //If permission is granted returning true
-        if (result == PackageManager.PERMISSION_GRANTED)
-            return true;
-
-        //If permission is not granted returning false
-        return false;
-    }
-
-    private void requestPermission(String permission, int code) {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
-            //If the user has denied the permission previously your code will come to this block
-            //Here you can explain why you need this permission
-            //Explain here why you need this permission
-        }
-        //And finally ask for the permission
-        ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, code);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //Checking the request code of our request
-        if (requestCode == READ_STORAGE_CODE) {
-            //If permission is granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openImagePickerIntent();
-            } else {
-                getActivity().finish();
-            }
-        } else if (requestCode == WRITE_STORAGE_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                getActivity().finish();
-            }
-        }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
+
 
     private void addGeneralField() {
         String user_id = AppSharedPref.read("ID", "0");
         Date curDate = new Date();
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String DateToStr = format.format(curDate);
 
@@ -1366,7 +1328,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
         send_paramas.add(new BasicNameValuePair("email", general_email_send));
         send_paramas.add(new BasicNameValuePair("tel", general_tel_send));
         send_paramas.add(new BasicNameValuePair("title", general_title_send));
-        send_paramas.add(new BasicNameValuePair("expire_date", DateToStr));
         send_paramas.add(new BasicNameValuePair("price", price_send));
         send_paramas.add(new BasicNameValuePair("selected_client", user_id));
         send_paramas.add(new BasicNameValuePair("status", "disabled"));
@@ -1421,37 +1382,15 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (resultCode == -1 && requestCode == PickImageActivity.PICKER_REQUEST_CODE) {
-            this.pathList = intent.getExtras().getStringArrayList(PickImageActivity.KEY_DATA_RESULT);
-            if (this.pathList != null && !this.pathList.isEmpty()) {
-                horizontalScrollView.setVisibility(View.VISIBLE);
-                for (int i = 0; i < pathList.size(); i++) {
-                    viewItemSelected = getActivity().getLayoutInflater().inflate(R.layout.piclist_item_selected, layoutListItemSelect, false);
-                    viewItemSelected.setTag(pathList.get(i));
-                    btnDelete = (ImageView) viewItemSelected.findViewById(R.id.btnDelete);
-                    calcbtnDelete();
-                    Bitmap bmImg = BitmapFactory.decodeFile(pathList.get(i), options);
-                    viewItemSelected.setId(i);
-                    ImageView imageItem = (ImageView) viewItemSelected.findViewById(R.id.imageItem);
-                    imageItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageItem.setLayoutParams(imageView_lp);
-                    imageItem.setImageBitmap(bmImg);
-                    layoutListItemSelect.addView(viewItemSelected);
-                }
-            }
-        }
-    }
-
     private void calcbtnDelete() {
         if (btnDelete != null) {
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    for (int i = 0; i < pathList.size(); i++) {
+                        Log.d(CONST.APP_LOG, "url:  " + pathList.get(i));
+                    }
                     String selected_item = (String) ((View) v.getParent().getParent()).getTag();
                     layoutListItemSelect.removeView((View) v.getParent().getParent());
                     pathList.remove(selected_item);
@@ -1468,19 +1407,18 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
         callback.getStepperLayout().showProgress("در حال ارسال اطلاعات");
         String app_token = AppSharedPref.read("TOKEN", "");
-            byte[] data = Base64.decode(app_token, Base64.DEFAULT);
+        byte[] data = Base64.decode(app_token, Base64.DEFAULT);
 
 
+        try {
+            String user_pass = new String(data, "UTF-8");
 
-            try {
-                String user_pass = new String(data, "UTF-8");
 
-
-                Ion.with(getContext())
-                        .load(CONST.APP_TOKEN)
-                        .setBodyParameter("username", user_pass)
-                        .setBodyParameter("password", user_pass.split("_")[0])
-                        .asString()
+            Ion.with(getContext())
+                    .load(CONST.APP_TOKEN)
+                    .setBodyParameter("username", user_pass)
+                    .setBodyParameter("password", user_pass.split("_")[0])
+                    .asString()
                     .setCallback(new FutureCallback<String>() {
                         @Override
                         public void onCompleted(Exception e, String result) {
@@ -1495,18 +1433,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
 
 
-                                    for (int i = 0; i < pathList.size(); i++) {
-                                        try {
-                                            String path = new DecodeFileAsync().execute(pathList.get(i)).get();
-                                            final_path.add(path);
-                                        } catch (InterruptedException err) {
-                                            err.printStackTrace();
-                                        } catch (ExecutionException err) {
-                                            err.printStackTrace();
-                                        }
-                                    }
-
-
                                     if (is_edit) {
 
                                         ionBuilder = Ion.with(getContext()).load("POST", CONST.EDIT_ORDER);
@@ -1518,8 +1444,8 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
                                         ionBuilder.setHeader("Authorization", "Bearer " + token);
 
-                                        for (int j = 0; j < final_path.size(); j++) {
-                                            File file = new File(final_path.get(j));
+                                        for (int j = 0; j < pathList.size(); j++) {
+                                            File file = new File(pathList.get(j));
                                             String name = "img_" + j;
                                             ionBuilder.setMultipartFile(name, "image/*", file);
                                         }
@@ -1565,8 +1491,8 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
                                         }
 
                                         ionBuilder.setHeader("Authorization", "Bearer " + token);
-                                        for (int j = 0; j < final_path.size(); j++) {
-                                            File file = new File(final_path.get(j));
+                                        for (int j = 0; j < pathList.size(); j++) {
+                                            File file = new File(pathList.get(j));
                                             String name = "img_" + j;
                                             ionBuilder.setMultipartFile(name, "image/*", file);
                                         }
@@ -1577,7 +1503,6 @@ public class InsertOrderStep1 extends Fragment implements BlockingStep, Category
 
                                                 callback.getStepperLayout().hideProgress();
                                                 callback.goToNextStep();
-
 
 
                                                 if (e == null) {

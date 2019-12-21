@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -115,7 +116,9 @@ public class DroidDialog {
             txtContent.setVisibility(View.GONE);
         } else {
             txtContent.setVisibility(View.VISIBLE);
-            txtContent.setText(builder.content);
+            //txtContent.setText();
+            txtContent.setText(Html.fromHtml(builder.content));
+
         }
 
         if (TextUtils.isEmpty(builder.positiveText)) {
@@ -256,6 +259,13 @@ public class DroidDialog {
         dialog content message
         */
         public Builder content(String content) {
+            this.content = content;
+            return this;
+        }
+        /*
+        dialog content message
+        */
+        public Builder htmlContent(String content) {
             this.content = content;
             return this;
         }
